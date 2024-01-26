@@ -1,0 +1,67 @@
+{  
+  "calls": [  
+    {  
+      "id": 1,  
+      "chatroom_id": 1,  
+      "call_type": "audio",  
+      "call_duration": 30,  
+      "timestamp": "2022-03-01",  
+      "caller_id": 1,  
+      "callee_id": 2  
+    },  
+    {  
+      "id": 2,  
+      "chatroom_id": 1,  
+      "call_type": "video",  
+      "call_duration": 45,  
+      "timestamp": "2022-03-02",  
+      "caller_id": 2,  
+      "callee_id": 1  
+    },  
+    {  
+      "id": 3,  
+      "chatroom_id": 2,  
+      "call_type": "audio",  
+      "call_duration": 60,  
+      "timestamp": "2022-03-03",  
+      "caller_id": 4,  
+      "callee_id": 5  
+    },  
+    {  
+      "id": 4,  
+      "chatroom_id": 2,  
+      "call_type": "video",  
+      "call_duration": 30,  
+      "timestamp": "2022-03-04",  
+      "caller_id": 5,  
+      "callee_id": 4  
+    },  
+    {  
+      "id": 5,  
+      "chatroom_id": 3,  
+      "call_type": "audio",  
+      "call_duration": 45,  
+      "timestamp": "2022-03-05",  
+      "caller_id": 2,  
+      "callee_id": 3  
+    },  
+    {  
+      "id": 6,  
+      "chatroom_id": 4,  
+      "call_type": "video",  
+      "call_duration": 60,  
+      "timestamp": "2022-03-06",  
+      "caller_id": 5,  
+      "callee_id": 4  
+    },  
+    {  
+      "id": 7,  
+      "chatroom_id": 5,  
+      "call_type": "audio",  
+      "call_duration": 30,  
+      "timestamp": "2022-03-07",  
+      "caller_id": 1,  
+      "callee_id": 2  
+    }  
+  ]  
+}  
