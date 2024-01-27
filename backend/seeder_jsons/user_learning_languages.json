@@ -1,0 +1,52 @@
+{  
+  "user_learning_languages": [  
+    {  
+      "id": 1,  
+      "User_id": 1,  
+      "Languages_id": 1,  
+      "Proficiency": "Beginner"  
+    },  
+    {  
+      "id": 2,  
+      "User_id": 1,  
+      "Languages_id": 2,  
+      "Proficiency": "Intermediate"  
+    },  
+    {  
+      "id": 3,  
+      "User_id": 2,  
+      "Languages_id": 3,  
+      "Proficiency": "Advanced"  
+    },  
+    {  
+      "id": 4,  
+      "User_id": 3,  
+      "Languages_id": 4,  
+      "Proficiency": "Intermediate"  
+    },  
+    {  
+      "id": 5,  
+      "User_id": 3,  
+      "Languages_id": 5,  
+      "Proficiency": "Beginner"  
+    },  
+    {  
+      "id": 6,  
+      "User_id": 4,  
+      "Languages_id": 1,  
+      "Proficiency": "Advanced"  
+    },  
+    {  
+      "id": 7,  
+      "User_id": 5,  
+      "Languages_id": 2,  
+      "Proficiency": "Beginner"  
+    },  
+    {  
+      "id": 8,  
+      "User_id": 5,  
+      "Languages_id": 3,  
+      "Proficiency": "Intermediate"  
+    }  
+  ]  
+}  

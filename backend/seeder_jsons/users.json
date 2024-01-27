@@ -1,0 +1,54 @@
+{  
+  "users": [  
+    {  
+      "id": 1,  
+      "email": "user1@example.com",  
+      "username": "user1",  
+      "password": "password1",  
+      "plan_type": "plan1",  
+      "bio": "This is a bio for user1",  
+      "imageURL": "https://via.placeholder.com/150/FF0000/FFFFFF?Text=Digital.com",  
+      "userAddress": "123 Main Street, New York, USA"  
+    },  
+    {  
+      "id": 2,  
+      "email": "user2@example.com",  
+      "username": "user2",  
+      "password": "password2",  
+      "plan_type": "plan2",  
+      "bio": "This is a bio for user2",  
+      "imageURL": "https://via.placeholder.com/150/00FF00/000000?Text=Up.Co",  
+      "userAddress": "456 Central Avenue, London, UK"  
+    },  
+    {  
+      "id": 3,  
+      "email": "user3@example.com",  
+      "username": "user3",  
+      "password": "password3",  
+      "plan_type": "plan3",  
+      "bio": "This is a bio for user3",  
+      "imageURL": "https://via.placeholder.com/150/0000FF/808080?Text=Lorem.net",  
+      "userAddress": "789 South Boulevard, Sydney, Australia"  
+    },  
+    {  
+      "id": 4,  
+      "email": "user4@example.com",  
+      "username": "user4",  
+      "password": "password4",  
+      "plan_type": "plan4",  
+      "bio": "This is a bio for user4",  
+      "imageURL": "https://via.placeholder.com/150/FFFF00/000000?Text=Down.Com",  
+      "userAddress": "321 North Square, Tokyo, Japan"  
+    },  
+    {  
+      "id": 5,  
+      "email": "user5@example.com",  
+      "username": "user5",  
+      "password": "password5",  
+      "plan_type": "plan5",  
+      "bio": "This is a bio for user5",  
+      "imageURL": "https://via.placeholder.com/150/FF00FF/FFFFFF?Text=Right.Org",  
+      "userAddress": "654 West Circle, Paris, France"  
+    }  
+  ]  
+}  
