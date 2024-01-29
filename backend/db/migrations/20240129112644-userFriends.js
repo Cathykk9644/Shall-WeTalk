@@ -24,10 +24,11 @@ module.exports = {
           key: 'id',
         },
       },
-      friendNickName: {
-        allowNull: false,
+      friendNickname: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

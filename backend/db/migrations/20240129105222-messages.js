@@ -1,41 +1,54 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('messages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      username: {
+      chatroomId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'chatrooms',
+          key: 'id',
+        },
+      },
+      senderId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      messageText: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      email: {
+      messageType: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      password: {
-        allowNull: false,
+      voiceNoteFileUrl: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
-      planType: {
-        allowNull: false,
-        type: Sequelize.STRING,
+      voiceNoteDuration: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
       },
-      bio: {
-        allowNull: false,
-        type: Sequelize.STRING,
+      voiceNoteSize: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
       },
-      imageURL: {
+      timestamp: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
       },
-      userAddress: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -47,6 +60,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('messages');
   },
 };

@@ -1,14 +1,35 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('userMotherTongues', {
+    await queryInterface.createTable('calls', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userId: {
+      chatroomId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'chatrooms',
+          key: 'id',
+        },
+      },
+      callType: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      callDuration: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+
+      timestamp: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      callerId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -16,14 +37,15 @@ module.exports = {
           key: 'id',
         },
       },
-      languageId: {
+      calleeId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'languages',
+          model: 'users',
           key: 'id',
         },
       },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -35,6 +57,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('userMotherTongues');
+    await queryInterface.dropTable('calls');
   },
 };

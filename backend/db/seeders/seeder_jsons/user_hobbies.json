@@ -1,0 +1,44 @@
+{
+  "user_hobbies": [
+    {
+      "id": 1,
+      "hobbyId": 1,
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "hobbyId": 2,
+      "userId": 1
+    },
+    {
+      "id": 3,
+      "hobbyId": 1,
+      "userId": 2
+    },
+    {
+      "id": 4,
+      "hobbyId": 3,
+      "userId": 2
+    },
+    {
+      "id": 5,
+      "hobbyId": 2,
+      "userId": 3
+    },
+    {
+      "id": 6,
+      "hobbyId": 4,
+      "userId": 4
+    },
+    {
+      "id": 7,
+      "hobbyId": 3,
+      "userId": 5
+    },
+    {
+      "id": 8,
+      "hobbyId": 5,
+      "userId": 5
+    }
+  ]
+}

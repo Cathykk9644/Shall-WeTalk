@@ -1,0 +1,104 @@
+{
+  "user_friends": [
+    {
+      "userId": 1,
+      "friendId": 2,
+      "friendNickname": "Tommy"
+    },
+    {
+      "userId": 2,
+      "friendId": 1,
+      "friendNickname": "Jacky"
+    },
+    {
+      "userId": 1,
+      "friendId": 3,
+      "friendNickname": "Samantha"
+    },
+    {
+      "userId": 3,
+      "friendId": 1,
+      "friendNickname": "Alex"
+    },
+    {
+      "userId": 2,
+      "friendId": 4,
+      "friendNickname": "Emily"
+    },
+    {
+      "userId": 4,
+      "friendId": 2,
+      "friendNickname": "Daniel"
+    },
+    {
+      "userId": 1,
+      "friendId": 5,
+      "friendNickname": "Olivia"
+    },
+    {
+      "userId": 5,
+      "friendId": 1,
+      "friendNickname": "Liam"
+    },
+    {
+      "userId": 3,
+      "friendId": 4,
+      "friendNickname": "Sophia"
+    },
+    {
+      "userId": 4,
+      "friendId": 3,
+      "friendNickname": "Ava"
+    },
+    {
+      "userId": 2,
+      "friendId": 5,
+      "friendNickname": "Mia"
+    },
+    {
+      "userId": 5,
+      "friendId": 2,
+      "friendNickname": "Jackson"
+    },
+    {
+      "userId": 1,
+      "friendId": 3,
+      "friendNickname": "Charlotte"
+    },
+    {
+      "userId": 3,
+      "friendId": 1,
+      "friendNickname": "Lucas"
+    },
+    {
+      "userId": 3,
+      "friendId": 4,
+      "friendNickname": "Harper"
+    },
+    {
+      "userId": 4,
+      "friendId": 3,
+      "friendNickname": "Lily"
+    },
+    {
+      "userId": 2,
+      "friendId": 5,
+      "friendNickname": "Ethan"
+    },
+    {
+      "userId": 5,
+      "friendId": 2,
+      "friendNickname": "Luna"
+    },
+    {
+      "userId": 1,
+      "friendId": 4,
+      "friendNickname": "Liam"
+    },
+    {
+      "userId": 4,
+      "friendId": 1,
+      "friendNickname": "Grace"
+    }
+  ]
+}

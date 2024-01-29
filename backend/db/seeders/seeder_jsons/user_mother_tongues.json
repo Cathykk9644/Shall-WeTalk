@@ -1,0 +1,28 @@
+{
+  "user_mother_tongues": [
+    {
+      "userId": 1,
+      "languageId": "5"
+    },
+    {
+      "userId": 2,
+      "languageId": "1"
+    },
+    {
+      "userId": 3,
+      "languageId": "1"
+    },
+    {
+      "userId": 4,
+      "languageId": "4"
+    },
+    {
+      "userId": 5,
+      "languageId": "1"
+    },
+    {
+      "userId": 5,
+      "languageId": "5"
+    }
+  ]
+}
