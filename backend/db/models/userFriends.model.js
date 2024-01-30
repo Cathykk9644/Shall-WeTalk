@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       friendId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       friendNickname: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
     },
     {

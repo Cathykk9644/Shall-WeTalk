@@ -13,6 +13,22 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'friendId',
         as: 'friendsOfUser',
       });
+
+      this.hasMany(models.calls, {
+        foreignKey: 'callerId',
+        as: 'caller',
+      });
+      this.hasMany(models.calls, {
+        foreignKey: 'calleeId',
+        as: 'callee',
+      });
+      this.hasMany(models.messages, {
+        foreignKey: 'senderId',
+        as: 'sender',
+      });
+      this.hasMany(models.userLearningLanguages, {
+        foreignKey: 'userId',
+      });
     }
   }
   users.init(
@@ -21,35 +37,35 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       username: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       planType: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       bio: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       imageURL: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       userAddress: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
     },
     {

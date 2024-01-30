@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       language: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
     },
     {

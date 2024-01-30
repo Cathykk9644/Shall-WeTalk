@@ -16,13 +16,13 @@ module.exports = (sequelize, DataTypes) => {
 
         primaryKey: true,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
 
       userId: {
         allowNull: false,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
 
         references: {
           model: 'users',
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       languageId: {
         allowNull: false,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
 
         references: {
           model: 'languages',
@@ -46,13 +46,13 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         allowNull: false,
 
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
 
       updatedAt: {
         allowNull: false,
 
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
     },
     {

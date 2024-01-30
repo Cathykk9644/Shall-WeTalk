@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       hobby: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
     },
     {
