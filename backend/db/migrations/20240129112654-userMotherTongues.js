@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, sequelize) {
     await queryInterface.createTable('userMotherTongues', {
       id: {
         allowNull: false,
@@ -10,13 +10,13 @@ module.exports = {
 
         primaryKey: true,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
 
       userId: {
         allowNull: false,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
 
         references: {
           model: 'users',
@@ -28,7 +28,7 @@ module.exports = {
       languageId: {
         allowNull: false,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
 
         references: {
           model: 'languages',
@@ -40,18 +40,18 @@ module.exports = {
       createdAt: {
         allowNull: false,
 
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
 
       updatedAt: {
         allowNull: false,
 
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, sequelize) {
     await queryInterface.dropTable('userMotherTongues');
   },
 };

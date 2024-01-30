@@ -1,16 +1,16 @@
 'use strict';
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, sequelize) {
     await queryInterface.createTable('federatedCredentials', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -18,36 +18,36 @@ module.exports = {
       },
       provider: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       providerId: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       accessToken: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       refreshToken: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       expires: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
 
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, sequelize) {
     await queryInterface.dropTable('federatedCredentials');
   },
 };

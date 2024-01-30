@@ -1,16 +1,16 @@
 'use strict';
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, sequelize) {
     await queryInterface.createTable('calls', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       chatroomId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'chatrooms',
           key: 'id',
@@ -18,20 +18,20 @@ module.exports = {
       },
       callType: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       callDuration: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
 
       timestamp: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
       callerId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -39,7 +39,7 @@ module.exports = {
       },
       calleeId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -48,15 +48,15 @@ module.exports = {
 
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, sequelize) {
     await queryInterface.dropTable('calls');
   },
 };

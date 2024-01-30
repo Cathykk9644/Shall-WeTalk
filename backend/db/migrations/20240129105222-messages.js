@@ -1,16 +1,16 @@
 'use strict';
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, sequelize) {
     await queryInterface.createTable('messages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       chatroomId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'chatrooms',
           key: 'id',
@@ -18,7 +18,7 @@ module.exports = {
       },
       senderId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -26,40 +26,40 @@ module.exports = {
       },
       messageText: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       messageType: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       voiceNoteFileUrl: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
       },
       voiceNoteDuration: {
         allowNull: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       voiceNoteSize: {
         allowNull: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
       timestamp: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
 
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, sequelize) {
     await queryInterface.dropTable('messages');
   },
 };

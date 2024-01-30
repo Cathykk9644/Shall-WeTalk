@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, sequelize) {
     await queryInterface.createTable('chatroomUsers', {
       id: {
         allowNull: false,
@@ -10,12 +10,12 @@ module.exports = {
 
         primaryKey: true,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
       },
 
       userId: {
         allowNull: true,
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -25,7 +25,7 @@ module.exports = {
       chatroomId: {
         allowNull: false,
 
-        type: Sequelize.INTEGER,
+        type: sequelize.INTEGER,
 
         references: {
           model: 'chatrooms',
@@ -36,18 +36,18 @@ module.exports = {
       createdAt: {
         allowNull: false,
 
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
 
       updatedAt: {
         allowNull: false,
 
-        type: Sequelize.DATE,
+        type: sequelize.DATE,
       },
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, sequelize) {
     await queryInterface.dropTable('chatroomUsers');
   },
 };
