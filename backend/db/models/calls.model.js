@@ -1,14 +1,11 @@
-const { Model } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   class call extends Model {
     static associate(models) {
-      this.belongsTo(models.chatrooms, { foreignKey: 'chatroomId' });
-      this.belongsTo(models.users, { foreignKey: 'callerId', as: 'callMaker' });
-      this.belongsTo(models.users, {
-        foreignKey: 'calleeId',
-        as: 'callReceiver',
-      });
+      this.belongsTo(models.chatrooms);
+      this.belongsTo(models.users);
+      this.belongsTo(models.users);
     }
   }
   call.init(
@@ -17,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       chatroomId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'chatrooms',
           key: 'id',
@@ -29,20 +26,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       callType: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       callDuration: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
 
       timestamp: {
         allowNull: false,
-        type: sequelize.DATE,
+        type: DataTypes.DATE,
       },
       callerId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -50,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       calleeId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -62,5 +59,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'calls', // ! model name MUST match table name
     }
   );
-  return Class;
+  return call;
 };

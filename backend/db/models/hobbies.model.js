@@ -1,18 +1,18 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class hobbies extends Model {}
-  hobbies.init(
+  class hobby extends Model {}
+  hobby.init(
     {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       hobby: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
     },
     {
@@ -20,5 +20,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'hobbies', // ! model name MUST match table name
     }
   );
-  return Class;
+  return hobby;
 };

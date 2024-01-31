@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       userId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -24,23 +24,23 @@ module.exports = (sequelize, DataTypes) => {
       },
       provider: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       providerId: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       accessToken: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       refreshToken: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       expires: {
         allowNull: false,
-        type: sequelize.DATE,
+        type: DataTypes.DATE,
       },
     },
     {
@@ -48,5 +48,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'federatedCredentials', // ! model name MUST match table name
     }
   );
-  return Class;
+  return federatedCredential;
 };

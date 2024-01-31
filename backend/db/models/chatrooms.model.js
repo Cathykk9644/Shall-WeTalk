@@ -1,20 +1,23 @@
-const { Model } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  class chatrooms extends Model {
+module.exports = (sequelize) => {
+  class chatroom extends Model {
     static associate(models) {
-      this.hasMany(models.chatroomsUsers, { foreignKey: 'chatroomId' });
-      this.hasMany(models.calls, { foreignKey: 'callerId' });
-      this.hasMany(models.messages, { foreignKey: 'senderId' });
+      // this.belongsTo(models.chatroom, { foreignKey: 'chatroomId' });
+      // this.belongsTo(models.User, { foreignKey: 'callerId', as: 'callMaker' });
+      // this.belongsTo(models.User, {
+      //   foreignKey: 'calleeId',
+      //   as: 'callReceiver',
+      // });
     }
   }
-  chatrooms.init(
+  chatroom.init(
     {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
     },
     {
@@ -22,5 +25,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'chatrooms', // ! model name MUST match table name
     }
   );
-  return Class;
+  return chatroom;
 };

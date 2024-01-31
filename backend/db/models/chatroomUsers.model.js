@@ -1,9 +1,9 @@
-const { Model } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class chatroomUser extends Model {
     static associate(models) {
-      this.belongsToMany(models.chatroom, { foreignKey: chatroomId });
+      this.belongsTo(models.chatrooms, { foreignKey: 'chatroomId' });
     }
   }
   chatroomUser.init(
@@ -15,12 +15,12 @@ module.exports = (sequelize, DataTypes) => {
 
         primaryKey: true,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
 
       userId: {
         allowNull: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       chatroomId: {
         allowNull: false,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
 
         references: {
           model: 'chatrooms',
@@ -43,5 +43,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'chatroomUsers', // ! model name MUST match table name
     }
   );
-  return Class;
+  return chatroomUser;
 };

@@ -1,13 +1,13 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class userLearningLanguages extends Model {
+  class userLearningLanguage extends Model {
     static associate(models) {
       this.belongsTo(models.hobbies, { foreignKey: 'hobbyId' });
       this.belongsTo(models.users, { foreignKey: 'userId' });
     }
   }
-  userLearningLanguages.init(
+  userLearningLanguage.init(
     {
       id: {
         allowNull: false,
@@ -16,13 +16,13 @@ module.exports = (sequelize, DataTypes) => {
 
         primaryKey: true,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
 
       userId: {
         allowNull: false,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
 
         references: {
           model: 'users',
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       languageId: {
         allowNull: false,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
 
         references: {
           model: 'languages',
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       proficiency: {
         allowNull: false,
 
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
     },
     {
@@ -54,5 +54,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'userLearningLanguages', // ! model name MUST match table name
     }
   );
-  return Class;
+  return userLearningLanguage;
 };

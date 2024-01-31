@@ -1,15 +1,15 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class users extends Model {
+  class user extends Model {
     static associate(models) {
       this.hasOne(models.sessions);
       this.hasMany(models.federatedCredentials, { foreignKey: 'userId' });
-      this.hasMany(models.UserFriends, {
+      this.hasMany(models.userFriends, {
         foreignKey: 'userId',
         as: 'userFriends',
       });
-      this.hasMany(models.UserFriends, {
+      this.hasMany(models.userFriends, {
         foreignKey: 'friendId',
         as: 'friendsOfUser',
       });
@@ -31,41 +31,41 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  users.init(
+  user.init(
     {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       username: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       email: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       password: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       planType: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       bio: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       imageURL: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       userAddress: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
     },
     {
@@ -73,5 +73,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'users', // ! model name MUST match table name
     }
   );
-  return Class;
+  return user;
 };

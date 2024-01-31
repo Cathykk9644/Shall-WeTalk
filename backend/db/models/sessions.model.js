@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       userId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -24,15 +24,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       sessionId: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       data: {
         allowNull: false,
-        type: sequelize.JSON,
+        type: DataTypes.JSON,
       },
       expires: {
         allowNull: false,
-        type: sequelize.DATE,
+        type: DataTypes.DATE,
       },
     },
     {
@@ -40,5 +40,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'sessions', // ! model name MUST match table name
     }
   );
-  return Class;
+  return session;
 };

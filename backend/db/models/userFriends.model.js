@@ -3,8 +3,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class userFriend extends Model {
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-      this.belongsTo(models.User, { foreignKey: 'friendId', as: 'friend' });
+      this.belongsTo(models.users, { foreignKey: 'userId', as: 'user' });
+      this.belongsTo(models.users, { foreignKey: 'friendId', as: 'friend' });
     }
   }
   userFriend.init(
@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       userId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       friendId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       friendNickname: {
         allowNull: true,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
     },
     {
@@ -41,5 +41,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'userFriends', // ! model name MUST match table name
     }
   );
-  return Class;
+  return userFriend;
 };

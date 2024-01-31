@@ -1,13 +1,13 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class userHobbies extends Model {
+  class userHobby extends Model {
     static associate(models) {
       this.belongsTo(models.hobbies, { foreignKey: 'hobbyId' });
       this.belongsTo(models.users, { foreignKey: 'userId' });
     }
   }
-  userHobbies.init(
+  userHobby.init(
     {
       id: {
         allowNull: false,
@@ -16,13 +16,13 @@ module.exports = (sequelize, DataTypes) => {
 
         primaryKey: true,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
 
       userId: {
         allowNull: false,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
 
         references: {
           model: 'users',
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       hobbyId: {
         allowNull: false,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
 
         references: {
           model: 'hobbies',
@@ -48,5 +48,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'userHobbies', // ! model name MUST match table name
     }
   );
-  return Class;
+  return userHobby;
 };

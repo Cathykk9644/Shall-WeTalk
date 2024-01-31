@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       chatroomId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'chatrooms',
           key: 'id',
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       senderId: {
         allowNull: false,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'users',
           key: 'id',
@@ -33,27 +33,27 @@ module.exports = (sequelize, DataTypes) => {
       },
       messageText: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       messageType: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       voiceNoteFileUrl: {
         allowNull: true,
-        type: sequelize.STRING,
+        type: DataTypes.STRING,
       },
       voiceNoteDuration: {
         allowNull: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       voiceNoteSize: {
         allowNull: true,
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       timestamp: {
         allowNull: false,
-        type: sequelize.DATE,
+        type: DataTypes.DATE,
       },
     },
     {
@@ -61,5 +61,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'messages', // ! model name MUST match table name
     }
   );
-  return Class;
+  return message;
 };

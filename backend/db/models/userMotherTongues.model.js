@@ -16,13 +16,13 @@ module.exports = (sequelize, DataTypes) => {
 
         primaryKey: true,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
 
       userId: {
         allowNull: false,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
 
         references: {
           model: 'users',
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       languageId: {
         allowNull: false,
 
-        type: sequelize.INTEGER,
+        type: DataTypes.INTEGER,
 
         references: {
           model: 'languages',
@@ -46,13 +46,13 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         allowNull: false,
 
-        type: sequelize.DATE,
+        type: DataTypes.DATE,
       },
 
       updatedAt: {
         allowNull: false,
 
-        type: sequelize.DATE,
+        type: DataTypes.DATE,
       },
     },
     {
@@ -60,5 +60,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'userMotherTongues', // ! model name MUST match table name
     }
   );
-  return Class;
+  return userMotherTongue;
 };
