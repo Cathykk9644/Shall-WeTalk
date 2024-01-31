@@ -1,0 +1,52 @@
+{
+  "user_learning_languages": [
+    {
+      "id": 1,
+      "userId": 1,
+      "languageId": 1,
+      "proficiency": "Beginner"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "languageId": 2,
+      "proficiency": "Intermediate"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "languageId": 3,
+      "proficiency": "Advanced"
+    },
+    {
+      "id": 4,
+      "userId": 3,
+      "languageId": 4,
+      "proficiency": "Intermediate"
+    },
+    {
+      "id": 5,
+      "userId": 3,
+      "languageId": 5,
+      "proficiency": "Beginner"
+    },
+    {
+      "id": 6,
+      "userId": 4,
+      "languageId": 1,
+      "proficiency": "Advanced"
+    },
+    {
+      "id": 7,
+      "userId": 5,
+      "languageId": 2,
+      "proficiency": "Beginner"
+    },
+    {
+      "id": 8,
+      "userId": 5,
+      "languageId": 3,
+      "proficiency": "Intermediate"
+    }
+  ]
+}

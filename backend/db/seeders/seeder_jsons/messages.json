@@ -1,0 +1,92 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "chatroomId": 1,
+      "senderId": 1,
+      "message_text": "Hello, how are you?",
+      "message_type": "text",
+      "voice_note_file_url": "",
+      "voice_note_duration": 0,
+      "voice_note_size": 0,
+      "timestamp": "2022-03-01"
+    },
+    {
+      "id": 2,
+      "chatroomId": 1,
+      "senderId": 2,
+      "message_text": "I'm fine, thank you.",
+      "message_type": "text",
+      "voice_note_file_url": "",
+      "voice_note_duration": 0,
+      "voice_note_size": 0,
+      "timestamp": "2022-03-01"
+    },
+    {
+      "id": 3,
+      "chatroomId": 2,
+      "senderId": 4,
+      "message_text": "",
+      "message_type": "voice",
+      "voice_note_file_url": "https://example.com/voice_note_3",
+      "voice_note_duration": 30,
+      "voice_note_size": 500,
+      "timestamp": "2022-03-02"
+    },
+    {
+      "id": 4,
+      "chatroomId": 2,
+      "senderId": 5,
+      "message_text": "",
+      "message_type": "voice",
+      "voice_note_file_url": "https://example.com/voice_note_4",
+      "voice_note_duration": 25,
+      "voice_note_size": 450,
+      "timestamp": "2022-03-02"
+    },
+    {
+      "id": 5,
+      "chatroomId": 3,
+      "senderId": 2,
+      "message_text": "Hi, can we meet tomorrow?",
+      "message_type": "text",
+      "voice_note_file_url": "",
+      "voice_note_duration": 0,
+      "voice_note_size": 0,
+      "timestamp": "2022-03-03"
+    },
+    {
+      "id": 6,
+      "chatroomId": 3,
+      "senderId": 3,
+      "message_text": "Sure, see you then.",
+      "message_type": "text",
+      "voice_note_file_url": "",
+      "voice_note_duration": 0,
+      "voice_note_size": 0,
+      "timestamp": "2022-03-03"
+    },
+    {
+      "id": 7,
+      "chatroomId": 4,
+      "senderId": 4,
+      "message_text": "",
+      "message_type": "voice",
+      "voice_note_file_url": "https://example.com/voice_note_7",
+      "voice_note_duration": 35,
+      "voice_note_size": 600,
+      "timestamp": "2022-03-04"
+    },
+    {
+      "id": 8,
+      "chatroomId": 4,
+      "senderId": 5,
+      "message_text": "",
+      "message_type": "voice",
+      "voice_note_file_url": "https://example.com/voice_note_8",
+      "voice_note_duration": 40,
+      "voice_note_size": 650,
+      "timestamp": "2022-03-04"
+    }
+  ]
+}
