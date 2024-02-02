@@ -15,6 +15,15 @@ class UserFriendsRouter {
       `${this.path}/getAllFriends`,
       this.controller.getAllFriends
     );
+    this.router.delete(
+      `${this.path}/removeFriend`,
+      this.controller.removeFriend
+    );
+    this.router.post(`${this.path}/addFriend`, this.controller.addFriend);
+    this.router.patch(
+      `${this.path}/updateNickname`,
+      this.controller.changeFriendNickName
+    );
   };
 }
 module.exports = UserFriendsRouter;
