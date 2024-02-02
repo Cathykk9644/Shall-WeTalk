@@ -5,18 +5,11 @@ class userController extends BaseController {
     super();
     this.db = db;
   }
-  getAllFriends = async (req, res) => {
-    const { userId } = req.body;
 
-    try {
-      const allFriends = await this.db.userFriends.findAll({
-        where: { userId },
-      });
-      res.json(allFriends);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //* To Do
+  //* Create user
+  //* Modify User
+  //* Delete User
 }
 
 module.exports = userController;
