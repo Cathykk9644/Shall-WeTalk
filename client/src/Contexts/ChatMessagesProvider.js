@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
-import io from 'socket.io-client'
+import React ,{useContext,useState} from 'react';
 
 const ChatMessagesContext = React.createContext();
 
@@ -7,15 +6,15 @@ export function useChatMessages() {
   return useContext(ChatMessagesContext);
 }
 
-export function ChatMessageProvider({ id, children }) {
-  const [chatMessages, setChatMessages] = useState()
+export function ChatMessagesProvider({id,children}){
+  const [chatMessages, setChatMessages] = useState([]);
 
-  useEffect(() => {
-    
-  },[])
+  const value = {
+    //return some functions here to send and receive messages  
+  };
 
-  return (
-    <ChatMessagesContext.Provider value={value}>
+  return(
+    <ChatMessagesContext.Provider value = {value}>
       {children}
     </ChatMessagesContext.Provider>
   )
