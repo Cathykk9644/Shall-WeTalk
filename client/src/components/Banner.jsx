@@ -1,9 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+import decorationImg from "../Assets/departmets-vector.svg";
 import hero1 from "../Assets/hero-1.png";
 import hero2 from "../Assets/hero-2.png";
-
 import herobg from "../Assets/hero-shape-2.png";
 import contact from "../Assets/hero-shape-1.svg";
 import { useNavigate } from "react-router-dom";
@@ -12,15 +11,23 @@ import { FaArrowRight } from "react-icons/fa6";
 const Banner = () => {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-3/4 flex  px-6 py-10">
+    <div className="w-full h-3/4 flex  px-10 py-10">
       {" "}
-      <div className="flex-1 p-12">
-        <h1 className="text-4xl font-bold mb-12  text-sky-600 ">
-          Teach Yours, Learn Theirs - Perfect Your Language Pairing on Shall
-          WeTalk!
-        </h1>
+      <div className="flex-1 p-6">
+        <div className="flex flex-col items-start ">
+          <img
+            src={decorationImg}
+            alt="Decoration"
+            className="w-40 mb-2 self-start"
+          />
+          <h1 className="text-4xl font-bold text-sky-600 mt-4">
+            Teach Yours, Learn Theirs - Perfect Your {""}
+            <span className="text-4xl text-rose-400">Language Pairing</span> on
+            Shall WeTalk!
+          </h1>
+        </div>
 
-        <p className="mb-14 mt-14 text-gray-400 text-sm">
+        <p className="mb-12 mt-12 text-gray-400 text-sm">
           Find your linguistic match and unlock fluency through conversation -
           Shall WeTalk is where cultures connect and languages live. Let's chat,
           let's exchange, let's grow!

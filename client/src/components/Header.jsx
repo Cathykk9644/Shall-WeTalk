@@ -7,7 +7,11 @@ const Header = () => {
     <div className="w-screen z-50 px-14 py-8">
       <div className="flex justify-between items-center h-full">
         <div className="flex items-center">
-          <img src={LOGO} alt="logo" className="w-44 object-cover" />
+          <img
+            src={LOGO}
+            alt="logo"
+            className="w-44 object-cover hover:scale-90"
+          />
         </div>
         <ul className="flex items-center gap-12">
           <li className="text-md font-semibold text-textColor1 hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
