@@ -7,8 +7,6 @@ module.exports = {
       __dirname,
       '/seeder_jsons/chatroom_users.json'
     )).chatroom_users;
-
-    console.log(chatroomUsersData);
     const chatroomUsers = chatroomUsersData.map((chatroomUser) => ({
       ...chatroomUser,
       createdAt: new Date(),

@@ -2,7 +2,7 @@ const Router = require('express');
 const UserController = require('../controller/users.controller');
 const db = require('../db/models/index');
 
-class userRouter {
+class UserRouter {
   path = '/users';
   router = Router();
 
@@ -17,4 +17,4 @@ class userRouter {
     // );
   };
 }
-module.exports = userRouter;
+module.exports = UserRouter;

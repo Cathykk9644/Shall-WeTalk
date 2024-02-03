@@ -20,7 +20,7 @@ class AuthController extends BaseController {
         async (email, password, done) => {
           try {
             // Find the user with the provided email
-            const user = await this.db.user.findOne({ where: { email } });
+            const user = await this.db.users.findOne({ where: { email } });
 
             // If the user doesn't exist, return error
             if (!user) {
@@ -47,44 +47,114 @@ class AuthController extends BaseController {
         }
       )
     );
+
+    passport.serializeUser((user, done) => {
+      // Serialize the user object (e.g., store the user id in the session)
+      done(null, user.id);
+    });
+
+    passport.deserializeUser((id, done) => {
+      // Deserialize the user object (e.g., retrieve the user from the database based on the id)
+      this.db.users
+        .findByPk(id)
+        .then((user) => {
+          done(null, user);
+        })
+        .catch((error) => {
+          done(error);
+        });
+    });
   }
 
-  register(req, res) {
+  register = async (req, res) => {
     // Handle the registration logic
     // Extract the email and password from the request body
-    const { email, password } = req.body;
+    try {
+      const {
+        username,
+        email,
+        password,
+        plantype,
+        bio,
+        imageURL,
+        userAddress,
+      } = req.body;
 
-    // Generate a salt and hash the password
-    const saltRounds = 10;
-    const hashedPassword = bcrypt.hashSync(password, saltRounds);
+      // Generate a salt and hash the password
+      const saltRounds = 10;
+      const hashedPassword = bcrypt.hashSync(password, saltRounds);
+      const newUser = {
+        username: username,
+        email: email,
+        password: hashedPassword,
+        planType: plantype,
+        bio: bio,
+        imageURL: imageURL,
+        userAddress: userAddress,
+      };
 
-    // Create a new user record in the database
-    this.db.user
-      .create({ email, password: hashedPassword })
-      .then((user) => {
-        // Redirect or send a response indicating successful registration
-        res.redirect('/login');
-      })
-      .catch((error) => {
-        // Handle the registration error
-        console.error(error);
-        // Redirect or send a response indicating the error
-        res.redirect('/register');
-      });
-  }
+      // Create a new user record in the database
+      const createdUser = await this.db.users.create(newUser);
+      req.session.userId = createdUser.id;
+      res.status(200).json('successful registration');
+    } catch (error) {
+      console.log(error);
+      res.redirect('/register');
+    }
+  };
 
-  logout(req, res) {
+  logout(req, res, next) {
     // Handle the logout logic
-    req.logout(); // Passport method to clear the login session
-    res.redirect('/'); // Redirect to the home page or any desired destination after logout
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session:', err);
+      }
+      // Logout the user from Passport
+      req.logout(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.redirect('/');
+      });
+
+      // Redirect or send a response as needed
+      res.send('Logged out successfully');
+    });
   }
 
-  login(req, res) {
-    // Handle the login request
-    passport.authenticate('local', {
-      successRedirect: '/profile',
-      failureRedirect: '/login',
-    })(req, res);
+  login(req, res, next) {
+    try {
+      passport.authenticate('local', (err, user, info) => {
+        if (err) {
+          // Handle error
+          return next(err);
+        }
+
+        if (!user) {
+          // Authentication failed
+          return res
+            .status(401)
+            .json({ message: 'Incorrect email or password.' });
+        }
+
+        req.login(user, (err) => {
+          if (err) {
+            // Handle error
+            return next(err);
+          }
+
+          // Set session data
+          req.session.userId = user.id;
+
+          // Successful login
+          return res.status(200).json({ message: 'Login successful' });
+        });
+      })(req, res, next);
+    } catch (error) {
+      console.log(error);
+      // Handle error
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
 }
 
