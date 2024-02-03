@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 
 const App = () => {
   // useEffect(() => {
-  //   const newSocket = io("http://localhost:8080");
+  //   const newSocket = io("http://localhost:8000");
   // });
 
   return (
