@@ -59,7 +59,7 @@ class UserFriendsController extends BaseController {
   changeFriendNickName = async (req, res) => {
     const { userId, friendId, newNickname } = req.body;
     try {
-      const updatenickName = this.db.userFriends.update(
+      await this.db.userFriends.update(
         { friendNickname: newNickname },
         { where: { userId: userId, friendId: friendId } }
       );
