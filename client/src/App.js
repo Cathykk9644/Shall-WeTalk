@@ -1,14 +1,25 @@
-import React , {useEffect} from "react";
-import io from 'socket.io-client';
+import React, { useEffect } from "react";
+import io from "socket.io-client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 const App = () => {
-  useEffect(()=>{
-    const newSocket = io('http://localhost:8080')
-  })
+  // useEffect(() => {
+  //   const newSocket = io("http://localhost:8080");
+  // });
+
   return (
-    <div className="App mt-12 flex items-center justify-center text-3xl text-gray-500">
-      <h1>Welcome to Shall Wetalk</h1>
-    </div>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
