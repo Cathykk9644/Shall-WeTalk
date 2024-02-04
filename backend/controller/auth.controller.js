@@ -145,6 +145,17 @@ class AuthController extends BaseController {
 
           // Set session data
           req.session.userId = user.id;
+          console.log(user);
+
+          // Generate a session cookie
+          const sessionCookie = req.session.cookie;
+
+          // Send the session cookie back to the user
+          res.cookie('session', sessionCookie, {
+            httpOnly: true,
+            secure: true, // Set this to true if using HTTPS
+            sameSite: 'strict',
+          });
 
           // Successful login
           return res.status(200).json({ message: 'Login successful' });
