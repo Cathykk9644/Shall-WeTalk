@@ -1,6 +1,7 @@
 const Router = require('express');
 const UserFriends = require('../controller/userFriends.controller');
 const db = require('../db/models/index');
+const checkAuth = require('../middleware/auth');
 
 class UserFriendsRouter {
   path = '/userfriends';
@@ -22,6 +23,7 @@ class UserFriendsRouter {
     this.router.post(`${this.path}/addFriend`, this.controller.addFriend);
     this.router.patch(
       `${this.path}/updateNickname`,
+      checkAuth,
       this.controller.changeFriendNickName
     );
   };

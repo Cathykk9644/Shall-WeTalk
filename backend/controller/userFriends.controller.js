@@ -2,7 +2,7 @@ const BaseController = require('./base.controller');
 const { Op } = require('sequelize');
 class UserFriendsController extends BaseController {
   constructor(db) {
-    super();
+    super(db);
     this.db = db;
   }
 
@@ -41,11 +41,12 @@ class UserFriendsController extends BaseController {
 
   addFriend = async (req, res) => {
     //* todo: add check for user-friend relation prexisting and prevent adding duplicate
-    const { userId, friendId, friendNickname } = req.body;
+    const { userId, friendId, friendNickname, isAccepted } = req.body;
     const newFriend = {
       userId: userId,
       friendId: friendId,
       friendNickname: friendNickname,
+      isAccepted: isAccepted,
     };
 
     try {
@@ -59,7 +60,7 @@ class UserFriendsController extends BaseController {
   changeFriendNickName = async (req, res) => {
     const { userId, friendId, newNickname } = req.body;
     try {
-      const updatenickName = this.db.userFriends.update(
+      await this.db.userFriends.update(
         { friendNickname: newNickname },
         { where: { userId: userId, friendId: friendId } }
       );
