@@ -145,7 +145,6 @@ class AuthController extends BaseController {
 
           // Set session data
           req.session.userId = user.id;
-          console.log(user);
 
           // Generate a session cookie
           const sessionCookie = req.session.cookie;

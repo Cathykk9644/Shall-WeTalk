@@ -41,17 +41,28 @@ class UserFriendsController extends BaseController {
 
   addFriend = async (req, res) => {
     //* todo: add check for user-friend relation prexisting and prevent adding duplicate
+
     const { userId, friendId, friendNickname, isAccepted } = req.body;
-    const newFriend = {
-      userId: userId,
-      friendId: friendId,
-      friendNickname: friendNickname,
-      isAccepted: isAccepted,
-    };
+
+    const doesRelationExist = await this.db.userFriends.findOne({
+      where: { userId: userId, friendId: friendId },
+    });
+
+    const relationExists = !!doesRelationExist;
 
     try {
-      await this.db.userFriends.create(newFriend);
-      res.json(newFriend);
+      if (!relationExists) {
+        const newFriend = {
+          userId: userId,
+          friendId: friendId,
+          friendNickname: friendNickname,
+          isAccepted: isAccepted,
+        };
+
+        await this.db.userFriends.create(newFriend);
+        res.json(newFriend);
+      }
+      res.json('Relation already exists');
     } catch (error) {
       console.log(error);
     }
