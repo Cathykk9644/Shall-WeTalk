@@ -125,7 +125,7 @@ const Login = () => {
       <img
         src={loginImg}
         alt="loginImg"
-        className="absolute bottom-20 right-8 m-6 max-w-xs object-cover opacity-40"
+        className="absolute bottom-20 right-12 m-4 max-w-xs object-cover opacity-40"
         style={{ maxWidth: "220px" }}
       />
     </div>
