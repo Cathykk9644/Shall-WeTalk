@@ -33,7 +33,7 @@ const Sidebar = () => {
         <ul className={`flex-1 ${isCollapsed ? "px-1" : "px-2"}`}>
           <SidebarItems isCollapsed={isCollapsed} />
         </ul>
-        <div className=" p-4 flex items-center">
+        <div className=" p-4 flex items-center mb-4">
           <img
             src="https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"
             alt="dummy user image"
@@ -43,7 +43,7 @@ const Sidebar = () => {
           />
           {!isCollapsed && (
             <div className="ml-4">
-              <h4 className="font-semibold text-sm text-white">Hi Jane!</h4>
+              <h4 className="font-semibold text-sm text-white ">Hey Cathy!</h4>
             </div>
           )}
         </div>

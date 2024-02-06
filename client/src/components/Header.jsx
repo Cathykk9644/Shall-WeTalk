@@ -19,7 +19,10 @@ const Header = () => {
           <li className="text-md font-semibold text-textColor1 hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
             Home
           </li>
-          <li className="flex items-center text-md font-semibold text-textColor1 hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
+          <li
+            onClick={() => navigate("/chat")}
+            className="flex items-center text-md font-semibold text-textColor1 hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer"
+          >
             How it works <RiArrowDropDownLine className="text-2xl" />
           </li>
           <li className="text-md font-semibold text-textColor1 hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
