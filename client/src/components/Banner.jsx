@@ -45,7 +45,7 @@ const Banner = () => {
       </div>
       {/* Right side (hero Image container) */}
       <div
-        className="flex-1 relative bg-cover bg-center"
+        className="flex-1 relative bg-cover bg-center opacity-95"
         style={{
           backgroundImage: `url(${herobg})`,
           backgroundSize: "95%",
