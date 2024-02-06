@@ -1,5 +1,5 @@
 import React from "react";
-// import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import decorationImg from "../Assets/departmets-vector.svg";
 import hero1 from "../Assets/hero-1.png";
 import hero2 from "../Assets/hero-2.png";
