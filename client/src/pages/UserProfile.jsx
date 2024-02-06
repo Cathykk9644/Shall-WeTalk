@@ -4,7 +4,7 @@ import { storage } from '../firebase';
 
 
 const UserProfile=()=>{
-  const []
+  const [] = useState();
   const getProfilePictureURL = async (userId) => {
     const storageRef = ref(storage, `profilePictures/${userId}`);
     const downloadURL = await getDownloadURL(storageRef);
