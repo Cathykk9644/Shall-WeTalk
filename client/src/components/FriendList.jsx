@@ -89,13 +89,13 @@ const FriendList = () => {
           <IoFilter />
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
         {friends.map((friend, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-4 hover:bg-gray-50 text-gray-500 text-sm"
+            className="flex items-center justify-between p-4 hover:bg-gray-50 text-gray-500 text-sm "
           >
-            <div className="flex items-center">
+            <div className="flex items-center ">
               <img
                 src={friend.imageUrl}
                 alt={friend.name}
