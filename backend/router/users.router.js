@@ -11,10 +11,7 @@ class UserRouter {
     this.initializeRoutes();
   }
   initializeRoutes = () => {
-    // this.router.get(
-    //   `${this.path}/getAllFriends`,
-    //   this.controller.getAllFriends
-    // );
+    this.router.get(`${this.path}/getProfile`, this.controller.getProfile);
   };
 }
 module.exports = UserRouter;
