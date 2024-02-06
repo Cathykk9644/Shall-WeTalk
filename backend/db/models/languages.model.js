@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasOne(models.sessions);
       this.hasMany(models.userMotherTongues, { foreignKey: 'languageId' });
+      this.hasMany(models.userLearningLanguages, { foreignKey: 'languageId' });
     }
   }
   language.init(

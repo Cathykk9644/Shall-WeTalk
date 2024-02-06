@@ -1,5 +1,5 @@
 const checkAuth = (req, res, next) => {
-  if (req.session && req.session.userId) {
+  if (req.session?.userId) {
     next();
   } else {
     res.status(400).json('access denied, unathorized user');
