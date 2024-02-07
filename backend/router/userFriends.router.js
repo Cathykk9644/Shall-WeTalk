@@ -14,13 +14,19 @@ class UserFriendsRouter {
   initializeRoutes = () => {
     this.router.get(
       `${this.path}/getAllFriends`,
+      checkAuth,
       this.controller.getAllFriends
     );
     this.router.delete(
       `${this.path}/removeFriend`,
+      checkAuth,
       this.controller.removeFriend
     );
-    this.router.post(`${this.path}/addFriend`, this.controller.addFriend);
+    this.router.post(
+      `${this.path}/addFriend`,
+      checkAuth,
+      this.controller.addFriend
+    );
     this.router.patch(
       `${this.path}/updateNickname`,
       checkAuth,

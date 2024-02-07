@@ -9,9 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         as: 'userFriends',
       });
-      this.hasMany(models.userFriends, {
-        foreignKey: 'friendId',
-        as: 'friendsOfUser',
+      this.hasMany(models.userMotherTongues, {
+        foreignKey: 'userId',
       });
 
       this.hasMany(models.calls, {
@@ -27,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
         as: 'sender',
       });
       this.hasMany(models.userLearningLanguages, {
+        foreignKey: 'userId',
+      });
+      this.hasMany(models.userHobbies, {
         foreignKey: 'userId',
       });
     }
