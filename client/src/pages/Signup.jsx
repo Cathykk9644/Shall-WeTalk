@@ -141,6 +141,7 @@ const Signup = () => {
               )}
             </label>
           </div>
+
           <div className="w-full">
             <label className="block text-gray-400 text-xs font-semibold">
               Confirm Password
@@ -152,13 +153,14 @@ const Signup = () => {
                 placeholder="Password Again"
                 required
               />
+              {errors.passwordConfirmation && (
+                <p className="text-xs text-red-500">
+                  {errors.passwordConfirmation.message}
+                </p>
+              )}
             </label>
-            {errors.passwordConfirmation && (
-              <p style={{ color: 'red' }}>
-                {errors.passwordConfirmation.message}
-              </p>
-            )}
           </div>
+
           <button
             type="submit"
             className="h-10 px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-bgColor3 text-sm focus:outline-none font-semibold hover:scale-95"
