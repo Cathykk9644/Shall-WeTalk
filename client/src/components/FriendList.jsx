@@ -87,21 +87,25 @@ const FriendList = () => {
           <span className="font-semibold text-sm text-gray-500 ml-2">
             {"You"}
           </span>
+          {/* Search bar */}
+          <div className="relative ml-4 flex-1">
+            <FaSearch
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 "
+              size={10}
+            />
+            <input
+              type="text"
+              placeholder="Search friends..."
+              className="pl-8 pr-4 py-1 w-full border rounded-full focus:outline-none focus:ring-1 focus:ring-sky-500 text-xs"
+            />
+          </div>
+          {/* Filter button */}
+          <button className="ml-4 p-2 rounded-full text-gray-500 hover:bg-gray-200 focus:outline-none">
+            <IoFilter />
+          </button>
         </div>
       </div>
-      <div className="p-4 flex items-center justify-between ">
-        <div className="relative flex-1">
-          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs" />
-          <input
-            type="text"
-            placeholder="Search friends..."
-            className="pl-12 pr-4 py-2 w-full border rounded-full focus:outline-none focus:ring-1 focus:ring-sky-500 text-xs"
-          />
-        </div>
-        <button className="ml-4 p-2 rounded-full text-gray-600 hover:bg-gray-100 focus:outline-none">
-          <IoFilter />
-        </button>
-      </div>
+
       <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
         {friends.map((friend, index) => (
           <div
