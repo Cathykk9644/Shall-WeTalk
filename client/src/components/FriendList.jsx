@@ -76,7 +76,20 @@ const FriendList = () => {
 
   return (
     <div className="w-2/6 h-full flex flex-col bg-bgColor1 border-r">
-      <div className="p-4 flex items-center justify-between border-b">
+      {/* Top bar */}
+      <div className="flex justify-between items-center p-2 border-b ">
+        <div className="flex items-center">
+          <img
+            src="https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"
+            alt="dummy user image"
+            className="w-8 h-8 rounded-full object-cover ml-2"
+          />
+          <span className="font-semibold text-sm text-gray-500 ml-2">
+            {"You"}
+          </span>
+        </div>
+      </div>
+      <div className="p-4 flex items-center justify-between ">
         <div className="relative flex-1">
           <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs" />
           <input
@@ -89,7 +102,7 @@ const FriendList = () => {
           <IoFilter />
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto scrollbar-hide">
+      <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
         {friends.map((friend, index) => (
           <div
             key={index}

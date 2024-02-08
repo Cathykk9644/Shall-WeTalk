@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IoSend } from "react-icons/io5";
+import { IoSend, IoVideocam, IoCall } from "react-icons/io5";
 import { IoMdHappy } from "react-icons/io";
 import { AiFillAudio } from "react-icons/ai";
 
@@ -54,7 +54,31 @@ const TextInterface = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 ">
+    <div className="flex flex-col flex-1 h-full">
+      {/* Top bar */}
+      <div className="flex justify-between items-center p-2 border-b ">
+        {/* Left side: Profile and 'You' */}
+        <div className="flex items-center ">
+          <img
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGhhcHB5JTIwZ2lybHxlbnwwfHwwfHx8MA%3D%3D"
+            alt="dummy user image"
+            className="w-8 h-8 rounded-full object-cover ml-2 "
+          />
+          <span className="font-semibold text-sm text-gray-500 ml-2">
+            {"Alice Smith"}
+          </span>
+        </div>
+
+        {/* Right side: Call buttons */}
+        <div>
+          <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none mr-2">
+            <IoCall size={18} />
+          </button>
+          <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none mr-2">
+            <IoVideocam size={18} />
+          </button>
+        </div>
+      </div>
       <div className="flex-1 p-4 overflow-y-auto scrollbar-hide">
         {/* Chat messages will be displayed here */}
         {chatMessages.map((msg) => (
@@ -79,10 +103,13 @@ const TextInterface = () => {
       <div className="border-t p-4 flex items-center">
         {/* Emoji button */}
         <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none">
-          <IoMdHappy size={24} />
+          <IoMdHappy size={20} />
         </button>
         <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none">
-          <AiFillAudio size={24} />
+          <AiFillAudio size={20} />
+        </button>
+        <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none">
+          <IoVideocam size={20} />
         </button>
         {/* Message Input */}
         <input
