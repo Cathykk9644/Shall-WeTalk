@@ -56,7 +56,7 @@ const TextInterface = () => {
   return (
     <div className="flex flex-col flex-1 h-full">
       {/* Top bar */}
-      <div className="flex justify-between items-center p-2 border-b ">
+      <div className="flex justify-between items-center p-2 border-b">
         {/* Left side: Profile and 'You' */}
         <div className="flex items-center ">
           <img
