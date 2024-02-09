@@ -36,6 +36,7 @@ const Login = () => {
 
       // Handle the response as needed
       console.log(response.data);
+      navigate('/Userprofile');
     } catch (error) {
       if (
         error.response &&

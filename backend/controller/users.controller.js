@@ -36,6 +36,45 @@ class userController extends BaseController {
     }
   };
 
+  checkIfUserDetailsExist = async (req, res) => {
+    const { username, email } = req.body;
+
+    const doesEmailExistPromise = new Promise((resolve, reject) => {
+      this.db.users
+        .findOne({
+          where: { email: email },
+        })
+        .then((result) => resolve(!!result)) // Convert result to a boolean
+        .catch((error) => reject(error));
+    });
+
+    const doesUsernameExistPromise = new Promise((resolve, reject) => {
+      this.db.users
+        .findOne({
+          where: { username: username },
+        })
+        .then((result) => resolve(!!result)) // Convert result to a boolean
+        .catch((error) => reject(error));
+    });
+
+    try {
+      const [isEmailUsed, isUsernameUsed] = await Promise.all([
+        doesEmailExistPromise,
+        doesUsernameExistPromise,
+      ]);
+
+      const EmailUsed = !!isEmailUsed;
+      const usernameUsed = !!isUsernameUsed;
+
+      res.json({
+        email: EmailUsed,
+        username: usernameUsed,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //* Modify User
   //* Delete User
 }

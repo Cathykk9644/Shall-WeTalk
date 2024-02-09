@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import loginbg from '../Assets/loginbg.avif';
 import logo from '../Assets/Logo.jpeg';
@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { passwordSchema } from '../utils/validationFuncts.js';
+import axios from 'axios';
 
 const schema = z
   .object({
@@ -36,9 +37,33 @@ const schema = z
 const Signup = () => {
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    console.log('onSubmit:', data);
-    alert('I am being called');
+  const [usernameExists, setUsernameExists] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+
+  const onSubmit = async (data) => {
+    setEmailExists(false);
+    setUsernameExists(false);
+
+    try {
+      const doesUsernameOrEmailUsed = await axios.post(
+        'http://localhost:8000/users/checkIfUserDetailsExist',
+        data
+      );
+      const { data: results } = doesUsernameOrEmailUsed;
+
+      if (results.email === true) {
+        setEmailExists(true);
+      }
+      if (results.username === true) {
+        setUsernameExists(true);
+      } else {
+        await axios.post('http://localhost:8000/auth/register', data);
+
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const { handleSubmit, register, formState } = useForm({
@@ -107,6 +132,12 @@ const Signup = () => {
               {errors.username && (
                 <p style={{ color: 'red' }}>{errors.username?.message}</p>
               )}
+              {usernameExists && (
+                <p style={{ color: 'red' }}>
+                  {' '}
+                  username already in use, please choose another.
+                </p>
+              )}
             </label>
           </div>
           <div className="w-full">
@@ -122,6 +153,12 @@ const Signup = () => {
               />
               {errors.email && (
                 <p style={{ color: 'red' }}>{errors.email?.message}</p>
+              )}
+              {emailExists && (
+                <p style={{ color: 'red' }}>
+                  {' '}
+                  email already in use, please choose another.
+                </p>
               )}
             </label>
           </div>

@@ -70,15 +70,7 @@ class AuthController extends BaseController {
     // Handle the registration logic
     // Extract the email and password from the request body
     try {
-      const {
-        username,
-        email,
-        password,
-        plantype,
-        bio,
-        imageURL,
-        userAddress,
-      } = req.body;
+      const { username, email, password } = req.body;
 
       // Generate a salt and hash the password
       const saltRounds = 10;
@@ -87,10 +79,11 @@ class AuthController extends BaseController {
         username: username,
         email: email,
         password: hashedPassword,
-        planType: plantype,
-        bio: bio,
-        imageURL: imageURL,
-        userAddress: userAddress,
+        planType: 'free',
+        bio: 'tell people a bit about yourself',
+        imageURL:
+          'https://via.placeholder.com/150/FF0000/FFFFFF?Text=Digital.com',
+        userAddress: 'random Universe',
       };
 
       // Create a new user record in the database
