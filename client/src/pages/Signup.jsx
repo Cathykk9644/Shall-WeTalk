@@ -1,16 +1,76 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import loginbg from "../Assets/loginbg.avif";
-import logo from "../Assets/Logo.jpeg";
-import { motion } from "framer-motion";
-import loginImg from "../Assets/landingbg3.png";
-import { FaGooglePlus } from "react-icons/fa6";
-import { FaFacebook } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa";
-import { RiChatSmile2Line } from "react-icons/ri";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import loginbg from '../Assets/loginbg.avif';
+import logo from '../Assets/Logo.jpeg';
+import { motion } from 'framer-motion';
+import loginImg from '../Assets/landingbg3.png';
+import { FaGooglePlus } from 'react-icons/fa6';
+import { FaFacebook } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
+import { RiChatSmile2Line } from 'react-icons/ri';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { passwordSchema } from '../utils/validationFuncts.js';
+import axios from 'axios';
+
+const schema = z
+  .object({
+    username: z.string().min(4, {
+      message: 'Your username must be at least 4 characters long',
+    }),
+    email: z.string().email('Please enter a valid email'),
+    password: passwordSchema,
+    passwordConfirmation: z.string(),
+    isVerrified: z.boolean().optional(),
+  })
+  .superRefine(({ passwordConfirmation, password }, ctx) => {
+    if (passwordConfirmation !== password) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords did not match',
+        path: ['passwordConfirmation'],
+      });
+    }
+  });
 
 const Signup = () => {
   const navigate = useNavigate();
+
+  const [usernameExists, setUsernameExists] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+
+  const onSubmit = async (data) => {
+    setEmailExists(false);
+    setUsernameExists(false);
+
+    try {
+      const doesUsernameOrEmailUsed = await axios.post(
+        'http://localhost:8000/users/checkIfUserDetailsExist',
+        data
+      );
+      const { data: results } = doesUsernameOrEmailUsed;
+
+      if (results.email === true) {
+        setEmailExists(true);
+      }
+      if (results.username === true) {
+        setUsernameExists(true);
+      } else {
+        await axios.post('http://localhost:8000/auth/register', data);
+
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const { handleSubmit, register, formState } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const { errors } = formState;
 
   return (
     <div className="flex min-h-screen">
@@ -22,7 +82,7 @@ const Signup = () => {
         {/* Transparent container */}
         <div
           className="bg-white  bg-opacity-20 rounded-lg p-8 backdrop-filter backdrop-blur-md"
-          style={{ backdropFilter: "blur(5px)" }}
+          style={{ backdropFilter: 'blur(5px)' }}
         >
           <div className="flex space-x-4 ">
             <RiChatSmile2Line className="text-white text-5xl" />
@@ -38,12 +98,12 @@ const Signup = () => {
           <p className="text-3xl font-semibold text-white mb-16">
             Right Here On Shall Wetalk!
           </p>
-        </div>{" "}
+        </div>{' '}
         <img
           src={loginImg}
           alt="loginImg"
           className="absolute bottom-20 left-12 m-4 max-w-xs object-cover opacity-40"
-          style={{ maxWidth: "220px" }}
+          style={{ maxWidth: '220px' }}
         />
       </div>
 
@@ -54,64 +114,88 @@ const Signup = () => {
         <h1 className="text-xl font-bold text-sky-500 items-center">
           Let's start to create account
         </h1>
-        <form className="flex flex-col space-y-4">
+        <form
+          className="flex flex-col space-y-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="w-full">
             <label className="block text-gray-400 text-xs font-semibold">
               Username
+              <input
+                className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
+                name="username"
+                type="text"
+                placeholder="Username"
+                {...register('username')}
+                required
+              />
+              {errors.username && (
+                <p style={{ color: 'red' }}>{errors.username?.message}</p>
+              )}
+              {usernameExists && (
+                <p style={{ color: 'red' }}>
+                  {' '}
+                  username already in use, please choose another.
+                </p>
+              )}
             </label>
-            <input
-              className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
-              name="password"
-              type="password"
-              placeholder="Username"
-              // value={password}
-              // onChange={(e) => onChange(e)}
-              required
-            />
           </div>
           <div className="w-full">
             <label className="block text-gray-400 text-xs font-semibold">
               Email
+              <input
+                className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
+                name="email"
+                type="email"
+                placeholder="Email"
+                {...register('email')}
+                required
+              />
+              {errors.email && (
+                <p style={{ color: 'red' }}>{errors.email?.message}</p>
+              )}
+              {emailExists && (
+                <p style={{ color: 'red' }}>
+                  {' '}
+                  email already in use, please choose another.
+                </p>
+              )}
             </label>
-            <input
-              className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
-              name="email"
-              type="email"
-              placeholder="Email"
-              // value={email}
-              // onChange={(e) => onChange(e)}
-              required
-            />
           </div>
-
           <div className="w-full">
             <label className="block text-gray-400 text-xs font-semibold">
               Password
+              <input
+                className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
+                name="password"
+                type="password"
+                {...register('password')}
+                placeholder="Password"
+                required
+              />
+              {errors.password && (
+                <p style={{ color: 'red' }}>{errors.password?.message}</p>
+              )}
             </label>
-            <input
-              className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
-              name="password"
-              type="password"
-              placeholder="Password"
-              // value={password}
-              // onChange={(e) => onChange(e)}
-              required
-            />
           </div>
 
           <div className="w-full">
             <label className="block text-gray-400 text-xs font-semibold">
               Confirm Password
+              <input
+                className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
+                name="passwordConfirmation"
+                type="password"
+                {...register('passwordConfirmation')}
+                placeholder="Password Again"
+                required
+              />
+              {errors.passwordConfirmation && (
+                <p className="text-xs text-red-500">
+                  {errors.passwordConfirmation.message}
+                </p>
+              )}
             </label>
-            <input
-              className="h-10 block w-full mt-2 rounded-md border-0 p-4 text-gray-500 text-xs shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-0 focus:ring-1 focus:ring-inset focus:ring-sky-600"
-              name="password"
-              type="password"
-              placeholder="Password Again"
-              // value={password}
-              // onChange={(e) => onChange(e)}
-              required
-            />
           </div>
 
           <button
@@ -131,9 +215,9 @@ const Signup = () => {
         </div>
         {/* Icons container */}
         <div className="flex justify-center space-x-8">
-          {" "}
+          {' '}
           <button className="text-3xl text-sky-400 hover:text-amber-400 hover:scale-90">
-            {" "}
+            {' '}
             <FaGooglePlus />
           </button>
           <button className="text-3xl text-sky-400 hover:text-sky-700 hover:scale-90">
@@ -145,10 +229,11 @@ const Signup = () => {
         </div>
         <div className="text-center">
           <p className="text-xs text-gray-400 mb-4">
-            Already have an account with us?{" "}
+            Already have an account with us?{' '}
             <span
               className="underline cursor-pointer"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate('/login')}
+              role="link"
             >
               Log in now!
             </span>

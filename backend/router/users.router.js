@@ -12,6 +12,10 @@ class UserRouter {
   }
   initializeRoutes = () => {
     this.router.get(`${this.path}/getProfile`, this.controller.getProfile);
+    this.router.post(
+      `${this.path}/checkIfUserDetailsExist`,
+      this.controller.checkIfUserDetailsExist
+    );
   };
 }
 module.exports = UserRouter;

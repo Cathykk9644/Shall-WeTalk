@@ -8,7 +8,6 @@ class UserFriendsController extends BaseController {
 
   getAllFriends = async (req, res) => {
     const { userId } = req.body;
-    console.log(userId);
 
     try {
       const allFriends = await this.db.userFriends.findAll({
@@ -41,7 +40,7 @@ class UserFriendsController extends BaseController {
   };
 
   addFriend = async (req, res) => {
-    //* todo: add check for user-friend relation prexisting and prevent adding duplicate
+    
 
     const { userId, friendId, friendNickname, isAccepted } = req.body;
 
