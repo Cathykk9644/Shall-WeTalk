@@ -3,7 +3,6 @@ import { FaSearch } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 
 const FriendList = () => {
-  // Updated dummy data for friends list with actual image URLs
   const friends = [
     {
       name: "Alice Smith",
@@ -71,7 +70,6 @@ const FriendList = () => {
       imageUrl:
         "https://images.unsplash.com/photo-1548142813-c348350df52b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     },
-    // ... additional friends
   ];
 
   return (

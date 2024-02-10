@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
+import VideoChat from "./pages/VideoChat";
 import UserProfile from "./pages/UserProfile";
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/videochat" element={<VideoChat />} />
           <Route path="/userprofile" element={<UserProfile />} />
         </Routes>
       </div>
