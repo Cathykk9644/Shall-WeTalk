@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
+import VideoChat from "./pages/VideoChat";
 import UserProfile from "./pages/UserProfile";
 import { ContactsProvider } from "./Contexts/ContactsProvider";
 import { SocketProvider } from "./Contexts/SocketProvider.js";
@@ -32,6 +33,7 @@ const App = () => {
               <Route path="/signup" element={<Signup />} />
               <Route element={<ProtectedRoutes/>}>
                 <Route path="/chat" element={<Chat />} />
+                <Route path="/videochat" element={<VideoChat />} />
                 <Route path="/userprofile" element={<UserProfile id={id}/>} />
               </Route>
 
