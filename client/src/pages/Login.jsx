@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import loginbg from '../Assets/loginbg.avif';
 import logo from '../Assets/Logo.jpeg';
@@ -10,8 +10,9 @@ import { FaGithub } from 'react-icons/fa';
 import { RiChatSmile2Line } from 'react-icons/ri';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({setId}) => {
   const navigate = useNavigate();
+  const  idRef = useRef();
 
   const [loginDetails, setLoginDetails] = useState({
     email: '',
@@ -36,7 +37,9 @@ const Login = () => {
 
       // Handle the response as needed
       console.log(response.data);
-      navigate('/Userprofile');
+      idRef.current = response.data.id;
+      setId(idRef.current)
+      navigate(`/Userprofile/`);
     } catch (error) {
       if (
         error.response &&

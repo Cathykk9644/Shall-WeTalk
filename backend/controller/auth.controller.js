@@ -150,7 +150,7 @@ class AuthController extends BaseController {
           });
 
           // Successful login
-          return res.status(200).json({ message: 'Login successful' });
+          return res.status(200).json({ message: 'Login successful' , id: user.id});
         });
       })(req, res, next);
     } catch (error) {
