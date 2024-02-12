@@ -16,6 +16,12 @@ class UserRouter {
       `${this.path}/checkIfUserDetailsExist`,
       this.controller.checkIfUserDetailsExist
     );
+    this.router.post(
+      `${this.path}/addProfilePic`,
+      this.controller.addProfilePicture
+    );
   };
+
+
 }
 module.exports = UserRouter;

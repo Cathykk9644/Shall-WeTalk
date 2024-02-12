@@ -1,4 +1,4 @@
-import React, { Profiler, useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase';
 import axios from 'axios';
@@ -11,7 +11,7 @@ const UserProfile=({id})=>{
   const [profileDetails,setProfileDetails] = useState();
 
   const getProfilePictureURL = async (userId) => {
-    const storageRef = ref(storage,`${STORAGE_KEY,userId}`);
+    const storageRef = ref(storage,`${STORAGE_KEY, userId}`);
     const downloadURL = await getDownloadURL(storageRef);
     setProfileURL(downloadURL);
     return downloadURL;
@@ -20,6 +20,11 @@ const UserProfile=({id})=>{
   const uploadProfilePicture = async (userId, file) => {
     const storageRef = ref(storage,`${STORAGE_KEY,userId}`);
     await uploadBytes(storageRef, file);
+    const pfpURL = await getProfilePictureURL(id);
+    await axios.post(`http://localhost:8000/users/addProfilePic`,{
+      userId:userId,
+      newProfileURL: pfpURL
+    })
   };
   
   const handleFileInput = (e) =>{
@@ -29,8 +34,7 @@ const UserProfile=({id})=>{
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    uploadProfilePicture("test",fileInputFile);
-    getProfilePictureURL("test");
+    uploadProfilePicture(id,fileInputFile);
   }
 
   const getUserProfileDetails = async (loginId) =>{
@@ -39,8 +43,8 @@ const UserProfile=({id})=>{
       const userProfileDetails = await axios.get('http://localhost:8000/users/getProfile',{
         params:{userId:loginId}
       })
-      console.log(userProfileDetails)
       setProfileDetails(userProfileDetails.data)
+      setProfileURL(userProfileDetails.data.imageURL);
     }catch(err){
       console.log(err);
     }
@@ -52,7 +56,7 @@ const UserProfile=({id})=>{
   
   return(
     <div>
-      {profileDetails?<form>
+      {profileDetails&&profileURL?<form>
         <label>Name:</label>
         <div>{profileDetails.username}</div>
         <br/>
@@ -62,11 +66,17 @@ const UserProfile=({id})=>{
         <label>Learning Languages:</label>
         <div>{profileDetails.userLearningLanguages}</div>
         <br/>
+        <label>Address:</label>
+        <div>{profileDetails.userAddress}</div>
+        <br/>
         <label>Hobbies:</label>
         <div>{profileDetails.useHobbies}</div>
         <br/>
+        <label>Tell us a bit about yourself:</label>
+        <div>{profileDetails.bio}</div>
+        <br/>
         <label>Profile Picture  :</label>
-        <img className='rounded-full' src={profileURL} alt='profile pic' />
+        <img className='rounded-full size-32' src={profileURL} alt='profile pic' />
         <input 
           type='file'
           name='file'

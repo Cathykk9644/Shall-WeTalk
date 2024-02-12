@@ -76,6 +76,24 @@ class userController extends BaseController {
     }
   };
 
+  addProfilePicture =async (req,res) =>{
+    const {userId, newProfileURL} = req.body;
+    try {
+      this.db.users.update({imageURL:newProfileURL},{
+        where:
+        {
+          id:userId
+        }
+      });
+
+      res.status(200).json(`New Profile URL: ${newProfileURL}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  
   //* Modify User
   //* Delete User
 }
