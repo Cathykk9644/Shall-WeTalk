@@ -75,18 +75,18 @@ const FriendList = () => {
   return (
     <div className="w-2/6 h-full flex flex-col bg-bgColor1 border-r">
       {/* Top bar */}
-      <div className="flex justify-between items-center p-2 border-b ">
-        <div className="flex items-center">
+      <div className="flex justify-center items-center p-2 border-b ">
+        <div className="flex items-center -ml-2">
           <img
             src="https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"
             alt="dummy user image"
-            className="w-8 h-8 rounded-full object-cover ml-2"
+            className="w-8 h-8 rounded-full object-cover "
           />
           <span className="font-semibold text-sm text-gray-500 ml-2">
             {"You"}
           </span>
           {/* Search bar */}
-          <div className="relative ml-4 flex-1">
+          <div className="relative ml-4 flex-1 ">
             <FaSearch
               className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 "
               size={10}
