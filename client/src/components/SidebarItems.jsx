@@ -41,7 +41,10 @@ const SidebarItems = ({ isCollapsed }) => {
         <PiUserBold className="text-xl" />
         {!isCollapsed && <span className="ml-4 ">Profile</span>}
       </li>
-      <li className="flex items-center p-4 hover:bg-sky-400 rounded-md font-semibold cursor-pointer duration-100">
+      <li
+        onClick={() => navigate("/video")}
+        className="flex items-center p-4 hover:bg-sky-400 rounded-md font-semibold cursor-pointer duration-100"
+      >
         <PiBellRingingBold className="text-xl" />
         {!isCollapsed && <span className="ml-4 ">Notifications</span>}
       </li>
