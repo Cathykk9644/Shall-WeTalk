@@ -2,22 +2,25 @@ import React from "react";
 import LOGO from "../Assets/Logo.jpeg";
 import Video1 from "../Assets/Video-1.jpg";
 import Video2 from "../Assets/Video-2.jpg";
-
 import { FaSlackHash, FaVideo } from "react-icons/fa";
 import { FaMicrophoneSlash } from "react-icons/fa6";
 import { HiPhoneIncoming } from "react-icons/hi";
 import { ImPhoneHangUp } from "react-icons/im";
 import { IoChatbubbleSharp, IoVideocamOff, IoVideocam } from "react-icons/io5";
-
 import VideoChatUI from "../components/VideoChatUI";
+import { useNavigate, Link } from "react-router-dom";
 
 const VideoChat = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex h-screen">
       {/* Left Section */}
       <div className="flex flex-col w-2/3 bg-bgColor1 p-4">
         {/* Top Bar */}
-        <div className="w-full h-16 bg-bgColor1  flex items-center justify-center p-2  hover:scale-95 cursor-pointer duration-100">
+        <div
+          onClick={() => navigate("/chat")}
+          className="w-full h-16 bg-bgColor1  flex items-center justify-center p-2  hover:scale-95 cursor-pointer duration-100"
+        >
           <img src={LOGO} alt="Logo" className="h-full" />
         </div>
 

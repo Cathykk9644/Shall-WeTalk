@@ -1,30 +1,32 @@
-require('./environment');
-const express = require('express');
-const cors = require('cors');
-const { Server } = require('socket.io');
-const { createServer } = require('http');
-const session = require('express-session');
-const passport = require('passport');
+require("./environment");
+const express = require("express");
+const cors = require("cors");
+const { Server } = require("socket.io");
+const { createServer } = require("http");
+const session = require("express-session");
+const passport = require("passport");
 
-const AuthRouter = require('./router/auth.router');
-const userRouter = require('./router/users.router');
-const userFriendRouter = require('./router/userFriends.router');
+const AuthRouter = require("./router/auth.router");
+const userRouter = require("./router/users.router");
+const userFriendRouter = require("./router/userFriends.router");
 
 const PORT = process.env.PORT || 8080;
 const app = express();
 const http = createServer(app);
+
 const io = new Server(http, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
+    origin: "*",
+    methods: ["GET", "POST"],
   },
 });
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: 'thunder-cat',
+    secret: "thunder-cat",
     resave: false,
     saveUninitialized: false,
   })
@@ -33,20 +35,36 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => {
-  res.send('Hello, Shall WeTalk!');
+app.get("/", (req, res) => {
+  res.send("Hello, Shall WeTalk!");
 });
 const authRouter = new AuthRouter();
-app.use('/', authRouter.router);
+app.use("/", authRouter.router);
 
 const routers = [new userRouter(), new userFriendRouter()];
-routers.forEach((router) => app.use('/', router.router));
+routers.forEach((router) => app.use("/", router.router));
 
-io.on('connection', (socket) => {
-  console.log('user id:', socket.id, ' has logged in!');
+io.on("connection", (socket) => {
+  console.log("user id:", socket.id, " has logged in!");
+
+  // socket server setup for video chat
+  socket.emit("me", socket.id);
+
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("callEnded");
+  });
+
+  socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+    io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+  });
+
+  socket.on("answerCall", (data) => {
+    io.to(data.to).emit("callAccepted", data.signal);
+  });
 });
 
-http.listen(PORT, '0.0.0.0', () => {
+http.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 App listening on the port ${PORT}`);
 });
+
 ``;

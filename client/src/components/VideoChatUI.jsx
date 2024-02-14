@@ -102,7 +102,7 @@ const VideoChatUI = () => {
           value={message}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="flex-1 mx-4 my-2  p-2 border rounded-full focus:outline-none focus:ring-1 focus:border-sky-400 shadow-sm text-xs"
+          className="flex-1 mx-4 my-2  p-2 border rounded-full focus:outline-none focus:ring-1 focus:border-sky-300 shadow-sm text-xs"
         />
         {/* Send Message Button */}
         <button
