@@ -11,30 +11,36 @@ export function useContacts() {
 export function ContactsProvider({id, children}) {
   // create a state
   const [contacts, setContacts] = useState([]);
-  const getFriends = async () => {
+  const getFriends = async (id) => {
     try{
-      const response = await axios.get(`http://localhost:8000/users/friends/${id}`)
+      const response = await axios.get(`http://localhost:8000/userFriends/getAllFriends/`,
+      {params:
+        {userId:id}
+      });
+      console.log(response.data);
       const friends=response.data;
       let contactList = [];
       contactList = friends.map((friend)=>{
-        return  {id:friend.friendId,name:friend.friendName}
+        return  {id:friend.friendId,name:friend.friendNickname}
       })
       setContacts(contactList)
+      console.log("contacts:",contactList)
     }catch(err){
       console.log(err);
     }
   }
   useEffect(()=>{
-    getFriends();
+    getFriends(id);
   },[])
 
   // appending contact
   async function createContact (friendId, name) {
     try{
-      const response = await axios.post(`http://localhost:8080/users/friends`,{
+      const response = await axios.post(`http://localhost:8000/userFriends/addFriend`,{
+        userId: id,  
         friendId:friendId,
-        friendName:name,
-        userId: id
+        friendNickname:name,
+        isAccepted: false
       })
     }catch(err){
       console.log(err);

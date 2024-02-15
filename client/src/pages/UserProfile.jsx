@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase';
 import axios from 'axios';
+import Sidebar from '../components/Sidebar';
 
 const STORAGE_KEY = "profilePictures/"
 
@@ -55,8 +56,11 @@ const UserProfile=({id})=>{
   },[])
   
   return(
-    <div>
-      {profileDetails&&profileURL?<form>
+    <>
+    {profileDetails&&profileURL?<div className="flex h-screen  overflow-hidden">
+      <Sidebar username={profileDetails.username} pfp={profileURL}/>
+      <div className="flex flex-1">
+      <form>
         <label>Name:</label>
         <div>{profileDetails.username}</div>
         <br/>
@@ -89,8 +93,10 @@ const UserProfile=({id})=>{
         >
           Upload your profile picture here!
         </button>
-      </form>:"Loading"}
-    </div>
+      </form>
+      </div>
+    </div>:"Loading"}
+    </>
   )
 }
 export default UserProfile;
