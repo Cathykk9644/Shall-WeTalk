@@ -66,6 +66,13 @@ class AuthController extends BaseController {
     });
   }
 
+  googleRegister = async (req, res) => {};
+  githubRegister = async (req, res) => {};
+  facebookRegister = async (req, res) => {};
+  googleLogin = async (req, res) => {};
+  githubLogin = async (req, res) => {};
+  facebookLogin = async (req, res) => {};
+
   register = async (req, res) => {
     // Handle the registration logic
     // Extract the email and password from the request body
