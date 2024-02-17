@@ -19,12 +19,13 @@ const VideoChatSocketProvider = ({ id,children }) => {
   const connectionRef = useRef();
 
   useEffect(() => {
+    console.log(navigator.mediaDevices)
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
       });
-
+    
     videoChatSocket.on("me", (id) => setMe(id));
 
     videoChatSocket.on("callUser", ({ from, name: callerName, signal }) => {

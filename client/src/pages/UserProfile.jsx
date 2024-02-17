@@ -80,7 +80,7 @@ const UserProfile=({id})=>{
         <div>{profileDetails.bio}</div>
         <br/>
         <label>Profile Picture  :</label>
-        <img className='rounded-full size-32' src={profileURL} alt='profile pic' />
+        <img className='rounded-full size-32 object-cover' src={profileURL} alt='profile pic' />
         <input 
           type='file'
           name='file'
