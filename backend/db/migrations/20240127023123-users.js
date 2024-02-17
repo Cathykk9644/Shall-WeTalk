@@ -1,52 +1,71 @@
 'use strict';
+
 module.exports = {
-  async up(queryInterface, sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: sequelize.INTEGER,
+        type: Sequelize.INTEGER,
       },
       username: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
       },
       email: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
       },
       password: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
       },
       planType: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
+      },
+      signUpType: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       bio: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
       },
       imageURL: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
       },
       userAddress: {
         allowNull: false,
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: sequelize.DATE,
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: sequelize.DATE,
+        type: Sequelize.DATE,
       },
     });
+
+    // Add a custom constraint to allow password to be null if signUpType is "thirdParty"
+    await queryInterface.sequelize.query(`
+      ALTER TABLE users ADD CONSTRAINT check_password_based_on_sign_up_type CHECK (
+        (
+          'signUpType' = 'thirdParty' AND password IS NULL) OR
+        ('signUpType' <> 'thirdParty' AND password IS NOT NULL)
+      );
+    `);
+    // start table entries from id 6 to avoid an error
+    await queryInterface.sequelize.query(
+      'ALTER SEQUENCE users_id_seq RESTART WITH 6'
+    );
   },
-  async down(queryInterface, sequelize) {
+
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('users');
   },
 };
