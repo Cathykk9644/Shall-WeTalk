@@ -11,6 +11,7 @@ import VideoCall from "./pages/VideoCall";
 import VideoTesting from "./pages/VideoTesting";
 import { ContactsProvider } from "./Contexts/ContactsProvider";
 import { SocketProvider } from "./Contexts/SocketProvider.js";
+import { VideoChatSocketProvider } from "./Contexts/VideoSocketContext";
 
 const App = () => {
   const [id,setId] = useState();
@@ -19,7 +20,9 @@ const App = () => {
     return(
       <SocketProvider id = {id}>
         <ContactsProvider id = {id}>
+          <VideoChatSocketProvider id={id}>
             <Outlet/>
+          </VideoChatSocketProvider>
         </ContactsProvider>
       </SocketProvider>      
     )

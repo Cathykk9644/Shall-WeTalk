@@ -6,7 +6,7 @@ const VideoChatSocketContext = createContext();
 
 const videoChatSocket = io("http://localhost:8000");
 
-const VideoChatSocketProvider = ({ children }) => {
+const VideoChatSocketProvider = ({ id,children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const [stream, setStream] = useState();
