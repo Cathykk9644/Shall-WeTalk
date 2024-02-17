@@ -70,15 +70,7 @@ class AuthController extends BaseController {
     // Handle the registration logic
     // Extract the email and password from the request body
     try {
-      const {
-        username,
-        email,
-        password,
-        plantype,
-        bio,
-        imageURL,
-        userAddress,
-      } = req.body;
+      const { username, email, password } = req.body;
 
       // Generate a salt and hash the password
       const saltRounds = 10;
@@ -87,10 +79,11 @@ class AuthController extends BaseController {
         username: username,
         email: email,
         password: hashedPassword,
-        planType: plantype,
-        bio: bio,
-        imageURL: imageURL,
-        userAddress: userAddress,
+        planType: 'free',
+        bio: 'tell people a bit about yourself',
+        imageURL:
+          'oogleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae',
+        userAddress: 'random Universe',
       };
 
       // Create a new user record in the database
@@ -157,7 +150,7 @@ class AuthController extends BaseController {
           });
 
           // Successful login
-          return res.status(200).json({ message: 'Login successful' });
+          return res.status(200).json({ message: 'Login successful' , id: user.id});
         });
       })(req, res, next);
     } catch (error) {

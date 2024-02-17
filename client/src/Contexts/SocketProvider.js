@@ -12,11 +12,11 @@ export function SocketProvider({ id, children }) {
 
   useEffect(() => {
     const newSocket = io(
-      'http://localhost:8080',
+      'http://localhost:8000',
       { query: { id } }  
     )
     setSocket(newSocket);
-
+    console.log(socket)
     return () => newSocket.close();
   }, [id])
 

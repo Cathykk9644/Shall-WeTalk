@@ -9,8 +9,9 @@ class userController extends BaseController {
   //* To Do
 
   getProfile = async (req, res) => {
-    const { userId } = req.body;
+    const  {userId}  = req.query
     console.log(userId);
+    console.log(req.query);
     try {
       const profile = await this.db.users.findOne({
         where: { id: userId },
@@ -36,6 +37,63 @@ class userController extends BaseController {
     }
   };
 
+  checkIfUserDetailsExist = async (req, res) => {
+    const { username, email } = req.body;
+
+    const doesEmailExistPromise = new Promise((resolve, reject) => {
+      this.db.users
+        .findOne({
+          where: { email: email },
+        })
+        .then((result) => resolve(!!result)) // Convert result to a boolean
+        .catch((error) => reject(error));
+    });
+
+    const doesUsernameExistPromise = new Promise((resolve, reject) => {
+      this.db.users
+        .findOne({
+          where: { username: username },
+        })
+        .then((result) => resolve(!!result)) // Convert result to a boolean
+        .catch((error) => reject(error));
+    });
+
+    try {
+      const [isEmailUsed, isUsernameUsed] = await Promise.all([
+        doesEmailExistPromise,
+        doesUsernameExistPromise,
+      ]);
+
+      const EmailUsed = !!isEmailUsed;
+      const usernameUsed = !!isUsernameUsed;
+
+      res.json({
+        email: EmailUsed,
+        username: usernameUsed,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  addProfilePicture =async (req,res) =>{
+    const {userId, newProfileURL} = req.body;
+    try {
+      this.db.users.update({imageURL:newProfileURL},{
+        where:
+        {
+          id:userId
+        }
+      });
+
+      res.status(200).json(`New Profile URL: ${newProfileURL}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  
   //* Modify User
   //* Delete User
 }

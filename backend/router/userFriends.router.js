@@ -14,7 +14,7 @@ class UserFriendsRouter {
   initializeRoutes = () => {
     this.router.get(
       `${this.path}/getAllFriends`,
-      checkAuth,
+      // checkAuth,
       this.controller.getAllFriends
     );
     this.router.delete(

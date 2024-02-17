@@ -24,7 +24,9 @@ const SidebarItems = ({ isCollapsed }) => {
         <PiHouseBold className="text-xl" />
         {!isCollapsed && <span className="ml-4 ">Home</span>}
       </li>
-      <li className="flex items-center p-4 hover:bg-sky-400 rounded-md font-semibold cursor-pointer duration-100">
+      <li 
+        onClick={() => navigate("/chat")}
+        className="flex items-center p-4 hover:bg-sky-400 rounded-md font-semibold cursor-pointer duration-100">
         <PiChatBold className="text-xl" />
         {!isCollapsed && <span className="ml-4 ">Messages</span>}
       </li>
