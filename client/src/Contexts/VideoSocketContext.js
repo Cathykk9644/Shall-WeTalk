@@ -23,8 +23,6 @@ const VideoChatSocketProvider = ({ children }) => {
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
-
-        myVideo.current.srcObject = currentStream;
       });
 
     videoChatSocket.on("me", (id) => setMe(id));
@@ -32,7 +30,18 @@ const VideoChatSocketProvider = ({ children }) => {
     videoChatSocket.on("callUser", ({ from, name: callerName, signal }) => {
       setCall({ isReceivingCall: true, from, name: callerName, signal });
     });
+
+    return () => {
+      videoChatSocket.off("me");
+      videoChatSocket.off("callUser");
+    };
   }, []);
+
+  useEffect(() => {
+    if (stream && myVideo.current) {
+      myVideo.current.srcObject = stream;
+    }
+  }, [stream]);
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -53,9 +62,11 @@ const VideoChatSocketProvider = ({ children }) => {
   };
 
   const callUser = (id) => {
+    console.log("Calling user with ID:", id);
     const peer = new Peer({ initiator: true, trickle: false, stream });
 
     peer.on("signal", (data) => {
+      console.log("Emitting callUser event");
       videoChatSocket.emit("callUser", {
         userToCall: id,
         signalData: data,

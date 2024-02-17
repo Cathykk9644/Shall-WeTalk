@@ -8,6 +8,7 @@ import Chat from "./pages/Chat";
 import VideoChat from "./pages/VideoChat";
 import UserProfile from "./pages/UserProfile";
 import VideoCall from "./pages/VideoCall";
+import VideoTesting from "./pages/VideoTesting";
 
 const App = () => {
   useEffect(() => {
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/chat" element={<Chat />} />
           <Route path="/videochat" element={<VideoChat />} />
           <Route path="/video" element={<VideoCall />} />
+          <Route path="/videotest" element={<VideoTesting />} />
           <Route path="/userprofile" element={<UserProfile />} />
         </Routes>
       </div>
