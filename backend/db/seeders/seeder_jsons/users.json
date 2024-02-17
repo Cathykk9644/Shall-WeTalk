@@ -8,7 +8,8 @@
       "planType": "plan1",
       "bio": "This is a bio for user1",
       "imageURL": "https://via.placeholder.com/150/FF0000/FFFFFF?Text=Digital.com",
-      "userAddress": "123 Main Street, New York, USA"
+      "userAddress": "123 Main Street, New York, USA",
+      "signUpType": "thirdParty"
     },
     {
       "id": 2,
@@ -18,7 +19,8 @@
       "planType": "plan2",
       "bio": "This is a bio for user2",
       "imageURL": "https://via.placeholder.com/150/00FF00/000000?Text=Up.Co",
-      "userAddress": "456 Central Avenue, London, UK"
+      "userAddress": "456 Central Avenue, London, UK",
+      "signUpType": "thirdParty"
     },
     {
       "id": 3,
@@ -28,7 +30,8 @@
       "planType": "plan3",
       "bio": "This is a bio for user3",
       "imageURL": "https://via.placeholder.com/150/0000FF/808080?Text=Lorem.net",
-      "userAddress": "789 South Boulevard, Sydney, Australia"
+      "userAddress": "789 South Boulevard, Sydney, Australia",
+      "signUpType": "email"
     },
     {
       "id": 4,
@@ -38,7 +41,8 @@
       "planType": "plan4",
       "bio": "This is a bio for user4",
       "imageURL": "https://via.placeholder.com/150/FFFF00/000000?Text=Down.Com",
-      "userAddress": "321 North Square, Tokyo, Japan"
+      "userAddress": "321 North Square, Tokyo, Japan",
+      "signUpType": "thirdParty"
     },
     {
       "id": 5,
@@ -48,7 +52,8 @@
       "planType": "plan5",
       "bio": "This is a bio for user5",
       "imageURL": "https://via.placeholder.com/150/FF00FF/FFFFFF?Text=Right.Org",
-      "userAddress": "654 West Circle, Paris, France"
+      "userAddress": "654 West Circle, Paris, France",
+      "signUpType": "email"
     }
   ]
 }
