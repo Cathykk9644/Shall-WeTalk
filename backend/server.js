@@ -148,7 +148,9 @@ const routers = [new userRouter(), new userFriendRouter()];
 routers.forEach((router) => app.use("/", router.router));
 
 io.on("connection", (socket) => {
-  console.log("user id:", socket.id, " has logged in!");
+  const { id } = socket.handshake.query;
+  socket.join(id);
+  console.log("user id:", id, " has logged in!");
 
   // socket server setup for video chat
   socket.emit("me", socket.id);
