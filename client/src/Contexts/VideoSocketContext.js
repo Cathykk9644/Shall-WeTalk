@@ -4,8 +4,7 @@ import Peer from "simple-peer";
 
 const VideoChatSocketContext = createContext();
 
-const videoChatSocket = io("http://localhost:8000");
-
+// This provider component will use the id passed as a prop to create a socket connection
 const VideoChatSocketProvider = ({ id, children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
@@ -18,42 +17,58 @@ const VideoChatSocketProvider = ({ id, children }) => {
   const userVideo = useRef();
   const connectionRef = useRef();
 
+  // Creating a ref for the socket to persist the connection without re-creating it on re-renders
+  const videoChatSocket = useRef();
+
+  // This effect will only run once when the component mounts
   useEffect(() => {
+    videoChatSocket.current = io("http://localhost:8000", { query: { id } });
+
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
       });
 
-    videoChatSocket.on("me", (id) => setMe(id));
+    videoChatSocket.current.on("me", (id) => setMe(id));
 
-    videoChatSocket.on("callUser", ({ from, name: callerName, signal }) => {
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
-    });
+    videoChatSocket.current.on(
+      "callUser",
+      ({ from, name: callerName, signal }) => {
+        setCall({ isReceivingCall: true, from, name: callerName, signal });
+      }
+    );
 
+    // Cleanup function to remove all socket event listeners
     return () => {
-      videoChatSocket.off("me");
-      videoChatSocket.off("callUser");
+      videoChatSocket.current.emit("logout");
+      videoChatSocket.current.off("me");
+      videoChatSocket.current.off("callUser");
+      videoChatSocket.current.off("callAccepted");
+      videoChatSocket.current.disconnect();
     };
   }, []);
 
-  useEffect(() => {
-    if (stream && myVideo.current) {
-      myVideo.current.srcObject = stream;
-    }
-  }, [stream]);
-
+  // Answering a call
   const answerCall = () => {
     setCallAccepted(true);
 
     const peer = new Peer({ initiator: false, trickle: false, stream });
 
     peer.on("signal", (data) => {
-      videoChatSocket.emit("answerCall", { signal: data, to: call.from });
+      videoChatSocket.current.emit("answerCall", {
+        signal: data,
+        to: call.from,
+      });
     });
 
     peer.on("stream", (currentStream) => {
-      userVideo.current.srcObject = currentStream;
+      if (userVideo.current) {
+        userVideo.current.srcObject = currentStream;
+      }
     });
 
     peer.signal(call.signal);
@@ -61,14 +76,21 @@ const VideoChatSocketProvider = ({ id, children }) => {
     connectionRef.current = peer;
   };
 
-  const callUser = (id) => {
-    console.log("Calling user with ID:", id);
+  // Calling a user
+  const callUser = (idToCall) => {
+    if (idToCall === me) {
+      setCallAccepted(true);
+      userVideo.current.srcObject = myVideo.current.srcObject; // Show own video as the user video
+      // No need to create a peer connection in this case
+      return;
+    }
+
+    // Proceed with the regular call process if calling someone else
     const peer = new Peer({ initiator: true, trickle: false, stream });
 
     peer.on("signal", (data) => {
-      console.log("Emitting callUser event");
-      videoChatSocket.emit("callUser", {
-        userToCall: id,
+      videoChatSocket.current.emit("callUser", {
+        userToCall: idToCall,
         signalData: data,
         from: me,
         name,
@@ -79,21 +101,26 @@ const VideoChatSocketProvider = ({ id, children }) => {
       userVideo.current.srcObject = currentStream;
     });
 
-    videoChatSocket.on("callAccepted", (signal) => {
+    videoChatSocket.current.on("callAccepted", (signal) => {
       setCallAccepted(true);
-
       peer.signal(signal);
     });
 
     connectionRef.current = peer;
   };
 
+  // Leaving the call
   const leaveCall = () => {
     setCallEnded(true);
 
-    connectionRef.current.destroy();
+    if (connectionRef.current) {
+      connectionRef.current.destroy();
+    }
 
-    window.location.reload();
+    // Resetting the call state
+    setCall({});
+    setCallAccepted(false);
+    setCallEnded(false);
   };
 
   return (
@@ -101,6 +128,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
       value={{
         call,
         callAccepted,
+        setCallAccepted,
         myVideo,
         userVideo,
         stream,
