@@ -1,9 +1,13 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
+import FriendsTopBar from "./FriendsTopBar"
+import {useContacts} from "../Contexts/ContactsProvider"
 
 const FriendList = () => {
-  const friends = [
+  const friends = useContacts().contacts;
+
+  const fakeFriends = [
     {
       name: "Alice Smith",
       lastActive: "1:15 pm",
@@ -74,35 +78,7 @@ const FriendList = () => {
 
   return (
     <div className="w-2/6 h-full flex flex-col bg-bgColor1 border-r">
-      {/* Top bar */}
-      <div className="flex justify-center items-center p-2 border-b ">
-        <div className="flex items-center -ml-2">
-          <img
-            src="https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"
-            alt="dummy user image"
-            className="w-8 h-8 rounded-full object-cover "
-          />
-          <span className="font-semibold text-sm text-gray-500 ml-2">
-            {"You"}
-          </span>
-          {/* Search bar */}
-          <div className="relative ml-4 flex-1 ">
-            <FaSearch
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 "
-              size={10}
-            />
-            <input
-              type="text"
-              placeholder="Search friends..."
-              className="pl-8 pr-4 py-1 w-full border rounded-full focus:outline-none focus:ring-1 focus:ring-sky-500 text-xs"
-            />
-          </div>
-          {/* Filter button */}
-          <button className="ml-4 p-2 rounded-full text-gray-500 hover:bg-gray-200 focus:outline-none">
-            <IoFilter />
-          </button>
-        </div>
-      </div>
+      <FriendsTopBar/>
 
       <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
         {friends.map((friend, index) => (
@@ -112,7 +88,7 @@ const FriendList = () => {
           >
             <div className="flex items-center ">
               <img
-                src={friend.imageUrl}
+                src={friend.imageURL}
                 alt={friend.name}
                 className="rounded-full h-10 w-10 object-cover"
                 onError={(e) => {
@@ -122,7 +98,7 @@ const FriendList = () => {
               />
               <span className="ml-4 font-medium">{friend.name}</span>
             </div>
-            <div className="text-xs text-gray-500">{friend.lastActive}</div>
+            {/* <div className="text-xs text-gray-500">{friend.lastActive}</div> */}
           </div>
         ))}
       </div>

@@ -50,10 +50,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      signUpType: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
+      // signUpType: {
+      //   allowNull: false,
+      //   type: DataTypes.STRING,
+      // },
     },
     {
       sequelize,

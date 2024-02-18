@@ -24,7 +24,7 @@ const App = () => {
   const ProtectedRoutes = () => {
     return (
       <SocketProvider id={id}>
-        <ContactsProvider id={id}>
+        <ContactsProvider id={1}>
           <VideoChatSocketProvider id={id}>
             <Outlet />
           </VideoChatSocketProvider>
