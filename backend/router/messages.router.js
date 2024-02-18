@@ -12,14 +12,11 @@ class MessageRouter {
   }
   initializeRoutes = () => {
     this.router.get(`${this.path}/getMessages`, this.controller.getMessages);
-    this.router.post(
-      `${this.path}/checkIfMessageDetailsExist`,
-      this.controller.checkIfMessageDetailsExist
-    );
-    this.router.post(
-      `${this.path}/addProfilePic`,
-      this.controller.addProfilePicture
-    );
+    this.router.post(`${this.path}/createMessage`,this.controller.createMessage);
+    // this.router.post(
+    //   `${this.path}/addProfilePic`,
+    //   this.controller.addProfilePicture
+    // );
   };
 
 

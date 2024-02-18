@@ -24,7 +24,7 @@ class UserFriendsRouter {
     );
     this.router.post(
       `${this.path}/addFriend`,
-      checkAuth,
+      // checkAuth,
       this.controller.addFriend
     );
     this.router.patch(

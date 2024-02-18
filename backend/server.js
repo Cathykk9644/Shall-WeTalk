@@ -112,6 +112,7 @@ const passport = require("passport");
 const AuthRouter = require("./router/auth.router");
 const userRouter = require("./router/users.router");
 const userFriendRouter = require("./router/userFriends.router");
+const MessageRouter = require("./router/messages.router")
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -144,7 +145,7 @@ app.get("/", (req, res) => {
 const authRouter = new AuthRouter();
 app.use("/", authRouter.router);
 
-const routers = [new userRouter(), new userFriendRouter()];
+const routers = [new userRouter(), new userFriendRouter(),new MessageRouter()];
 routers.forEach((router) => app.use("/", router.router));
 
 io.on("connection", (socket) => {
