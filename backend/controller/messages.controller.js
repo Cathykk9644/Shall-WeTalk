@@ -7,15 +7,30 @@ class MessageController extends BaseController {
   }
 
   getMessages = async (req,res) =>{
-    const {chatroomId}=req.query;
-    console.log(chatroomId)
+    const {userId}=req.query;
+    console.log(userId)
     try{
-      const messages = await this.db.messages.findAll({
-        where:{chatroomId}
+      const messages = await this.db.chatroomUsers.findAll({
+        where:{userId},
+        include:[
+          {
+            model: this.db.chatrooms,
+            include:[
+              {
+                model:this.db.messages,
+              }
+            ]
+          }
+        ]
       })
-      res.status(200).json({
-        messages
-      })
+      const chatroomMessages = messages.reduce((result, current) => {  
+        result[current.chatroom.id] = current.chatroom.messages;  
+        return result;  
+      }, {}); 
+
+      res.status(200).json(
+        chatroomMessages
+      )   
     }catch (err){
       console.log(err);
       throw new Error(err);

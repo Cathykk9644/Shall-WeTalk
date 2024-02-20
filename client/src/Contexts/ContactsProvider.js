@@ -18,7 +18,6 @@ export function ContactsProvider({id, children}) {
       {params:
         {userId:id}
       });
-      console.log(response.data);
       const friends=response.data;
       let contactList = [];
       contactList = friends.map((friend)=>{

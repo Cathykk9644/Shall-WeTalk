@@ -5,7 +5,7 @@ import { IoFilter } from "react-icons/io5";
 const FriendsTopBar = () => {
 
   return (
-    <div>
+    <div >
       {/* Top bar */}
       <div className="flex justify-center items-center p-2 border-b ">
         <div className="flex items-center -ml-2">

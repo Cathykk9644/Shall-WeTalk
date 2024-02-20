@@ -3,7 +3,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     static associate(models) {
-      // ...associations
+      this.belongsToMany(models.hobbies, { through: models.userHobbies});
+      this.belongsToMany(models.chatrooms, { through: models.chatroomUsers});
+      this.hasMany(models.userMotherTongues);
+      this.hasMany(models.userLearningLanguages);
     }
   }
   user.init(

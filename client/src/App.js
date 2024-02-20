@@ -17,16 +17,19 @@ import VideoTesting from "./pages/VideoTesting";
 import { ContactsProvider } from "./Contexts/ContactsProvider";
 import { SocketProvider } from "./Contexts/SocketProvider.js";
 import { VideoChatSocketProvider } from "./Contexts/VideoSocketContext";
+import { ChatMessageProvider } from "./Contexts/ChatMessagesProvider.js";
 
 const App = () => {
   const [id, setId] = useState();
 
   const ProtectedRoutes = () => {
     return (
-      <SocketProvider id={id}>
+      <SocketProvider id={1}>
         <ContactsProvider id={1}>
           <VideoChatSocketProvider id={id}>
-            <Outlet />
+            <ChatMessageProvider id = {1}>
+              <Outlet />
+            </ChatMessageProvider>
           </VideoChatSocketProvider>
         </ContactsProvider>
       </SocketProvider>
@@ -45,7 +48,7 @@ const App = () => {
             <Route path="/videochat" element={<VideoChat />} />
             <Route path="/video" element={<VideoCall />} />
             <Route path="/videotest" element={<VideoTesting />} />
-            <Route path="/userprofile" element={<UserProfile id={id} />} />
+            <Route path="/userprofile" element={<UserProfile id={1} />} />
           </Route>
         </Routes>
       </div>
