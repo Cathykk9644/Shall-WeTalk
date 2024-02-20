@@ -1,10 +1,12 @@
 import React, { createContext, useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import Peer from "simple-peer";
+import {useSocket} from "./SocketProvider";
 
 const VideoChatSocketContext = createContext();
 
-const videoChatSocket = io("http://localhost:8000");
+const videoChatSocket = io('http://localhost:8000')
+
 
 const VideoChatSocketProvider = ({ id, children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
@@ -13,16 +15,21 @@ const VideoChatSocketProvider = ({ id, children }) => {
   const [name, setName] = useState("");
   const [call, setCall] = useState({});
   const [me, setMe] = useState("");
+  // const videoChatSocket = useSocket();
+
+  console.log("videoChatSocket",videoChatSocket)
 
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
 
   useEffect(() => {
-    console.log(navigator.mediaDevices)
+    console.log("navigator",navigator.mediaDevices)
+    
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
+        console.log("current",currentStream)
         setStream(currentStream);
       });
     
@@ -40,6 +47,8 @@ const VideoChatSocketProvider = ({ id, children }) => {
 
   useEffect(() => {
     if (stream && myVideo.current) {
+      console.log("myVid",myVideo)
+      console.log("stream",stream)
       myVideo.current.srcObject = stream;
     }
   }, [stream]);
@@ -54,7 +63,14 @@ const VideoChatSocketProvider = ({ id, children }) => {
     });
 
     peer.on("stream", (currentStream) => {
-      userVideo.current.srcObject = currentStream;
+      console.log("currentStream",currentStream)
+      console.log("userVid",userVideo)
+      if (userVideo.current && currentStream){
+        userVideo.current.srcObject = currentStream;
+      }
+
+
+
     });
 
     peer.signal(call.signal);

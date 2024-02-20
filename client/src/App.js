@@ -26,7 +26,7 @@ const App = () => {
     return (
       <SocketProvider id={1}>
         <ContactsProvider id={1}>
-          <VideoChatSocketProvider id={id}>
+          <VideoChatSocketProvider id={1}>
             <ChatMessageProvider id = {1}>
               <Outlet />
             </ChatMessageProvider>
