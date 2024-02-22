@@ -1,43 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState,useCallback } from "react";
 import { IoSend, IoVideocam, IoCall } from "react-icons/io5";
 import { IoMdHappy } from "react-icons/io";
 import { AiFillAudio } from "react-icons/ai";
+import {useChatMessages} from "../Contexts/ChatMessagesProvider"
+
 
 const TextInterface = () => {
   const [message, setMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState([
-    { id: 1, text: "Hey 😉, how's it going?", sender: "friend" },
-    {
-      id: 2,
-      text: "Not too bad, just working on a project. You?",
-      sender: "me",
-    },
-    { id: 3, text: "Same here. Need a break though.🥹", sender: "friend" },
-    { id: 4, text: "We should catch up soon 🤗!", sender: "me" },
-    { id: 5, text: "Yeah definitely!", sender: "friend" },
-    { id: 6, text: "Let's do dinner, go hiking or sth 👻!", sender: "me" },
-    { id: 7, text: "👍 Yeah sounds fun!", sender: "friend" },
-    { id: 8, text: "What about next Sat?", sender: "me" },
-    { id: 9, text: "Yeah okay!", sender: "friend" },
-    { id: 10, text: "Alright see you then!", sender: "me" },
-    { id: 11, text: "Looking forward to it", sender: "friend" },
-    { id: 12, text: "Yeah me too!", sender: "me" },
-    { id: 13, text: "Let's go hiking first and dinner later!😬", sender: "me" },
-    { id: 14, text: "Cool let'ssss do that!", sender: "friend" },
-    {
-      id: 15,
-      text: "Okay hang in there, I will see you soon!😀",
-      sender: "me",
-    },
-  ]);
+  const {testSocket} = useChatMessages();
+  const selectedChat = useChatMessages().chatMessages;
+  // console.log("text interface:", selectedChat)
+  const [chatMessages, setChatMessages] = useState(
+    
+  //   [
+  //   { id: 1, text: "Hey 😉, how's it going?", sender: "friend" },
+  //   {
+  //     id: 2,
+  //     text: "Not too bad, just working on a project. You?",
+  //     sender: "me",
+  //   },
+  //   { id: 3, text: "Same here. Need a break though.🥹", sender: "friend" },
+  //   { id: 4, text: "We should catch up soon 🤗!", sender: "me" },
+  //   { id: 5, text: "Yeah definitely!", sender: "friend" },
+  //   { id: 6, text: "Let's do dinner, go hiking or sth 👻!", sender: "me" },
+  //   { id: 7, text: "👍 Yeah sounds fun!", sender: "friend" },
+  //   { id: 8, text: "What about next Sat?", sender: "me" },
+  //   { id: 9, text: "Yeah okay!", sender: "friend" },
+  //   { id: 10, text: "Alright see you then!", sender: "me" },
+  //   { id: 11, text: "Looking forward to it", sender: "friend" },
+  //   { id: 12, text: "Yeah me too!", sender: "me" },
+  //   { id: 13, text: "Let's go hiking first and dinner later!😬", sender: "me" },
+  //   { id: 14, text: "Cool let'ssss do that!", sender: "friend" },
+  //   {
+  //     id: 15,
+  //     text: "Okay hang in there, I will see you soon!😀",
+  //     sender: "me",
+  //   },
+  // ]
+  );
+  const setRef = useCallback(node => {
+    if (node) {
+      node.scrollIntoView({ smooth: true })
+    }
+  }, [])
 
   const handleSendMessage = () => {
     if (message.trim()) {
       const newMessage = {
-        id: chatMessages.length + 1,
-        text: message,
-        sender: "me",
+        sendername: chatMessages.length + 1,
+        message: message,
+        fromMe: true,
       };
+      testSocket(newMessage.message);
       setChatMessages([...chatMessages, newMessage]);
       setMessage("");
     }
@@ -52,6 +66,12 @@ const TextInterface = () => {
       handleSendMessage();
     }
   };
+
+  useEffect(()=>{
+    if(selectedChat){
+      setChatMessages(selectedChat[0].messages)
+    }
+  },[selectedChat])
 
   return (
     <div className="flex flex-col flex-1 h-full">
@@ -81,24 +101,27 @@ const TextInterface = () => {
       </div>
       <div className="flex-1 p-4 overflow-y-auto scrollbar-hide">
         {/* Chat messages will be displayed here */}
-        {chatMessages.map((msg) => (
+        {chatMessages?chatMessages.map((msg,index) => {
+          const lastMessage = chatMessages.length - 1 === index
+          return(
           <div
-            key={msg.id}
+            ref={lastMessage?setRef:null}
+            key={index}
             className={`flex my-2 ${
-              msg.sender === "me" ? "justify-end" : "justify-start"
+              msg.fromMe ? "justify-end" : "justify-start"
             }`}
           >
             <div
               className={` px-4 py-2 rounded-full text-sm font-semibold ${
-                msg.sender === "me"
+                msg.fromMe
                   ? "bg-sky-400 text-white "
                   : "bg-gray-200 text-gray-500"
               }`}
             >
-              {msg.text}
+              {msg.message}
             </div>
           </div>
-        ))}
+        )}):"Send message to start chatting!"}
       </div>
       <div className="border-t p-4 flex items-center">
         {/* Emoji button */}

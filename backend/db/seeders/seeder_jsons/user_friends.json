@@ -73,12 +73,6 @@
       "isAccepted": true  
     },  
     {  
-      "userId": 1,  
-      "friendId": 3,  
-      "friendNickname": "Charlotte",  
-      "isAccepted": true  
-    },  
-    {  
       "userId": 3,  
       "friendId": 1,  
       "friendNickname": "Lucas",  

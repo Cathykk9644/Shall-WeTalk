@@ -114,6 +114,7 @@ const userRouter = require("./router/users.router");
 const userFriendRouter = require("./router/userFriends.router");
 const MessageRouter = require("./router/messages.router");
 const ChatroomRouter = require("./router/chatrooms.router");
+const { initializeSockets } = require("./sockets/index.js");
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -149,29 +150,10 @@ app.use("/", authRouter.router);
 const routers = [new userRouter(), new userFriendRouter(),new MessageRouter(), new ChatroomRouter()];
 routers.forEach((router) => app.use("/", router.router));
 
-io.on("connection", (socket) => {
-  const { id } = socket.handshake.query;
-  socket.join(id);
-  console.log("user id:", id, " has logged in!");
-
-  // socket server setup for video chat
-  socket.emit("me", socket.id);
-
-  socket.on("disconnect", () => {
-    socket.broadcast.emit("callEnded");
-  });
-
-  socket.on("callUser", ({ userToCall, signalData, from, name }) => {
-    io.to(userToCall).emit("callUser", { signal: signalData, from, name });
-  });
-
-  socket.on("answerCall", (data) => {
-    io.to(data.to).emit("callAccepted", data.signal);
-  });
-});
+initializeSockets(io);
 
 http.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 App listening on the port ${PORT}`);
 });
 
-``;
+;

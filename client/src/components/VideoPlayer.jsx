@@ -5,7 +5,9 @@ const VideoPlayer = ({ name, stream, isUser }) => {
 
   useEffect(() => {
     // Set the stream as the source of the video when the component mounts and when stream changes
+    console.log("internal vid ref before",internalVideoRef)  
     if (internalVideoRef.current && stream) {
+      console.log("internal vid ref",internalVideoRef)
       internalVideoRef.current.srcObject = stream;
     }
   }, [stream]);
