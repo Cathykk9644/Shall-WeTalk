@@ -12,6 +12,13 @@ class UserFriendsController extends BaseController {
     try {
       const allFriends = await this.db.userFriends.findAll({
         where: { userId },
+        include:[
+          {
+            model:this.db.users,
+            foreignKey:'friendId',
+            as:'friend',
+          }
+        ]
       });
       res.json(allFriends);
     } catch (error) {

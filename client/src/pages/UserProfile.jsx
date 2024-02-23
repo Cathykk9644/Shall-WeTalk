@@ -47,6 +47,7 @@ const UserProfile = ({ id }) => {
           params: { userId: loginId },
         }
       );
+      // userProfileDetails.data.
       setProfileDetails(userProfileDetails.data);
       setProfileURL(userProfileDetails.data.imageURL);
     } catch (err) {
@@ -69,16 +70,25 @@ const UserProfile = ({ id }) => {
               <div>{profileDetails.username}</div>
               <br />
               <label>Native Language:</label>
-              <div>{profileDetails.userMotherTongues}</div>
+              <div>{profileDetails.userMotherTongues.map((userMotherTongue)=>{
+                return(
+                <li>{userMotherTongue.language.language}</li>
+                )})}</div>
               <br />
               <label>Learning Languages:</label>
-              <div>{profileDetails.userLearningLanguages}</div>
+              <div>{profileDetails.userLearningLanguages.map((userLearningLanguage)=>{
+                return(
+                <li>{userLearningLanguage.language.language}</li>
+                )})}</div>
               <br />
               <label>Address:</label>
               <div>{profileDetails.userAddress}</div>
               <br />
               <label>Hobbies:</label>
-              <div>{profileDetails.useHobbies}</div>
+              <div>{profileDetails.hobbies.map((userhobby)=>{
+                return(
+                <li>{userhobby.hobby}</li>
+                )})}</div>
               <br />
               <label>Tell us a bit about yourself:</label>
               <div>{profileDetails.bio}</div>

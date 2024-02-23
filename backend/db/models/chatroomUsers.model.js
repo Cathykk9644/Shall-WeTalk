@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class chatroomUser extends Model {
     static associate(models) {
       this.belongsTo(models.chatrooms, { foreignKey: 'chatroomId' });
+      this.belongsTo(models.users, { foreignKey: 'userId' });
     }
   }
   chatroomUser.init(

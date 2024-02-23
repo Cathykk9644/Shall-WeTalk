@@ -1,5 +1,6 @@
 import React, {useContext,useEffect,useState} from 'react'
 import axios from 'axios';
+import { FaRegThumbsDown } from 'react-icons/fa6';
 
 const ContactsContext = React.createContext()
 
@@ -17,11 +18,10 @@ export function ContactsProvider({id, children}) {
       {params:
         {userId:id}
       });
-      console.log(response.data);
       const friends=response.data;
       let contactList = [];
       contactList = friends.map((friend)=>{
-        return  {id:friend.friendId,name:friend.friendNickname}
+        return  {id:friend.friendId,name:friend.friendNickname, imageURL:friend.friend.imageURL}
       })
       setContacts(contactList)
       console.log("contacts:",contactList)

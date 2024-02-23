@@ -3,34 +3,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     static associate(models) {
-      this.hasOne(models.sessions);
-      this.hasMany(models.federatedCredentials, { foreignKey: 'userId' });
-      this.hasMany(models.userFriends, {
-        foreignKey: 'userId',
-        as: 'userFriends',
-      });
-      this.hasMany(models.userMotherTongues, {
-        foreignKey: 'userId',
-      });
-
-      this.hasMany(models.calls, {
-        foreignKey: 'callerId',
-        as: 'caller',
-      });
-      this.hasMany(models.calls, {
-        foreignKey: 'calleeId',
-        as: 'callee',
-      });
-      this.hasMany(models.messages, {
-        foreignKey: 'senderId',
-        as: 'sender',
-      });
-      this.hasMany(models.userLearningLanguages, {
-        foreignKey: 'userId',
-      });
-      this.hasMany(models.userHobbies, {
-        foreignKey: 'userId',
-      });
+      this.belongsToMany(models.hobbies, { through: models.userHobbies});
+      this.belongsToMany(models.chatrooms, { through: models.chatroomUsers});
+      this.hasMany(models.userMotherTongues);
+      this.hasMany(models.userLearningLanguages);
     }
   }
   user.init(
@@ -50,8 +26,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       password: {
-        allowNull: false,
+        allowNull: true, // Allow null for password field
         type: DataTypes.STRING,
+        validate: {
+          passwordRequired() {
+            // Custom validation to enforce password presence if signUpType is not "thirdParty"
+            if (this.signUpType !== 'thirdParty' && !this.password) {
+              throw new Error('Password is required');
+            }
+          },
+        },
       },
       planType: {
         allowNull: false,
@@ -69,10 +53,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
+      // signUpType: {
+      //   allowNull: false,
+      //   type: DataTypes.STRING,
+      // },
     },
     {
       sequelize,
-      modelName: 'users', // ! model name MUST match table name
+      modelName: 'users',
     }
   );
   return user;

@@ -1,10 +1,12 @@
 import React, { createContext, useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import Peer from "simple-peer";
+import { useSocket } from "./SocketProvider";
 
 const VideoChatSocketContext = createContext();
 
-// This provider component will use the id passed as a prop to create a socket connection
+const videoChatSocket = io("http://localhost:8000");
+
 const VideoChatSocketProvider = ({ id, children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
@@ -12,17 +14,22 @@ const VideoChatSocketProvider = ({ id, children }) => {
   const [name, setName] = useState("");
   const [call, setCall] = useState({});
   const [me, setMe] = useState("");
+  // const videoChatSocket = useSocket();
 
-  const myVideo = useRef();
-  const userVideo = useRef();
+  // console.log("videoChatSocket",videoChatSocket)
+
+  const myVideo = useRef(null);
+  const userVideo = useRef(null);
   const connectionRef = useRef();
   const videoChatSocket = useRef();
 
   // This effect will only run once when the component mounts
   useEffect(() => {
+    console.log(navigator.mediaDevices);
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
+        // console.log("current",currentStream)
         setStream(currentStream);
         if (myVideo.current) {
           myVideo.current.srcObject = currentStream;
@@ -48,7 +55,14 @@ const VideoChatSocketProvider = ({ id, children }) => {
     };
   }, []);
 
-  // Answering a call
+  useEffect(() => {
+    if (stream && myVideo.current) {
+      // console.log("myVid",myVideo)
+      // console.log("stream",stream)
+      myVideo.current.srcObject = stream;
+    }
+  }, [stream]);
+
   const answerCall = () => {
     setCallAccepted(true);
 
@@ -62,9 +76,9 @@ const VideoChatSocketProvider = ({ id, children }) => {
     });
 
     peer.on("stream", (currentStream) => {
-      if (userVideo.current) {
-        userVideo.current.srcObject = currentStream;
-      }
+      // console.log("currentStream",currentStream)
+      // console.log("userVid",userVideo)
+      userVideo.current.srcObject = currentStream;
     });
 
     peer.signal(call.signal);
@@ -93,6 +107,8 @@ const VideoChatSocketProvider = ({ id, children }) => {
       });
     });
 
+    // console.log('USER VIDEO !', userVideo)
+    // console.log('USER VIDEO current!', userVideo.current.srcObject)
     peer.on("stream", (currentStream) => {
       userVideo.current.srcObject = currentStream;
     });

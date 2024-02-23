@@ -9,6 +9,7 @@ module.exports = (sequelize) => {
       //   foreignKey: 'calleeId',
       //   as: 'callReceiver',
       // });
+      this.hasMany(models.messages);
     }
   }
   chatroom.init(
@@ -19,6 +20,8 @@ module.exports = (sequelize) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      // chatroomName: { type: DataTypes.STRING(255) },
+      // isGroup: { type: DataTypes.BOOLEAN },
     },
     {
       sequelize,

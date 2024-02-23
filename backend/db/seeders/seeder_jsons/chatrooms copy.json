@@ -1,0 +1,29 @@
+{
+  "chatroom": [
+    {
+      "id": 1
+      ,"chatroomName":"Let's Learn English",
+      "isGroup":true
+    },
+    {
+      "id": 2
+      ,"chatroomName":"Let's Learn Chinese",
+      "isGroup":true
+    },
+    {
+      "id": 3
+      ,"chatroomName":"Let's Learn Japanese",
+      "isGroup":true
+    },
+    {
+      "id": 4
+      ,"chatroomName":"",
+      "isGroup":false
+    },
+    {
+      "id": 5
+      ,"chatroomName":"",
+      "isGroup":false
+    }
+  ]
+}

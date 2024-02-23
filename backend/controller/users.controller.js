@@ -18,8 +18,8 @@ class userController extends BaseController {
         attributes: ['username', 'email', 'bio', 'imageURL', 'userAddress'],
         include: [
           {
-            model: this.db.userHobbies,
-            include: [this.db.hobbies],
+            model: this.db.hobbies,
+            through: this.db.userHobbies,
           },
           {
             model: this.db.userMotherTongues,

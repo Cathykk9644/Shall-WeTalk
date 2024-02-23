@@ -1,7 +1,11 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class hobby extends Model {}
+  class hobby extends Model {
+    static associate(models) {
+      this.belongsToMany(models.users,{through:models.userHobbies});
+    }
+  }
   hobby.init(
     {
       id: {
