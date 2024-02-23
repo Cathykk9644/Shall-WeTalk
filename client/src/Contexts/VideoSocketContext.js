@@ -16,8 +16,6 @@ const VideoChatSocketProvider = ({ id, children }) => {
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
-
-  // Creating a ref for the socket to persist the connection without re-creating it on re-renders
   const videoChatSocket = useRef();
 
   // This effect will only run once when the component mounts
