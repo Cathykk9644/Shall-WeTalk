@@ -22,8 +22,6 @@ const VideoChatSocketProvider = ({ id, children }) => {
 
   // This effect will only run once when the component mounts
   useEffect(() => {
-    videoChatSocket.current = io("http://localhost:8000", { query: { id } });
-
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
@@ -33,7 +31,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
         }
       });
 
-    videoChatSocket.current.on("me", (id) => setMe(id));
+    videoChatSocket.on("me", (id) => setMe(id));
 
     videoChatSocket.current.on(
       "callUser",
