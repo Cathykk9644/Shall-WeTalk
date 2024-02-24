@@ -89,7 +89,7 @@ class AuthController extends BaseController {
         planType: 'free',
         bio: 'tell people a bit about yourself',
         imageURL:
-          'oogleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae',
+          'https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae',
         userAddress: 'random Universe',
       };
 

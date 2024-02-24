@@ -10,11 +10,19 @@ export function useChatMessages() {
 }
 
 export function ChatMessageProvider({ id, children }) {
-  const [chatMessages, setChatMessages] = useState()
+  const [chatMessages, setChatMessages] = useState([])
+  const [chatIndex,setChatIndex] = useState(0)
   const {contacts} = useContacts(); 
   const socket = useSocket();
 
-  const getChatMessages = async (id,contacts) => {
+  const getUsername = (userId) => {  
+  const contact = contacts.find(contact => contact.id === userId);  
+  return contact   
+    ?  contact.name  
+    :  `user ${userId}`;  
+  };  
+
+  const getChatMessages = async (id) => {
     try{
       const response = await Promise.all([
         axios.get(`http://localhost:8000/messages/getMessages`,
@@ -34,11 +42,12 @@ export function ChatMessageProvider({ id, children }) {
 
       // console.log("contacts inside getChatMessage",contacts)
       let chatList = Object.entries(chatrooms).map(([chatroomId, chatroom]) => {    
-        let chatroomName = chatroom.filter(user => user.id !== 1).map(user => user.username);    
+        let chatroomName = chatroom.filter(user => user.id !== id).map(user => getUsername(user.id));
+        let chatroomURL =  chatroom.length===2?chatroom.filter(user => user.id !== id).map(user=>user.imageURL):"https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae"   
         let recipients = chatroom.map(user => {
           //format the recipients
-          const contact = contacts.find(contact => contact.id === user.id);
-          return contact ? { id: user.id, name: contact.name } : { id: id, name: `user ${user.id}` };  
+          const contactName = getUsername(user.id)
+          return contactName ? { id: user.id, name: contactName } : { id: id, name: `user ${user.id}` };  
         });   
         // Get the messages for the chatroom  
         let indivChatMessages = messages[chatroomId] || [];    
@@ -48,10 +57,16 @@ export function ChatMessageProvider({ id, children }) {
             const contact = contacts.find(contact => contact.id === message.senderId);  
             const name = (contact && contact.name) || `user${message.senderId}`; // if no contact found, use 'user' + id  
             const fromMe = id === message.senderId;  
-            return { message:message.messageText, senderName: name, fromMe };  
+            if (message.messageType === "text"){
+              return { message:message.messageText, senderName: name, fromMe };  
+            }else if (message.messageType === "voice"){
+              return { audio:message.voiceNoteFileURL, senderName: name, fromMe };  
+            }
           });  
-        return {    
-          chatroomName: chatroomName.join(', '), // Join the names with a comma    
+        return {
+          chatroomId,
+          chatroomName: chatroomName.join(', '), // Join the names with a comma,
+          chatroomURL,    
           recipients: recipients,    
           messages: indivChatMessages, // Add messages to the chatroom    
         };    
@@ -66,13 +81,20 @@ export function ChatMessageProvider({ id, children }) {
   }; 
 
 
-  //INCOMPLETE!!!!
-  const addMessageToChat = useCallback(({ recipients, messageBody, senderId }) => {
+  const addMessageToChat = useCallback(({ chatroomId,recipients, message, senderId }) => {
+    console.log('contacts inside addMessage',contacts)
+    const contact = contacts.find(contact => contact.id === senderId);
+    let senderName = contact ? { id: senderId, name: contact.name } : { id: id, name: `user ${senderId}` }
+    const formattedRecipients = recipients.map(id => {  
+      const contact = contacts.find(contact => contact.id === id);  
+      return contact ? { id: contact.id, name: contact.name } : { id: id, name: `user ${id}` };  
+    });  
+    const fromMe = id === senderId;  
     setChatMessages(prevChatMessages => {
       let madeChange = false
-      const newMessage = { senderId, messageBody }
+      const newMessage = { senderName, message, fromMe }
       const newChatMessages = prevChatMessages.map(chatMessages => {
-        if (arrayEquality(chatMessages.recipients, recipients)) {
+        if (arrayEquality(chatMessages.recipients, formattedRecipients)) {
           madeChange = true
           return {
             ...chatMessages,
@@ -86,26 +108,44 @@ export function ChatMessageProvider({ id, children }) {
       if (madeChange) {
         return newChatMessages
       } else {
+        let chatroomName = recipients.filter(r=>r!==id).map((r)=>{
+          const contact = contacts.find(contact => contact.id === r);
+          let username = contact ? { id: r, name: contact.name } : { id: r.id, name: `userId ${r}` }
+          return(
+            username
+          )
+
+        }); 
         return [
           ...prevChatMessages,
-          { recipients, messages: [newMessage] }
+          {chatroomId, chatroomName: chatroomName.join(', '), recipients, messages: [newMessage] }
         ]
       }
     })
-  }, [setChatMessages])
+
+  }, [setChatMessages,contacts])
 
 
-  //add send Message function INCOMPLETE!!!
-  function sendMessage(recipients, messageBody) {
-    socket.emit('send-message', { recipients, messageBody })
-    addMessageToChat({ recipients, messageBody, senderId: id })
-  }
-  function testSocket(load){
-    socket.emit("test-receive",{load:"world!"})
-    socket.on("test-emit",()=>{
-      console.log("this is the server's " ,load)
+  //add send Message function
+  function sendMessage({chatroomId,recipients, message}) {
+    socket.emit('send-message', { 
+      chatroomId, recipients, message 
     })
+    console.log("recipients inside emit",recipients)
+    addMessageToChat({ chatroomId,recipients, message, senderId: id })
   }
+
+  // use this as an example on how to emit and listen
+  // function testSocket(load){
+  //   socket.emit("test-receive",{load:"world!"})
+  //   socket.on("test-emit",()=>{
+  //     console.log("this is the server's" ,load)
+  //   })
+  // }
+
+  useEffect(() => {  
+  console.log('chatMessages after add',chatMessages)  
+}, [chatMessages]);  
 
   useEffect(() => {  
     if (contacts) {  
@@ -119,8 +159,10 @@ export function ChatMessageProvider({ id, children }) {
   }, [id, contacts,addMessageToChat])  
 
   const value ={
-    chatMessages:chatMessages,
-    testSocket
+    allMessages:chatMessages,
+    sendMessage,
+    setChatIndex,
+    selectedChat: chatMessages[chatIndex]
   }
   return (
     <ChatMessagesContext.Provider value={value}>
@@ -130,13 +172,13 @@ export function ChatMessageProvider({ id, children }) {
 }
 
 // outside the component
-function arrayEquality(a, b) {
-  if (a.length !== b.length) return false
-
-  a.sort()
-  b.sort()
-
-  return a.every((element, index) => {
-    return element === b[index]
-  })
-}
+function arrayEquality(a, b) {  
+  if (a.length !== b.length) return false;  
+  
+  const sortedA = a.sort((a, b) => a.id - b.id);  
+  const sortedB = b.sort((a, b) => a.id - b.id);  
+  
+  return sortedA.every((element, index) => {  
+    return element.id === sortedB[index].id;  
+  });  
+}  

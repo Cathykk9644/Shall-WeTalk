@@ -1,9 +1,12 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import { HiOutlineCurrencyBangladeshi } from "react-icons/hi";
 import { IoFilter } from "react-icons/io5";
 
-const FriendsTopBar = () => {
-
+const FriendsTopBar = ({searchValue,setSearchValue}) => {
+  const handleInputChange = (e) => {
+    setSearchValue(e.target.value);
+  };
   return (
     <div >
       {/* Top bar */}
@@ -25,7 +28,9 @@ const FriendsTopBar = () => {
             />
             <input
               type="text"
+              name="searchValue"
               placeholder="Search friends..."
+              onChange={handleInputChange}
               className="pl-8 pr-4 py-1 w-full border rounded-full focus:outline-none focus:ring-1 focus:ring-sky-500 text-xs"
             />
           </div>
@@ -35,6 +40,7 @@ const FriendsTopBar = () => {
           </button>
         </div>
       </div>
+      
     </div>
   );
 };

@@ -4,7 +4,7 @@ class VideoChatService {
     this.db = db;
   }
   
-  videoChatSocketEvents(socket){
+  videoChatSocketEvents(socket,id,io){
     socket.emit("me", socket.id);
     socket.on("disconnect", () => {
       socket.broadcast.emit("callEnded");

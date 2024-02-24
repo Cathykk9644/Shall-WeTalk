@@ -1,7 +1,7 @@
 const MessageService = require("../services/message.service")
 const VideoChatService = require("../services/videochat.service")
-
-const messageService = new MessageService();
+const db = require('../db/models/index');
+const messageService = new MessageService(db);
 const videoChatService = new VideoChatService();
 
 function initializeSockets (io){
@@ -11,9 +11,9 @@ function initializeSockets (io){
   console.log("user id:", id, " has logged in!");
 
   //----------------- socket server setup for video chat ---------------
-  videoChatService.videoChatSocketEvents(socket);
+  videoChatService.videoChatSocketEvents(socket,id);
   // ---------------------socket server setup for chat -----------------
-  messageService.receiveTest(socket);
+  messageService.messageSocketEvents(socket,id,io);
 
 });
 }

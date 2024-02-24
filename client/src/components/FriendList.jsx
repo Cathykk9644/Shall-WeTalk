@@ -1,13 +1,74 @@
-import React from "react";
+import React, {useState} from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 import FriendsTopBar from "./FriendsTopBar"
 import {useContacts} from "../Contexts/ContactsProvider"
+import { useChatMessages } from "../Contexts/ChatMessagesProvider";
 
 const FriendList = () => {
   const friends = useContacts().contacts;
+  const {allMessages,setChatIndex} = useChatMessages();
+  const [searchValue,setSearchValue]= useState("")
 
-  const fakeFriends = [
+ 
+
+  return (
+    <div className="w-2/6 h-full flex flex-col bg-bgColor1 border-r">
+      <FriendsTopBar searchValue={searchValue} setSearchValue={setSearchValue}/>
+
+      {searchValue?
+      <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
+        {friends.map((friend, index) => (
+          <div
+            key={index}
+            className="flex items-center justify-between p-4 hover:bg-gray-50 text-gray-500 text-sm "
+          >
+            <div className="flex items-center ">
+              <img
+                src={friend.imageURL}
+                alt={friend.name}
+                className="rounded-full h-10 w-10 object-cover"
+                onError={(e) => {
+                  e.target.onerror = null; // prevents looping
+                  e.target.src = "https://via.placeholder.com/150"; // default image
+                }}
+              />
+              <span className="ml-4 font-medium">{friend.name}</span>
+            </div>
+            {/* <div className="text-xs text-gray-500">{friend.lastActive}</div> */}
+          </div>
+        ))}
+      </div>
+      :
+      <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
+        {allMessages&&allMessages.map((chat, index) => (
+          <div
+            key={index}
+            onClick={()=>setChatIndex(index)}
+            className="flex items-center justify-between p-4 hover:bg-gray-50 text-gray-500 text-sm "
+          >
+            <div className="flex items-center ">
+              <img
+                src={chat.chatroomURL}
+                alt={chat.chatroomName}
+                className="rounded-full h-10 w-10 object-cover"
+                onError={(e) => {
+                  e.target.onerror = null; // prevents looping
+                  e.target.src = "https://via.placeholder.com/150"; // default image
+                }}
+              />
+              <span className="ml-4 font-medium">{chat.chatroomName}</span>
+            </div>
+          </div>))}
+      </div>          
+      }
+    </div>
+  );
+};
+
+export default FriendList;
+
+ const fakeFriends = [
     {
       name: "Alice Smith",
       lastActive: "1:15 pm",
@@ -75,35 +136,3 @@ const FriendList = () => {
         "https://images.unsplash.com/photo-1548142813-c348350df52b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     },
   ];
-
-  return (
-    <div className="w-2/6 h-full flex flex-col bg-bgColor1 border-r">
-      <FriendsTopBar/>
-
-      <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
-        {friends.map((friend, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between p-4 hover:bg-gray-50 text-gray-500 text-sm "
-          >
-            <div className="flex items-center ">
-              <img
-                src={friend.imageURL}
-                alt={friend.name}
-                className="rounded-full h-10 w-10 object-cover"
-                onError={(e) => {
-                  e.target.onerror = null; // prevents looping
-                  e.target.src = "https://via.placeholder.com/150"; // default image
-                }}
-              />
-              <span className="ml-4 font-medium">{friend.name}</span>
-            </div>
-            {/* <div className="text-xs text-gray-500">{friend.lastActive}</div> */}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default FriendList;

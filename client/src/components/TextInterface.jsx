@@ -5,55 +5,33 @@ import { AiFillAudio } from "react-icons/ai";
 import {useChatMessages} from "../Contexts/ChatMessagesProvider"
 
 
-const TextInterface = () => {
+const TextInterface = ({id}) => {
   const [message, setMessage] = useState("");
-  const {testSocket} = useChatMessages();
-  const selectedChat = useChatMessages().chatMessages;
-  // console.log("text interface:", selectedChat)
-  const [chatMessages, setChatMessages] = useState(
-    
-  //   [
-  //   { id: 1, text: "Hey 😉, how's it going?", sender: "friend" },
-  //   {
-  //     id: 2,
-  //     text: "Not too bad, just working on a project. You?",
-  //     sender: "me",
-  //   },
-  //   { id: 3, text: "Same here. Need a break though.🥹", sender: "friend" },
-  //   { id: 4, text: "We should catch up soon 🤗!", sender: "me" },
-  //   { id: 5, text: "Yeah definitely!", sender: "friend" },
-  //   { id: 6, text: "Let's do dinner, go hiking or sth 👻!", sender: "me" },
-  //   { id: 7, text: "👍 Yeah sounds fun!", sender: "friend" },
-  //   { id: 8, text: "What about next Sat?", sender: "me" },
-  //   { id: 9, text: "Yeah okay!", sender: "friend" },
-  //   { id: 10, text: "Alright see you then!", sender: "me" },
-  //   { id: 11, text: "Looking forward to it", sender: "friend" },
-  //   { id: 12, text: "Yeah me too!", sender: "me" },
-  //   { id: 13, text: "Let's go hiking first and dinner later!😬", sender: "me" },
-  //   { id: 14, text: "Cool let'ssss do that!", sender: "friend" },
-  //   {
-  //     id: 15,
-  //     text: "Okay hang in there, I will see you soon!😀",
-  //     sender: "me",
-  //   },
-  // ]
-  );
+  const {sendMessage,allMessages,selectedChat} = useChatMessages();
+  // const [selectedChat,setSelectedChat] = useState();
+
   const setRef = useCallback(node => {
     if (node) {
       node.scrollIntoView({ smooth: true })
     }
   }, [])
 
-  const handleSendMessage = () => {
+  const handleSendMessage =  () => {
     if (message.trim()) {
       const newMessage = {
-        sendername: chatMessages.length + 1,
+        senderId: id,
         message: message,
         fromMe: true,
       };
-      testSocket(newMessage.message);
-      setChatMessages([...chatMessages, newMessage]);
+
       setMessage("");
+      const sendMessageLoad = {
+        chatroomId:selectedChat.chatroomId,
+        recipients:selectedChat.recipients.map(r=>r.id),
+        message:newMessage.message
+      }
+      console.log('send-message-load',sendMessageLoad)
+      sendMessage(sendMessageLoad);
     }
   };
 
@@ -67,11 +45,10 @@ const TextInterface = () => {
     }
   };
 
-  useEffect(()=>{
-    if(selectedChat){
-      setChatMessages(selectedChat[0].messages)
-    }
-  },[selectedChat])
+  // useEffect(()=>{
+  //   if(allMessages){setSelectedChat(allMessages[0]);}
+  // },[allMessages  ])
+  
 
   return (
     <div className="flex flex-col flex-1 h-full">
@@ -101,9 +78,9 @@ const TextInterface = () => {
       </div>
       <div className="flex-1 p-4 overflow-y-auto scrollbar-hide">
         {/* Chat messages will be displayed here */}
-        {chatMessages?chatMessages.map((msg,index) => {
-          const lastMessage = chatMessages.length - 1 === index
-          return(
+{selectedChat && (selectedChat.messages.length !==0)?selectedChat.messages.map((msg,index) => {  
+      const lastMessage = selectedChat.messages.length - 1 === index;  
+      return(
           <div
             ref={lastMessage?setRef:null}
             key={index}
@@ -118,7 +95,7 @@ const TextInterface = () => {
                   : "bg-gray-200 text-gray-500"
               }`}
             >
-              {msg.message}
+              {msg.message?msg.message:<AiFillAudio size={15} />}
             </div>
           </div>
         )}):"Send message to start chatting!"}

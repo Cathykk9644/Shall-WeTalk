@@ -21,7 +21,8 @@ class MessageController extends BaseController {
               }
             ]
           }
-        ]
+        ],
+        order: [[this.db.chatrooms, this.db.messages, 'timestamp', 'ASC']]
       })
       const chatroomMessages = messages.reduce((result, current) => {  
         result[current.chatroom.id] = current.chatroom.messages;  

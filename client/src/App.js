@@ -44,7 +44,7 @@ const App = () => {
           <Route path="/login" element={<Login setId={setId} />} />
           <Route path="/signup" element={<Signup />} />
           <Route element={<ProtectedRoutes />}>
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat" element={<Chat id={1} />} />
             <Route path="/videochat" element={<VideoChat />} />
             <Route path="/video" element={<VideoCall />} />
             <Route path="/videotest" element={<VideoTesting />} />
