@@ -3,12 +3,14 @@ import { IoSend, IoVideocam, IoCall } from "react-icons/io5";
 import { IoMdHappy } from "react-icons/io";
 import { AiFillAudio } from "react-icons/ai";
 import {useChatMessages} from "../Contexts/ChatMessagesProvider"
+import { useContacts } from "../Contexts/ContactsProvider";
 
 
 const TextInterface = ({id}) => {
   const [message, setMessage] = useState("");
-  const {sendMessage,allMessages,selectedChat} = useChatMessages();
-  // const [selectedChat,setSelectedChat] = useState();
+  const {sendMessage,sendNewMessage,allMessages,selectedChat,chatIndex,setSearchValue} = useChatMessages();
+  const {contacts} = useContacts();
+
 
   const setRef = useCallback(node => {
     if (node) {
@@ -17,6 +19,7 @@ const TextInterface = ({id}) => {
   }, [])
 
   const handleSendMessage =  () => {
+
     if (message.trim()) {
       const newMessage = {
         senderId: id,
@@ -25,13 +28,23 @@ const TextInterface = ({id}) => {
       };
 
       setMessage("");
-      const sendMessageLoad = {
-        chatroomId:selectedChat.chatroomId,
-        recipients:selectedChat.recipients.map(r=>r.id),
-        message:newMessage.message
+      if(chatIndex<allMessages.length){
+        const sendMessageLoad = {
+          chatroomId:selectedChat.chatroomId,
+          recipients:selectedChat.recipients.map(r=>r.id),
+          message:newMessage.message
+        }
+        console.log('send-message-load',sendMessageLoad)
+        sendMessage(sendMessageLoad);        
+      }else{
+        const newChatLoad={
+          recipients: [id, contacts[chatIndex - allMessages.length].id ],
+          message:newMessage.message
+        }
+        sendNewMessage(newChatLoad)
+        setSearchValue("")
       }
-      console.log('send-message-load',sendMessageLoad)
-      sendMessage(sendMessageLoad);
+
     }
   };
 

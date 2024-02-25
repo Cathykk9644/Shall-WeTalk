@@ -7,8 +7,8 @@ import { useChatMessages } from "../Contexts/ChatMessagesProvider";
 
 const FriendList = () => {
   const friends = useContacts().contacts;
-  const {allMessages,setChatIndex} = useChatMessages();
-  const [searchValue,setSearchValue]= useState("")
+  const {allMessages,setChatIndex,searchValue,setSearchValue} = useChatMessages();
+  // const [searchValue,setSearchValue]= useState("")
 
  
 
@@ -21,6 +21,7 @@ const FriendList = () => {
         {friends.map((friend, index) => (
           <div
             key={index}
+            onClick={()=>setChatIndex(index+allMessages.length)}
             className="flex items-center justify-between p-4 hover:bg-gray-50 text-gray-500 text-sm "
           >
             <div className="flex items-center ">
@@ -44,7 +45,7 @@ const FriendList = () => {
         {allMessages&&allMessages.map((chat, index) => (
           <div
             key={index}
-            onClick={()=>setChatIndex(index)}
+            onClick={()=>{setChatIndex(index)}}
             className="flex items-center justify-between p-4 hover:bg-gray-50 text-gray-500 text-sm "
           >
             <div className="flex items-center ">

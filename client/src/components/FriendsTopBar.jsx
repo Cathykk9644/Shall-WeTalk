@@ -28,7 +28,7 @@ const FriendsTopBar = ({searchValue,setSearchValue}) => {
             />
             <input
               type="text"
-              name="searchValue"
+              value= {searchValue}
               placeholder="Search friends..."
               onChange={handleInputChange}
               className="pl-8 pr-4 py-1 w-full border rounded-full focus:outline-none focus:ring-1 focus:ring-sky-500 text-xs"

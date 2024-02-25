@@ -17,7 +17,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
   const [me, setMe] = useState("");
   // const videoChatSocket = useSocket();
 
-  console.log("videoChatSocket",videoChatSocket)
+  // console.log("videoChatSocket",videoChatSocket)
 
   const myVideo = useRef(null);
   const userVideo = useRef(null);

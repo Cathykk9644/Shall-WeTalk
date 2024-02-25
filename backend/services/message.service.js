@@ -4,6 +4,22 @@ class MessageService {
     this.db = db;
   }
   
+  async createChat (recipients){
+    try{
+      const chatroom = await this.db.chatrooms.create({});
+      const chatroomUsers = recipients.map(userId=>(
+         {
+          userId,
+          chatroomId: chatroom.id
+        }
+      ))
+      const response = await this.db.chatroomUsers.bulkCreate(chatroomUsers)
+      return chatroom.id
+    }catch (err){
+      console.log(err);
+    }
+  }
+
   async storeMessage (chatroomId,senderId,message){
     try{
       const newMessage = {
@@ -31,6 +47,19 @@ class MessageService {
           newRecipients.push(id)
           socket.broadcast.to(recipient).emit('receive-message', {
             chatroomId, recipients: newRecipients, senderId: id, message
+          })
+        })
+      })
+    socket.on('send-new-message', async ({ recipients, message }) => {
+      const chatroomId = await this.createChat(recipients)
+      socket.emit('created-new-chat',{chatroomId:chatroomId,recipients,message})
+      await this.storeMessage(chatroomId,id,message); 
+
+      recipients.filter(r=>r !==id).forEach(recipient => {
+          const newRecipients = recipients.filter(r => r !== recipient)
+          newRecipients.push(id)
+          socket.broadcast.to(recipient).emit('receive-message', {
+            chatroomId:chatroomId, recipients: newRecipients, senderId: id, message
           })
         })
       })

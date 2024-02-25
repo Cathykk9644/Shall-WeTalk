@@ -12,6 +12,7 @@ export function useChatMessages() {
 export function ChatMessageProvider({ id, children }) {
   const [chatMessages, setChatMessages] = useState([])
   const [chatIndex,setChatIndex] = useState(0)
+  const [searchValue,setSearchValue] = useState("")
   const {contacts} = useContacts(); 
   const socket = useSocket();
 
@@ -54,8 +55,8 @@ export function ChatMessageProvider({ id, children }) {
         
           // Format messages  
           indivChatMessages = indivChatMessages.map(message => {  
-            const contact = contacts.find(contact => contact.id === message.senderId);  
-            const name = (contact && contact.name) || `user${message.senderId}`; // if no contact found, use 'user' + id  
+            const contactName = getUsername(message.senderId);  
+            const name = (contactName) || `user${message.senderId}`; // if no contact found, use 'user' + id  
             const fromMe = id === message.senderId;  
             if (message.messageType === "text"){
               return { message:message.messageText, senderName: name, fromMe };  
@@ -83,11 +84,12 @@ export function ChatMessageProvider({ id, children }) {
 
   const addMessageToChat = useCallback(({ chatroomId,recipients, message, senderId }) => {
     console.log('contacts inside addMessage',contacts)
-    const contact = contacts.find(contact => contact.id === senderId);
-    let senderName = contact ? { id: senderId, name: contact.name } : { id: id, name: `user ${senderId}` }
+    console.log('recipients passed into addMessage',recipients)
+    const contactName = getUsername(senderId);
+    let senderName = contactName ? { id: senderId, name: contactName } : { id: id, name: `user ${senderId}` }
     const formattedRecipients = recipients.map(id => {  
-      const contact = contacts.find(contact => contact.id === id);  
-      return contact ? { id: contact.id, name: contact.name } : { id: id, name: `user ${id}` };  
+      const contactName = getUsername(id);  
+      return contactName ? { id: id, name: contactName } : { id: id, name: `user ${id}` };  
     });  
     const fromMe = id === senderId;  
     setChatMessages(prevChatMessages => {
@@ -108,17 +110,19 @@ export function ChatMessageProvider({ id, children }) {
       if (madeChange) {
         return newChatMessages
       } else {
-        let chatroomName = recipients.filter(r=>r!==id).map((r)=>{
+        let chatroomName =[];
+        let chatroom = recipients.filter(r=>r!==id).map((r)=>{
           const contact = contacts.find(contact => contact.id === r);
           let username = contact ? { id: r, name: contact.name } : { id: r.id, name: `userId ${r}` }
+        let chatroomURL =  recipients.length===2?contact.imageURL:"https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae"
           return(
-            username
+            {chatroomName:[...chatroomName,username.name],chatroomURL}
           )
-
         }); 
+        console.log(chatroom)
         return [
           ...prevChatMessages,
-          {chatroomId, chatroomName: chatroomName.join(', '), recipients, messages: [newMessage] }
+          {chatroomId, chatroomURL:chatroom[0].chatroomURL,chatroomName: chatroom[0].chatroomName.join(', '), recipients, messages: [newMessage] }
         ]
       }
     })
@@ -128,12 +132,67 @@ export function ChatMessageProvider({ id, children }) {
 
   //add send Message function
   function sendMessage({chatroomId,recipients, message}) {
-    socket.emit('send-message', { 
-      chatroomId, recipients, message 
-    })
-    console.log("recipients inside emit",recipients)
-    addMessageToChat({ chatroomId,recipients, message, senderId: id })
+      socket.emit('send-message', { 
+        chatroomId, recipients, message 
+      })
+      console.log("recipients inside emit",recipients)
+      addMessageToChat({ chatroomId,recipients, message, senderId: id })
   }
+
+  useEffect(() => {  
+    console.log('chatMessages after add',chatMessages)  
+  }, [chatMessages]);  
+
+    useEffect(() => {  
+      if (contacts) {  
+        getChatMessages(id,contacts)  
+      }  
+      if (socket == null) return;
+
+      socket.on('receive-message', addMessageToChat);
+
+      return () => socket.off('receive-message')
+    }, [id, contacts, addMessageToChat])  
+
+
+
+  function sendNewMessage({recipients, message}) {
+    const formattedRecipients = recipients.map(id => {  
+      const contactName = getUsername(id);  
+      return contactName ? { id: id, name: contactName } : { id: id, name: `user ${id}` };  
+    });  
+    console.log(formattedRecipients)
+    const existChatIndex = chatMessages.findIndex((chatMessage)=>{
+      return arrayEquality(chatMessage.recipients,formattedRecipients);
+    })  
+    console.log("exist index",existChatIndex)
+    if (existChatIndex !== -1 ){
+      const existChat = chatMessages[existChatIndex]
+      console.log("exist chat",existChat)
+      sendMessage({chatroomId:existChat.chatroomId,recipients,message})
+      setChatIndex(existChatIndex)
+      }else{
+        console.log("in else statement")
+        // socket.emit('send-new-message', { 
+        //         recipients, message 
+        // })
+      } 
+  }
+
+    const handleNewChat = ({chatroomId,recipients,message}) => {  
+      addMessageToChat({ chatroomId, recipients, message, senderId: id });  
+      setChatIndex(chatMessages.length)
+    };  
+
+  
+  useEffect(() => {
+    if(socket == null) return;    
+    socket.on('created-new-chat', handleNewChat);  
+
+    // Cleanup the event listener  
+    return () => socket.off('created-new-chat', handleNewChat);  
+  }, [socket, addMessageToChat, chatMessages.length, id]); 
+
 
   // use this as an example on how to emit and listen
   // function testSocket(load){
@@ -143,26 +202,17 @@ export function ChatMessageProvider({ id, children }) {
   //   })
   // }
 
-  useEffect(() => {  
-  console.log('chatMessages after add',chatMessages)  
-}, [chatMessages]);  
 
-  useEffect(() => {  
-    if (contacts) {  
-      getChatMessages(id,contacts)  
-    }  
-    if (socket == null) return;
-
-    socket.on('receive-message', addMessageToChat);
-
-    return () => socket.off('receive-message')
-  }, [id, contacts,addMessageToChat])  
 
   const value ={
     allMessages:chatMessages,
     sendMessage,
+    sendNewMessage,
     setChatIndex,
-    selectedChat: chatMessages[chatIndex]
+    selectedChat: chatMessages[chatIndex],
+    chatIndex,
+    searchValue,
+    setSearchValue,
   }
   return (
     <ChatMessagesContext.Provider value={value}>
