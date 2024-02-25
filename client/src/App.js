@@ -24,10 +24,10 @@ const App = () => {
 
   const ProtectedRoutes = () => {
     return (
-      <SocketProvider id={1}>
-        <ContactsProvider id={1}>
-          <VideoChatSocketProvider id={1}>
-            <ChatMessageProvider id = {1}>
+      <SocketProvider id={id||1}>
+        <ContactsProvider id={id||1}>
+          <VideoChatSocketProvider id={id||1}>
+            <ChatMessageProvider id = {id||1}>
               <Outlet />
             </ChatMessageProvider>
           </VideoChatSocketProvider>
@@ -44,11 +44,11 @@ const App = () => {
           <Route path="/login" element={<Login setId={setId} />} />
           <Route path="/signup" element={<Signup />} />
           <Route element={<ProtectedRoutes />}>
-            <Route path="/chat" element={<Chat id={1} />} />
+            <Route path="/chat" element={<Chat id={id||1} />} />
             <Route path="/videochat" element={<VideoChat />} />
             <Route path="/video" element={<VideoCall />} />
             <Route path="/videotest" element={<VideoTesting />} />
-            <Route path="/userprofile" element={<UserProfile id={1} />} />
+            <Route path="/userprofile" element={<UserProfile id={id||1} />} />
           </Route>
         </Routes>
       </div>

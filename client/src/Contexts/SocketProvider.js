@@ -9,7 +9,7 @@ export function useSocket() {
 
 export function SocketProvider({ id, children }) {
   const [socket, setSocket] = useState()
-
+  console.log('Creating a new socket connection for id:', id); 
   useEffect(() => {
     const newSocket = io(
       'http://localhost:8000',
@@ -17,7 +17,10 @@ export function SocketProvider({ id, children }) {
     )
     setSocket(newSocket);
     // console.log("from socketprovider:",socket)
-    return () => newSocket.close();
+    return () => {
+      console.log('Disconnecting socket for id:', id); 
+      newSocket.disconnect()
+    };
   }, [id])
 
   return (

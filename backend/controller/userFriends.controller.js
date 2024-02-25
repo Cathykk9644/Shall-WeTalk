@@ -8,7 +8,7 @@ class UserFriendsController extends BaseController {
 
   getAllFriends = async (req, res) => {
     const { userId } = req.query;
-    console.log(req.query)
+    // console.log(req.query)
     try {
       const allFriends = await this.db.userFriends.findAll({
         where: { userId },

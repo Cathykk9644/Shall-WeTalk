@@ -8,7 +8,7 @@ class MessageController extends BaseController {
 
   getMessages = async (req,res) =>{
     const {userId}=req.query;
-    console.log(userId)
+    // console.log(userId)
     try{
       const messages = await this.db.chatroomUsers.findAll({
         where:{userId},

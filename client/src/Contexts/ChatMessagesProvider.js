@@ -39,7 +39,7 @@ export function ChatMessageProvider({ id, children }) {
       ]);
       const messages = response[0].data;
       const chatrooms = response[1].data;
-      console.log("before .map",messages)
+      // console.log("before .map",messages)
 
       // console.log("contacts inside getChatMessage",contacts)
       let chatList = Object.entries(chatrooms).map(([chatroomId, chatroom]) => {    
@@ -83,8 +83,8 @@ export function ChatMessageProvider({ id, children }) {
 
 
   const addMessageToChat = useCallback(({ chatroomId,recipients, message, senderId }) => {
-    console.log('contacts inside addMessage',contacts)
-    console.log('recipients passed into addMessage',recipients)
+    // console.log('contacts inside addMessage',contacts)
+    // console.log('recipients passed into addMessage',recipients)
     const contactName = getUsername(senderId);
     let senderName = contactName ? { id: senderId, name: contactName } : { id: id, name: `user ${senderId}` }
     const formattedRecipients = recipients.map(id => {  
@@ -119,7 +119,7 @@ export function ChatMessageProvider({ id, children }) {
             {chatroomName:[...chatroomName,username.name],chatroomURL}
           )
         }); 
-        console.log(chatroom)
+        // console.log(chatroom)
         return [
           ...prevChatMessages,
           {chatroomId, chatroomURL:chatroom[0].chatroomURL,chatroomName: chatroom[0].chatroomName.join(', '), recipients, messages: [newMessage] }
@@ -135,7 +135,7 @@ export function ChatMessageProvider({ id, children }) {
       socket.emit('send-message', { 
         chatroomId, recipients, message 
       })
-      console.log("recipients inside emit",recipients)
+      // console.log("recipients inside emit",recipients)
       addMessageToChat({ chatroomId,recipients, message, senderId: id })
   }
 
@@ -147,9 +147,13 @@ export function ChatMessageProvider({ id, children }) {
       if (contacts) {  
         getChatMessages(id,contacts)  
       }  
+      console.log(socket)
       if (socket == null) return;
 
-      socket.on('receive-message', addMessageToChat);
+      socket.on('receive-message', message=>{
+        console.log('Received Message: ', message)
+        addMessageToChat(message)
+      });
 
       return () => socket.off('receive-message')
     }, [id, contacts, addMessageToChat])  
@@ -161,21 +165,21 @@ export function ChatMessageProvider({ id, children }) {
       const contactName = getUsername(id);  
       return contactName ? { id: id, name: contactName } : { id: id, name: `user ${id}` };  
     });  
-    console.log(formattedRecipients)
+    // console.log(formattedRecipients)
     const existChatIndex = chatMessages.findIndex((chatMessage)=>{
       return arrayEquality(chatMessage.recipients,formattedRecipients);
     })  
-    console.log("exist index",existChatIndex)
+    // console.log("exist index",existChatIndex)
     if (existChatIndex !== -1 ){
       const existChat = chatMessages[existChatIndex]
-      console.log("exist chat",existChat)
+      // console.log("exist chat",existChat)
       sendMessage({chatroomId:existChat.chatroomId,recipients,message})
       setChatIndex(existChatIndex)
       }else{
-        console.log("in else statement")
-        // socket.emit('send-new-message', { 
-        //         recipients, message 
-        // })
+        // console.log("in else statement")
+        socket.emit('send-new-message', { 
+                recipients, message 
+        })
       } 
   }
 
@@ -191,7 +195,7 @@ export function ChatMessageProvider({ id, children }) {
 
     // Cleanup the event listener  
     return () => socket.off('created-new-chat', handleNewChat);  
-  }, [socket, addMessageToChat, chatMessages.length, id]); 
+  }, [ addMessageToChat]); 
 
 
   // use this as an example on how to emit and listen

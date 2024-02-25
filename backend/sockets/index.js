@@ -9,6 +9,7 @@ function initializeSockets (io){
   const { id } = socket.handshake.query;
   socket.join(id);
   console.log("user id:", id, " has logged in!");
+  console.log("Rooms for socket ID:", socket.id, socket.rooms);
 
   //----------------- socket server setup for video chat ---------------
   videoChatService.videoChatSocketEvents(socket,id);

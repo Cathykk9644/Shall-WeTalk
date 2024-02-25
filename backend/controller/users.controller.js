@@ -10,8 +10,8 @@ class userController extends BaseController {
 
   getProfile = async (req, res) => {
     const  {userId}  = req.query
-    console.log(userId);
-    console.log(req.query);
+    // console.log(userId);
+    // console.log(req.query);
     try {
       const profile = await this.db.users.findOne({
         where: { id: userId },

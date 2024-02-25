@@ -42,9 +42,12 @@ class MessageService {
   messageSocketEvents(socket,id){
     socket.on('send-message', ({ chatroomId, recipients, message }) => {
       this.storeMessage(chatroomId,id,message); 
-      recipients.filter(r=>r !==id).forEach(recipient => {
+      console.log("recipients",recipients)
+      recipients.forEach(recipient => {
           const newRecipients = recipients.filter(r => r !== recipient)
           newRecipients.push(id)
+          
+          console.log("Sending message to user ",recipient)
           socket.broadcast.to(recipient).emit('receive-message', {
             chatroomId, recipients: newRecipients, senderId: id, message
           })
@@ -55,10 +58,10 @@ class MessageService {
       socket.emit('created-new-chat',{chatroomId:chatroomId,recipients,message})
       await this.storeMessage(chatroomId,id,message); 
 
-      recipients.filter(r=>r !==id).forEach(recipient => {
+      recipients.forEach(recipient => {
           const newRecipients = recipients.filter(r => r !== recipient)
           newRecipients.push(id)
-          socket.broadcast.to(recipient).emit('receive-message', {
+          socket.to(recipient.trim()).emit('receive-message', {
             chatroomId:chatroomId, recipients: newRecipients, senderId: id, message
           })
         })

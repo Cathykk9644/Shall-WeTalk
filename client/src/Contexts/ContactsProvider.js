@@ -1,6 +1,5 @@
 import React, {useContext,useEffect,useState} from 'react'
 import axios from 'axios';
-import { FaRegThumbsDown } from 'react-icons/fa6';
 
 const ContactsContext = React.createContext()
 
