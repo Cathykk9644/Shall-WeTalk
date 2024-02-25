@@ -1,14 +1,13 @@
 import React, {useState} from "react";
-import { FaSearch } from "react-icons/fa";
-import { IoFilter } from "react-icons/io5";
+import AddFriendBar from "./AddFriendBar";
 import FriendsTopBar from "./FriendsTopBar"
 import {useContacts} from "../Contexts/ContactsProvider"
 import { useChatMessages } from "../Contexts/ChatMessagesProvider";
+import { IoPersonAddOutline } from "react-icons/io5";
 
 const FriendList = () => {
   const friends = useContacts().contacts;
   const {allMessages,setChatIndex,searchValue,setSearchValue} = useChatMessages();
-  // const [searchValue,setSearchValue]= useState("")
 
  
 
@@ -17,6 +16,7 @@ const FriendList = () => {
       <FriendsTopBar searchValue={searchValue} setSearchValue={setSearchValue}/>
 
       {searchValue?
+      <>
       <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
         {friends.map((friend, index) => (
           <div
@@ -39,8 +39,12 @@ const FriendList = () => {
             {/* <div className="text-xs text-gray-500">{friend.lastActive}</div> */}
           </div>
         ))}
+        
       </div>
+      <AddFriendBar/>
+      </>
       :
+      <>
       <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
         {allMessages&&allMessages.map((chat, index) => (
           <div
@@ -61,7 +65,8 @@ const FriendList = () => {
               <span className="ml-4 font-medium">{chat.chatroomName}</span>
             </div>
           </div>))}
-      </div>          
+      </div> 
+      </>         
       }
     </div>
   );
