@@ -1,10 +1,9 @@
-
 class VideoChatService {
-  constructor(db){
+  constructor(db) {
     this.db = db;
   }
-  
-  videoChatSocketEvents(socket){
+
+  videoChatSocketEvents(socket, io) {
     socket.emit("me", socket.id);
     socket.on("disconnect", () => {
       socket.broadcast.emit("callEnded");
@@ -18,6 +17,5 @@ class VideoChatService {
       io.to(data.to).emit("callAccepted", data.signal);
     });
   }
-
 }
-module.exports = VideoChatService
+module.exports = VideoChatService;
