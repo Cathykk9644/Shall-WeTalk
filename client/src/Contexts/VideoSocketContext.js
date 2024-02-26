@@ -107,12 +107,12 @@ const VideoChatSocketProvider = ({ id, children }) => {
 
       const peer = new Peer({ initiator: false, trickle: false, stream });
 
-    peer.on("signal", (data) => {
-      videoChatSocket.current.emit("answerCall", {
-        signal: data,
-        to: call.from,
+      peer.on("signal", (data) => {
+        videoChatSocket.current.emit("answerCall", {
+          signal: data,
+          to: call.from,
+        });
       });
-    });
 
     peer.on("stream", (currentStream) => {
       if (userVideo.current) {
@@ -139,14 +139,14 @@ const VideoChatSocketProvider = ({ id, children }) => {
       // Proceed with the regular call process if calling someone else
       const peer = new Peer({ initiator: true, trickle: false, stream });
 
-    peer.on("signal", (data) => {
-      videoChatSocket.current.emit("callUser", {
-        userToCall: idToCall,
-        signalData: data,
-        from: me,
-        name,
+      peer.on("signal", (data) => {
+        videoChatSocket.current.emit("callUser", {
+          userToCall: idToCall,
+          signalData: data,
+          from: me,
+          name,
+        });
       });
-    });
 
       console.log("USER VIDEO !", userVideo);
       console.log("USER VIDEO current!", userVideo.current.srcObject);
@@ -154,10 +154,10 @@ const VideoChatSocketProvider = ({ id, children }) => {
         userVideo.current.srcObject = currentStream;
       });
 
-    videoChatSocket.current.on("callAccepted", (signal) => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
+      videoChatSocket.current.on("callAccepted", (signal) => {
+        setCallAccepted(true);
+        peer.signal(signal);
+      });
 
       connectionRef.current = peer;
     });

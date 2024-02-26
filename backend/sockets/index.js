@@ -4,7 +4,7 @@ const db = require('../db/models/index');
 const messageService = new MessageService(db);
 const videoChatService = new VideoChatService();
 
-function initializeSockets (io){
+function initializeSockets(io) {
   io.on("connection", (socket) => {
   const { id } = socket.handshake.query;
   socket.join(id);
@@ -18,4 +18,4 @@ function initializeSockets (io){
 
 });
 }
-module.exports = {initializeSockets:initializeSockets};
+module.exports = { initializeSockets: initializeSockets };

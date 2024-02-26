@@ -35,9 +35,6 @@ const VideoCallComponent = () => {
       // Self-calling: mimic the call being accepted
       setCallAccepted(true);
       setCallerStream(stream);
-      // Note: For a complete self-call functionality,
-      // you may need to set additional state or perform other actions
-      // depending on how your context provider is set up.
     } else {
       // Calling another user
       callUser(idToCall);
