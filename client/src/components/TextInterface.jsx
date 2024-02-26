@@ -37,6 +37,7 @@ const TextInterface = ({id}) => {
         console.log('send-message-load',sendMessageLoad)
         sendMessage(sendMessageLoad);        
       }else{
+
         const newChatLoad={
           recipients: [id, contacts[chatIndex - allMessages.length].id ],
           message:newMessage.message
@@ -70,12 +71,12 @@ const TextInterface = ({id}) => {
         {/* Left side: Profile and 'You' */}
         <div className="flex items-center ">
           <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGhhcHB5JTIwZ2lybHxlbnwwfHwwfHx8MA%3D%3D"
-            alt="dummy user image"
+            src={selectedChat?selectedChat.chatroomURL:"https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae"}
+            alt="chatroom image"
             className="w-8 h-8 rounded-full object-cover ml-2 "
           />
           <span className="font-semibold text-sm text-gray-500 ml-2">
-            {"Alice Smith"}
+            {selectedChat?selectedChat.chatroomName:"Group Name"}
           </span>
         </div>
 

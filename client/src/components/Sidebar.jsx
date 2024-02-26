@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { PiCaretCircleLeftBold, PiCaretCircleRightBold } from "react-icons/pi";
 import SidebarItems from "./SidebarItems";
+import { useContacts } from "../Contexts/ContactsProvider";
 
 const Sidebar = (props) => {
-  const {username,pfp}=props
+  const {pfp}=props
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const {profileURL, username} = useContacts();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -36,7 +38,7 @@ const Sidebar = (props) => {
         </ul>
         <div className=" p-4 flex items-center mb-4">
           <img
-            src={pfp?pfp:"https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"}
+            src={pfp?pfp:profileURL?profileURL:"https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"}
             alt="dummy user image"
             className={`w-8 h-8 rounded-full border-white border-2 ${
               isCollapsed ? "mx-auto" : "ml-2"

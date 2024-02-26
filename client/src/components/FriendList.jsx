@@ -3,17 +3,17 @@ import AddFriendBar from "./AddFriendBar";
 import FriendsTopBar from "./FriendsTopBar"
 import {useContacts} from "../Contexts/ContactsProvider"
 import { useChatMessages } from "../Contexts/ChatMessagesProvider";
-import { IoPersonAddOutline } from "react-icons/io5";
+
 
 const FriendList = () => {
   const friends = useContacts().contacts;
-  const {allMessages,setChatIndex,searchValue,setSearchValue} = useChatMessages();
+  const {allMessages,setChatIndex,searchValue,setSearchValue,selectedChat} = useChatMessages();
 
  
 
   return (
     <div className="w-2/6 h-full flex flex-col bg-bgColor1 border-r">
-      <FriendsTopBar searchValue={searchValue} setSearchValue={setSearchValue}/>
+      <FriendsTopBar searchValue={searchValue} setSearchValue={setSearchValue} selectedChat={selectedChat}/>
 
       {searchValue?
       <>

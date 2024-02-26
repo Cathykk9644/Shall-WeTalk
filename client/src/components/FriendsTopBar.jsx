@@ -1,9 +1,10 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
-import { HiOutlineCurrencyBangladeshi } from "react-icons/hi";
 import { IoFilter } from "react-icons/io5";
+import { useContacts } from "../Contexts/ContactsProvider";
 
 const FriendsTopBar = ({searchValue,setSearchValue}) => {
+  const {profileURL} = useContacts();
   const handleInputChange = (e) => {
     setSearchValue(e.target.value);
   };
@@ -13,7 +14,7 @@ const FriendsTopBar = ({searchValue,setSearchValue}) => {
       <div className="flex justify-center items-center p-2 border-b ">
         <div className="flex items-center -ml-2">
           <img
-            src="https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"
+            src={profileURL?profileURL:"https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae"}
             alt="dummy user image"
             className="w-8 h-8 rounded-full object-cover "
           />

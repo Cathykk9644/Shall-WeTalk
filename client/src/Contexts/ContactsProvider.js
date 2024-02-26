@@ -10,7 +10,9 @@ export function useContacts() {
 
 export function ContactsProvider({id, children}) {
   // create a state
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState();
+  const [profileURL, setProfileURL] = useState();
+  const [username,setUsername]= useState();
   const getFriends = async (id) => {
     try{
       const response = await axios.get(`http://localhost:8000/userFriends/getAllFriends/`,
@@ -45,12 +47,19 @@ export function ContactsProvider({id, children}) {
       console.log(err);
     }
     setContacts(prevContacts => {
-      return [...prevContacts, {id, name} ]
+      return [...prevContacts, {id, name, imageURL:"https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae"} ]
     })
   }
 
   return (
-    <ContactsContext.Provider value={{contacts, createContact}}>
+    <ContactsContext.Provider value={{
+      contacts, 
+      createContact,
+      profileURL,
+      setProfileURL,
+      username,
+      setUsername
+    }}>
       {children}
     </ContactsContext.Provider>
   )
