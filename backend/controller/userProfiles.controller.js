@@ -37,27 +37,7 @@ class UserProfileController extends BaseController {
       throw new Error(err);
     }
   }
-  createUserProfile = async (req,res) =>{
-    const {chatroomId,senderId,UserProfileText,UserProfileType,voiceNoteFileUrl,voiceNoteDuration,voiceNoteSize,timestamp}=req.body;
-    try{
-      const newUserProfile = {
-        chatroomId:chatroomId,
-        senderId:senderId,
-        UserProfileText:UserProfileText,
-        UserProfileType:UserProfileType,
-        voiceNoteFileUrl:voiceNoteFileUrl,
-        voiceNoteDuration:voiceNoteDuration,
-        voiceNoteSize:voiceNoteSize,
-        timestamp:timestamp
-      }
 
-      const response = await this.db.UserProfiles.create(newUserProfile)
-      res.json(newUserProfile)
-    }catch (err){
-      console.log(err);
-      throw new Error(err);
-    }
-  }
   addMotherTongue = async (req,res) =>{
     const {userId,languageId}=req.body;
     try{

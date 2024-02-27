@@ -32,6 +32,11 @@ class UserFriendsRouter {
       checkAuth,
       this.controller.changeFriendNickName
     );
+    this.router.get(
+      `${this.path}/getSuggestedFriends`,
+      // checkAuth,
+      this.controller.getSuggestedFriends
+    );
   };
 }
 module.exports = UserFriendsRouter;

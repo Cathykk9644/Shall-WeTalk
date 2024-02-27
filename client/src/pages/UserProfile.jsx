@@ -195,7 +195,7 @@ const UserProfile = ({ id }) => {
               {/* Name Field */}  
               <div className="flex">    
                 <label className="mr-2">Name:</label>    
-                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('username')} /></div>    
+                <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('username')} /></div>    
               </div>    
               {isEditing.username ? (    
                 <>    
@@ -218,7 +218,7 @@ const UserProfile = ({ id }) => {
               {/* Native Language Field */}  
               <div className="flex">    
                 <label className="mr-2">Native Language:</label>    
-                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('userMotherTongues')} /></div>    
+                <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('userMotherTongues')} /></div>    
               </div>  
               {/* Display userMotherTongues array */}  
               {isEditing.userMotherTongues ? (  
@@ -259,7 +259,7 @@ const UserProfile = ({ id }) => {
               {/*Learning Languages Field */}  
               <div className="flex">    
                 <label className="mr-2">Learning Languages:</label>    
-                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('userLearningLanguages')} /></div>    
+                <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('userLearningLanguages')} /></div>    
               </div>  
               {/* Display userLearningLanguages array */}  
               {isEditing.userLearningLanguages ? (  
@@ -325,7 +325,7 @@ const UserProfile = ({ id }) => {
               {/* Address Field */}  
               <div className="flex">    
                 <label className="mr-2">Address:</label>    
-                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('userAddress')} /></div>    
+                <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('userAddress')} /></div>    
               </div>  
               {isEditing.userAddress ? (  
                 <>    
@@ -347,7 +347,7 @@ const UserProfile = ({ id }) => {
               {/* Hobbies Field */}  
               <div className="flex">    
                 <label className="mr-2">Hobbies:</label>    
-                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('hobbies')} /></div>    
+                <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('hobbies')} /></div>    
               </div>  
               {/* Display hobbies array */}  
               {isEditing.hobbies ? (  
@@ -387,7 +387,7 @@ const UserProfile = ({ id }) => {
               {/* Bio Field */}  
               <div className="flex">    
                 <label className="mr-2">Tell us a bit about yourself:</label>    
-                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('bio')} /></div>    
+                <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('bio')} /></div>    
               </div>  
               {isEditing.bio ? (  
                 <>    

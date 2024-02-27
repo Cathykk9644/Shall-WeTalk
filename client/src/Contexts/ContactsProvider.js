@@ -13,6 +13,7 @@ export function ContactsProvider({id, children}) {
   const [contacts, setContacts] = useState();
   const [profileURL, setProfileURL] = useState();
   const [username,setUsername]= useState();
+  const [suggestedFriendList, setSuggestedFriendList]= useState();
   const getFriends = async (id) => {
     try{
       const response = await axios.get(`http://localhost:8000/userFriends/getAllFriends/`,
@@ -30,8 +31,23 @@ export function ContactsProvider({id, children}) {
       console.log(err);
     }
   }
+
+  const getSuggestedFriends = async (id) => {
+    try{
+      const response = await axios.get(`http://localhost:8000/userFriends/getSuggestedFriends/`,
+      {params:
+        {userId:id}
+      });
+      const suggestedFriends=response.data;
+      setSuggestedFriendList(suggestedFriends)
+      console.log("suggestedFriends:",suggestedFriends)
+    }catch(err){
+      console.log(err);
+    }
+  }
   useEffect(()=>{
-    getFriends(id);
+     getFriends(id);
+     getSuggestedFriends(id);
   },[])
 
   // appending contact
@@ -58,7 +74,8 @@ export function ContactsProvider({id, children}) {
       profileURL,
       setProfileURL,
       username,
-      setUsername
+      setUsername,
+      suggestedFriendList
     }}>
       {children}
     </ContactsContext.Provider>

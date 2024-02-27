@@ -3,6 +3,7 @@ import AddFriendBar from "./AddFriendBar";
 import FriendsTopBar from "./FriendsTopBar"
 import {useContacts} from "../Contexts/ContactsProvider"
 import { useChatMessages } from "../Contexts/ChatMessagesProvider";
+import SuggestedFriendList from "./SuggestedFriendsList";
 
 
 const FriendList = () => {
@@ -14,9 +15,11 @@ const FriendList = () => {
   return (
     <div className="w-2/6 h-full flex flex-col bg-bgColor1 border-r">
       <FriendsTopBar searchValue={searchValue} setSearchValue={setSearchValue} selectedChat={selectedChat}/>
+      <SuggestedFriendList/>
 
       {searchValue?
       <>
+      <label className="border-t-2">Friends:</label>
       <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
         {friends.map((friend, index) => (
           <div
@@ -45,6 +48,7 @@ const FriendList = () => {
       </>
       :
       <>
+      <label className="border-t-2">Chats:</label>
       <div className="flex-1 overflow-y-auto scrollbar-hide cursor-pointer duration-100 ">
         {allMessages&&allMessages.map((chat, index) => (
           <div

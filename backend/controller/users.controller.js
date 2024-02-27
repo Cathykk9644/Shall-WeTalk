@@ -31,6 +31,7 @@ class userController extends BaseController {
           },
         ],
       });
+      
       res.status(200).json(profile);
     } catch (error) {
       console.log(error);
