@@ -5,6 +5,7 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { useContacts } from "../Contexts/ContactsProvider";
 import { FaPencilAlt } from "react-icons/fa";
+import Select from 'react-select';
 
 const STORAGE_KEY = "profilePictures/";
 
@@ -13,8 +14,27 @@ const UserProfile = ({ id }) => {
   const [fileInputFile, setFileInputFile] = useState();
   const [profileDetails, setProfileDetails] = useState();
   const [isEditing, setIsEditing] = useState({username: false, userMotherTongues: false, userLearningLanguages: false, userAddress: false, hobbies: false, bio: false});  
-  const [tempValues, setTempValues] = useState({username: "", userMotherTongues: "", userLearningLanguages: "", userAddress: "", hobbies: "", bio: ""});  
-
+  const [tempValues, setTempValues] = useState({username: "", userMotherTongues: "", userLearningLanguages:{id:"",language:"",proficiency:""} , userAddress: "", hobbies: "", bio: ""});
+  const [languageOptions,setLanguageOptions]= useState([  
+  { value: 'English', label: 'English', id:1  },  
+  { value: 'Spanish', label: 'Spanish', id:2 },  
+  { value: 'French', label: 'French', id: 3 },  
+  { value: 'German', label: 'German', id: 4 },  
+  { value: 'Chinese', label: 'Chinese', id: 5 },
+  ])  
+  const [hobbiesOptions,setHobbiesOptions]= useState([   
+  { value: 'Painting', label: 'Painting', id:1  },  
+  { value: 'Sleeping', label: 'Sleeping', id:2 },  
+  { value: 'Eating', label: 'Eating', id: 3 },  
+  { value: 'Travelling', label: 'Travelling', id: 4 },  
+  { value: 'Reading', label: 'Reading', id: 5 },
+  ])  
+  const proficiencyOptions = [  
+    { value: 'Beginner', label: 'Beginner' },  
+    { value: 'Intermediate', label: 'Intermediate' },  
+    { value: 'Advanced', label: 'Advanced' },  
+ 
+  ];  
 
   const getProfilePictureURL = async (userId) => {
     const storageRef = ref(storage, `${(STORAGE_KEY, userId)}`);
@@ -44,7 +64,7 @@ const UserProfile = ({ id }) => {
   };
 
   const getUserProfileDetails = async (loginId) => {
-    console.log(loginId);
+    // console.log(loginId);
     try {
       const userProfileDetails = await axios.get(
         "http://localhost:8000/users/getProfile",
@@ -52,8 +72,24 @@ const UserProfile = ({ id }) => {
           params: { userId: loginId },
         }
       );
-      // userProfileDetails.data.
-      setProfileDetails(userProfileDetails.data);
+      // userProfileDetails.data => map to arrays so that can do immediate update
+
+      setProfileDetails({
+        username:userProfileDetails.data.username,
+        userMotherTongues: userProfileDetails.data.userMotherTongues.map((userMotherTongue)=>{
+          return {id: userMotherTongue.id, language:userMotherTongue.language.language}
+        }), //may need map function here
+        userLearningLanguages:userProfileDetails.data.userLearningLanguages.map((userLearningLanguage)=>{
+          return {id:userLearningLanguage.id,language:userLearningLanguage.language.language, proficiency:userLearningLanguage.proficiency}
+        }), //need map
+        userAddress:userProfileDetails.data.userAddress,
+        hobbies:userProfileDetails.data.hobbies.map((hobby)=>{
+          return {id:hobby.id,hobby:hobby.hobby}
+        }), //need map
+        bio:userProfileDetails.data.bio,
+        imageURL:userProfileDetails.data.imageURL //optional
+      });
+
       setProfileURL(userProfileDetails.data.imageURL);
       setUsername(userProfileDetails.data.username)
     } catch (err) {
@@ -93,24 +129,61 @@ const UserProfile = ({ id }) => {
     setTempValues({...tempValues, [field]: profileDetails[field]});   
   };   
   
-  const handleChange = (e, field) => {    
-    setTempValues({...tempValues, [field]: e.target.value});    
-  };   
+  const handleChange = (selectedOptionOrEvent, field) => {  
+    if (selectedOptionOrEvent.target) {  
+      // It's a normal event from a text input  
+      setTempValues({ ...tempValues, [field]: selectedOptionOrEvent.target.value });  
+    } else {  
+      // It's a selected option object from the dropdown  
+      if (field === 'userLearningLanguages') {  
+        // may have to hard code to incorporate both language and proficiency options
+        console.log(selectedOptionOrEvent)
+        setTempValues({ ...tempValues, [field]: { ...tempValues[field], ...selectedOptionOrEvent } });  
+      } else {  
+        setTempValues({ ...tempValues, [field]: selectedOptionOrEvent });  
+      }  
+    }  
+  };  
   
   //edit update field API
-  const submitChange = async (field) => {    
-    try {    
+  const submitChange = async (event,field) => {
+    event.preventDefault()    
+    try {
+      const selectedOption = tempValues[field];
+      console.log(selectedOption)    
       // await axios.put(`http://localhost:8000/users/updateProfile`, {    
       //   userId: id,    
       //   [field]: tempValues[field],    
-      // });    
-      setProfileDetails({ ...profileDetails, [field]: tempValues[field] });    
-      setIsEditing({...isEditing, [field]: false});    
+      // });   
+       if (field === 'userLearningLanguages') {  
+          //process the userLearningLanguages field > may cause error
+          setProfileDetails({ ...profileDetails, [field]: 
+            [...profileDetails[field], {
+            id:selectedOption.id,
+            language:selectedOption.language,
+            proficiency:selectedOption.proficiency
+          }] });  
+        } else if(field === 'userMotherTongues'||"hobbies"){
+          setProfileDetails({   
+            ...profileDetails,   
+            [field]: [...profileDetails[field], selectedOption]  
+          });  
+        }
+        else {  
+          setProfileDetails({ ...profileDetails, [field]: selectedOption });  
+          
+        }  
+        setIsEditing({ ...isEditing, [field]: false });   
     } catch (err) {    
       console.error(err);    
       // Handle error (e.g., show an error message)    
     }    
   };  
+
+  useEffect(()=>{
+    console.log("tempVal",tempValues)
+    console.log("profileDetails",profileDetails)
+  },[tempValues])
   return (
     <>
       {profileDetails && profileURL ? (
@@ -134,69 +207,125 @@ const UserProfile = ({ id }) => {
                     onKeyDown={(e) => handleKeyDown(e, 'username')}    
                   />    
                   <button className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={() => submitChange('username')}>Edit</button>    
+                    onClick={(event) => submitChange(event,'username')}>Edit</button>    
                 </>    
               ) : (    
                 <div className="mx-4">{profileDetails.username}</div>    
               )}    
-
+              <br/>
 
               
               {/* Native Language Field */}  
               <div className="flex">    
-                <label className="mr-4">Native Language:</label>    
-                <div><FaPencilAlt onClick={() => toggleEdit('userMotherTongues')} /></div>    
+                <label className="mr-2">Native Language:</label>    
+                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('userMotherTongues')} /></div>    
               </div>  
               {/* Display userMotherTongues array */}  
               {isEditing.userMotherTongues ? (  
-                <>    
-                  <input  
-                    type="text"   
+                <div className="flex">    
+                  <Select
+                    styles={{    
+                      control: (provided) => ({    
+                        ...provided,    
+                        width: 160,
+                        height: 30,
+                        minHeight:30,   
+                        margin: 8,   
+                      }),    
+                      menu: (provided) => ({  
+                        ...provided,  
+                        width: 150, // Set a different width for the menu  
+                        minHeight:30,
+                      }),  
+                    }}      
                     value={tempValues.userMotherTongues}   
-                    onChange={(e) => handleChange(e, 'userMotherTongues')}  
-                    className="mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
-                    onKeyDown={(e) => handleKeyDown(e, 'userMotherTongues')}  
+                    onChange={({ value, id }) =>  
+                      handleChange({ id, language: value }, 'userMotherTongues')}  
+                    options={languageOptions} // languageOptions should be an array of options for the user to select from, testing with a random list  
+                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
                   />  
-                  <button className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={() => submitChange('userMotherTongues')}>Edit</button>  
-                </>  
+                  <button className=" bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
+                    onClick={(event) => submitChange(event,'userMotherTongues')}>Add
+                  </button>  
+                </div>  
               ) : (  
                 <div className="mx-4">{profileDetails.userMotherTongues.map((userMotherTongue) => (  
-                  <li>{userMotherTongue.language.language}</li>  
+                  <li>{userMotherTongue.language}</li>  
                 ))}</div>  
               )}  
               <br />
 
               
-              {/* MAKE IT A DROP DOWN Learning Languages Field */}  
+              {/*Learning Languages Field */}  
               <div className="flex">    
-                <label className="mr-4">Learning Languages:</label>    
-                <div><FaPencilAlt onClick={() => toggleEdit('userLearningLanguages')} /></div>    
+                <label className="mr-2">Learning Languages:</label>    
+                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('userLearningLanguages')} /></div>    
               </div>  
               {/* Display userLearningLanguages array */}  
               {isEditing.userLearningLanguages ? (  
-                <>    
-                  <input  
-                    type="text"   
-                    value={tempValues.userLearningLanguages}   
-                    onChange={(e) => handleChange(e, 'userLearningLanguages')}  
-                    className="mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
-                    onKeyDown={(e) => handleKeyDown(e, 'userLearningLanguages')}  
+                <div className="flex">    
+                  <Select  
+                    styles={{  
+                      control: (provided) => ({  
+                        ...provided,  
+                        width: 160,  
+                        height: 30,  
+                        minHeight: 30,  
+                        margin: 8,  
+                      }),  
+                      menu: (provided) => ({  
+                        ...provided,  
+                        width: 150,  
+                        minHeight: 30,  
+                      }),  
+                    }}  
+                    value={tempValues.userLearningLanguages.language}  
+                     onChange={({ value, id }) =>  
+                      handleChange({ id, language: value }, 'userLearningLanguages')  
+                    }  
+                    options={languageOptions}  
+                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
                   />  
-                  <button className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={() => submitChange('userLearningLanguages')}>Edit</button>  
-                </>  
+                  <Select  
+                    styles={{  
+                      control: (provided) => ({  
+                        ...provided,  
+                        width: 160,  
+                        height: 30,  
+                        minHeight: 30,  
+                        margin: 8,  
+                      }),  
+                      menu: (provided) => ({  
+                        ...provided,  
+                        width: 150,  
+                        minHeight: 30,  
+                      }),  
+                    }}  
+                    value={tempValues.userLearningLanguages.proficiency}  
+                    onChange={(selectedOption) =>  
+                      handleChange({ proficiency: selectedOption.value }, 'userLearningLanguages')  
+                    }  
+                    options={proficiencyOptions}  
+                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
+                  />  
+                  <button  
+                    className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
+                    onClick={(event) => submitChange(event,'userLearningLanguages')}  
+                  >  
+                    Add  
+                  </button>    
+                </div>    
               ) : (  
                 <div className="mx-4">{profileDetails.userLearningLanguages.map((userLearningLanguage) => (  
-                  <li>{userLearningLanguage.language.language}</li>  
+                  <li>{`${userLearningLanguage.language} - ${userLearningLanguage.proficiency}`}</li>  
                 ))}</div>  
               )}  
               <br /> 
 
               {/* Address Field */}  
               <div className="flex">    
-                <label className="mr-4">Address:</label>    
-                <div><FaPencilAlt onClick={() => toggleEdit('userAddress')} /></div>    
+                <label className="mr-2">Address:</label>    
+                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('userAddress')} /></div>    
               </div>  
               {isEditing.userAddress ? (  
                 <>    
@@ -208,7 +337,7 @@ const UserProfile = ({ id }) => {
                     onKeyDown={(e) => handleKeyDown(e, 'userAddress')}  
                   />  
                   <button className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={() => submitChange('userAddress')}>Edit</button>  
+                    onClick={(event) => submitChange(event,'userAddress')}>Edit</button>  
                 </>  
               ) : (  
                 <div className="mx-4">{profileDetails.userAddress}</div>  
@@ -217,22 +346,37 @@ const UserProfile = ({ id }) => {
 
               {/* Hobbies Field */}  
               <div className="flex">    
-                <label className="mr-4">Hobbies:</label>    
-                <div><FaPencilAlt onClick={() => toggleEdit('hobbies')} /></div>    
+                <label className="mr-2">Hobbies:</label>    
+                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('hobbies')} /></div>    
               </div>  
               {/* Display hobbies array */}  
               {isEditing.hobbies ? (  
-                <>    
-                  <input  
-                    type="text"   
+                <div className="flex">    
+                  <Select
+                    styles={{    
+                      control: (provided) => ({    
+                        ...provided,    
+                        width: 160,
+                        height: 20,
+                        minHeight:20,   
+                        margin: 8,   
+                      }),    
+                      menu: (provided) => ({  
+                        ...provided,  
+                        width: 150, // Set a different width for the menu  
+                        minHeight:30,
+                      }),  
+                    }}      
                     value={tempValues.hobbies}   
-                    onChange={(e) => handleChange(e, 'hobbies')}  
-                    className="mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
-                    onKeyDown={(e) => handleKeyDown(e, 'hobbies')}  
+                    onChange={({ value, id }) =>  
+                      handleChange({ id, hobby: value },  'hobbies')}  
+                    options={hobbiesOptions} // languageOptions should be an array of options for the user to select from, testing with a random list  
+                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
                   />  
-                  <button className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={() => submitChange('hobbies')}>Edit</button>  
-                </>  
+                  <button className=" bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
+                    onClick={(event) => submitChange(event,'hobbies')}>Add
+                  </button>  
+                </div>    
               ) : (  
                 <div className="mx-4">{profileDetails.hobbies.map((userhobby) => (  
                   <li>{userhobby.hobby}</li>  
@@ -242,8 +386,8 @@ const UserProfile = ({ id }) => {
 
               {/* Bio Field */}  
               <div className="flex">    
-                <label className="mr-4">Tell us a bit about yourself:</label>    
-                <div><FaPencilAlt onClick={() => toggleEdit('bio')} /></div>    
+                <label className="mr-2">Tell us a bit about yourself:</label>    
+                <div className="px-2  hover:bg-gray-300"><FaPencilAlt onClick={() => toggleEdit('bio')} /></div>    
               </div>  
               {isEditing.bio ? (  
                 <>    
@@ -255,7 +399,7 @@ const UserProfile = ({ id }) => {
                     onKeyDown={(e) => handleKeyDown(e, 'bio')}  
                   />  
                   <button className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={() => submitChange('bio')}>Edit</button>  
+                    onClick={(event) => submitChange(event,'bio')}>Edit</button>  
                 </>  
               ) : (  
                 <div className="mx-4">{profileDetails.bio}</div>  

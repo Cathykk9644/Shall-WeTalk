@@ -24,6 +24,8 @@ class UserHobbiesController extends BaseController {
 
         this.db.userHobbies.bulkCreate(hobbyEntries);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
 }
