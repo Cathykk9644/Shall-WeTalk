@@ -12,7 +12,7 @@ function initializeSockets (io){
   console.log("Rooms for socket ID:", socket.id, socket.rooms);
 
   //----------------- socket server setup for video chat ---------------
-  videoChatService.videoChatSocketEvents(io,id);
+  videoChatService.videoChatSocketEvents(socket,id,io);
   // ---------------------socket server setup for chat -----------------
   messageService.messageSocketEvents(socket,id,io);
 
