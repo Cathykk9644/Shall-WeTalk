@@ -114,6 +114,7 @@ const userRouter = require("./router/users.router");
 const userFriendRouter = require("./router/userFriends.router");
 const MessageRouter = require("./router/messages.router");
 const ChatroomRouter = require("./router/chatrooms.router");
+const UserProfileRouter = require("./router/userProfile.router.js")
 const { initializeSockets } = require("./sockets/index.js");
 
 const PORT = process.env.PORT || 8080;
@@ -147,7 +148,7 @@ app.get("/", (req, res) => {
 const authRouter = new AuthRouter();
 app.use("/", authRouter.router);
 
-const routers = [new userRouter(), new userFriendRouter(),new MessageRouter(), new ChatroomRouter()];
+const routers = [new userRouter(), new userFriendRouter(),new MessageRouter(), new ChatroomRouter(), new UserProfileRouter()];
 routers.forEach((router) => app.use("/", router.router));
 
 initializeSockets(io);
