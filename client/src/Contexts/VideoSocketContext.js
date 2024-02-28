@@ -5,6 +5,7 @@ import { useSocket } from "./SocketProvider";
 
 const VideoChatSocketContext = createContext();
 
+// This provider component will use the id passed as a prop to create a socket connection
 // const videoChatSocket = io("http://localhost:8000");
 
 const VideoChatSocketProvider = ({ id, children }) => {
@@ -23,6 +24,9 @@ const VideoChatSocketProvider = ({ id, children }) => {
 
   // This effect will only run once when the component mounts
   useEffect(() => {
+    videoChatSocket.current = io("http://localhost:8000", { query: { id } });
+    console.log("videoChatSocket", videoChatSocket.current);
+
     navigator.mediaDevices
       .enumerateDevices()
       .then(function (devices) {
@@ -36,12 +40,10 @@ const VideoChatSocketProvider = ({ id, children }) => {
         console.log(err.name + ": " + err.message);
       });
 
-    videoChatSocket.current = io("http://localhost:8000");
-    console.log("videoChatSocket", videoChatSocket.current);
 
     console.log(navigator.mediaDevices);
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false })
+      .getUserMedia({ video: true, audio: false }) 
       .then((currentStream) => {
         console.log("current", currentStream);
         setStream(currentStream);
@@ -96,6 +98,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
     }
   }, [stream]);
 
+  // Answering a call
   const answerCall = () => {
     // setCallAccepted(true);
 
@@ -104,18 +107,18 @@ const VideoChatSocketProvider = ({ id, children }) => {
 
       const peer = new Peer({ initiator: false, trickle: false, stream });
 
-      peer.on("signal", (data) => {
-        videoChatSocket.current.emit("answerCall", {
-          signal: data,
-          to: call.from,
-        });
+    peer.on("signal", (data) => {
+      videoChatSocket.current.emit("answerCall", {
+        signal: data,
+        to: call.from,
       });
+    });
 
-      peer.on("stream", (currentStream) => {
-        console.log("currentStream", currentStream);
-        console.log("userVid", userVideo);
+    peer.on("stream", (currentStream) => {
+      if (userVideo.current) {
         userVideo.current.srcObject = currentStream;
-      });
+      }
+    });
 
       peer.signal(call.signal);
 
@@ -136,14 +139,14 @@ const VideoChatSocketProvider = ({ id, children }) => {
       // Proceed with the regular call process if calling someone else
       const peer = new Peer({ initiator: true, trickle: false, stream });
 
-      peer.on("signal", (data) => {
-        videoChatSocket.current.emit("callUser", {
-          userToCall: idToCall,
-          signalData: data,
-          from: me,
-          name,
-        });
+    peer.on("signal", (data) => {
+      videoChatSocket.current.emit("callUser", {
+        userToCall: idToCall,
+        signalData: data,
+        from: me,
+        name,
       });
+    });
 
       console.log("USER VIDEO !", userVideo);
       console.log("USER VIDEO current!", userVideo.current.srcObject);
@@ -151,10 +154,10 @@ const VideoChatSocketProvider = ({ id, children }) => {
         userVideo.current.srcObject = currentStream;
       });
 
-      videoChatSocket.current.on("callAccepted", (signal) => {
-        setCallAccepted(true);
-        peer.signal(signal);
-      });
+    videoChatSocket.current.on("callAccepted", (signal) => {
+      setCallAccepted(true);
+      peer.signal(signal);
+    });
 
       connectionRef.current = peer;
     });

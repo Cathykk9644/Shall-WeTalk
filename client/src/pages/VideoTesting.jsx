@@ -6,6 +6,7 @@ const VideoCallComponent = () => {
   const {
     call,
     callAccepted,
+    setCallAccepted,
     myVideo,
     userVideo,
     stream,
@@ -27,6 +28,21 @@ const VideoCallComponent = () => {
       setCallerStream(userVideo.current.srcObject);
     }
   }, [callAccepted, callEnded, userVideo]);
+
+  // Function to handle calling a user or self
+  const handleCallClick = () => {
+    if (idToCall === me) {
+      // Self-calling: mimic the call being accepted
+      setCallAccepted(true);
+      setCallerStream(stream);
+      // Note: For a complete self-call functionality,
+      // you may need to set additional state or perform other actions
+      // depending on how your context provider is set up.
+    } else {
+      // Calling another user
+      callUser(idToCall);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -71,7 +87,7 @@ const VideoCallComponent = () => {
           </div>
         )}
         <button
-          onClick={() => callUser(idToCall)}
+          onClick={handleCallClick}
           className="bg-blue-500 text-white px-4 py-2 m-2 rounded-md hover:bg-blue-600"
         >
           Call
