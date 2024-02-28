@@ -71,31 +71,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
           console.error("Some other error occurred: ", err);
         }
       });
-
-    videoChatSocket.current.on("me", (id) => setMe(id));
-        if (myVideo.current) {
-          myVideo.current.srcObject = currentStream;
-        }
-      })
-      .catch((err) => {
-        console.error("err: ", err);
-        if (
-          err.name === "NotFoundError" ||
-          err.name === "DevicesNotFoundError"
-        ) {
-          // required track is missing
-          console.error("Required devices not found");
-        } else if (
-          err.name === "NotReadableError" ||
-          err.name === "TrackStartError"
-        ) {
-          // webcam or mic are already in use
-          console.error("Webcam or mic are already in use");
-        } else {
-          // some other error occurred
-          console.error("Some other error occurred: ", err);
-        }
-      });
+      
 
     videoChatSocket.current.on("me", (id) => setMe(id));
 
