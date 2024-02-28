@@ -1,5 +1,6 @@
 class VideoChatService {
   constructor(db) {
+  constructor(db) {
     this.db = db;
   }
   
