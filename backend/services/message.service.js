@@ -1,3 +1,4 @@
+const { ReceiptCutoff } = require("react-bootstrap-icons");
 
 class MessageService {
   constructor(db){
@@ -39,18 +40,32 @@ class MessageService {
     }
   }
 
-  messageSocketEvents(socket,id){
+  messageSocketEvents(socket,id,io){
     socket.on('send-message', ({ chatroomId, recipients, message }) => {
       this.storeMessage(chatroomId,id,message); 
       console.log("recipients",recipients)
-      recipients.forEach(recipient => {
-          const newRecipients = recipients.filter(r => r !== recipient)
-          newRecipients.push(id)
+      recipients.forEach(recipient => { //[1 6]
+        // const newRecipients = recipients.filter(r => r !== recipient)
+        // // newRecipients.push(id)
+
+
+      
+        if (recipient === id){
           
-          console.log("Sending message to user ",recipient)
-          socket.broadcast.to(recipient).emit('receive-message', {
-            chatroomId, recipients: newRecipients, senderId: id, message
+        }else{
+          io.to(`${recipient}`).except(id).emit('receive-message', {
+            chatroomId, recipients: recipients, senderId: id, message
           })
+        }
+        
+        // console.log("new recipients",newRecipients)
+        // console.log("Sending message to user ", recipient)
+
+        
+        // socket.broadcast.emit('receive-message',
+        //   {chatroomId, recipients: recipients, senderId: id, message: `${message} - ${recipient}`
+        //   });
+          
         })
       })
     socket.on('send-new-message', async ({ recipients, message }) => {
@@ -61,7 +76,8 @@ class MessageService {
       recipients.forEach(recipient => {
           const newRecipients = recipients.filter(r => r !== recipient)
           newRecipients.push(id)
-          socket.to(recipient.trim()).emit('receive-message', {
+          console.log("Sending message to:",recipient)
+          socket.to(recipient).emit('receive-message', {
             chatroomId:chatroomId, recipients: newRecipients, senderId: id, message
           })
         })

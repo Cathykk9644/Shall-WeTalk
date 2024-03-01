@@ -12,7 +12,7 @@ class UserProfileRouter {
   }
   initializeRoutes = () => {
     // this.router.get(`${this.path}/getUserProfiles`, this.controller.getUserProfiles);
-    this.router.post(`${this.path}/addMotherTongue`,this.controller.addMotherTongue);
+    this.router.post(`${this.path}/addOrUpdateMotherTongue`,this.controller.addOrUpdateMotherTongue);
     this.router.post(`${this.path}/addLearningLanguage`,this.controller.addLearningLanguage);
     // this.router.post(
     //   `${this.path}/addProfilePic`,

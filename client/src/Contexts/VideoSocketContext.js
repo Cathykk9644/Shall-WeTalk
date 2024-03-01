@@ -25,15 +25,15 @@ const VideoChatSocketProvider = ({ id, children }) => {
   // This effect will only run once when the component mounts
   useEffect(() => {
     videoChatSocket.current = io("http://localhost:8000", { query: { id } });
-    console.log("videoChatSocket", videoChatSocket.current);
+    // console.log("videoChatSocket", videoChatSocket.current);
 
     navigator.mediaDevices
       .enumerateDevices()
       .then(function (devices) {
         devices.forEach(function (device) {
-          console.log(
-            device.kind + ": " + device.label + " id = " + device.deviceId
-          );
+          // console.log(
+          //   device.kind + ": " + device.label + " id = " + device.deviceId
+          // );
         });
       })
       .catch(function (err) {
@@ -41,12 +41,11 @@ const VideoChatSocketProvider = ({ id, children }) => {
       });
 
 
-    console.log(navigator.mediaDevices);
+    // console.log(navigator.mediaDevices);
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: false }) 
       .then((currentStream) => {
-        console.log("current", currentStream);
-        console.log("current", currentStream);
+        // console.log("current", currentStream);
         setStream(currentStream);
         if (myVideo.current) {
           myVideo.current.srcObject = currentStream;

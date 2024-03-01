@@ -38,51 +38,30 @@ class UserProfileController extends BaseController {
     }
   }
 
-  addMotherTongue = async (req,res) =>{
+  addOrUpdateMotherTongue = async (req,res) =>{
     const {userId,languageId}=req.body;
     try{
       const newMotherTongue = {
+        
         userId,
         languageId
       }
-
+    const existingRecord = await this.db.userMotherTongues.findOne({  
+      where: { userId }  
+    });  
+    if (existingRecord){
+      const response = await existingRecord.update({languageId})
+    }else{
       const response = await this.db.userMotherTongues.create(newMotherTongue)
+    }
+
       res.json(newMotherTongue)
     }catch (err){
       console.log(err);
       throw new Error(err);
     }
   }
-  addMotherTongue = async (req,res) =>{
-    const {userId,languageId}=req.body;
-    try{
-      const newMotherTongue = {
-        userId,
-        languageId
-      }
-
-      const response = await this.db.userMotherTongues.create(newMotherTongue)
-      res.json(newMotherTongue)
-    }catch (err){
-      console.log(err);
-      throw new Error(err);
-    }
-  }
-  addMotherTongue = async (req,res) =>{
-    const {userId,languageId}=req.body;
-    try{
-      const newMotherTongue = {
-        userId,
-        languageId
-      }
-
-      const response = await this.db.userMotherTongues.create(newMotherTongue)
-      res.json(newMotherTongue)
-    }catch (err){
-      console.log(err);
-      throw new Error(err);
-    }
-  }
+ 
   addLearningLanguage = async (req,res) =>{
     const {userId,languageId,proficiency}=req.body;
     try{
@@ -100,7 +79,36 @@ class UserProfileController extends BaseController {
     }
   }
 
+ updateUsername = async (req,res) =>{
+    const {userId,languageId}=req.body;
+    try{
+      const newMotherTongue = {
+        userId,
+        languageId
+      }
 
+      const response = await this.db.userMotherTongues.create(newMotherTongue)
+      res.json(newMotherTongue)
+    }catch (err){
+      console.log(err);
+      throw new Error(err);
+    }
+  }
+  updateAddress = async (req,res) =>{
+    const {userId,languageId}=req.body;
+    try{
+      const newMotherTongue = {
+        userId,
+        languageId
+      }
+
+      const response = await this.db.userMotherTongues.create(newMotherTongue)
+      res.json(newMotherTongue)
+    }catch (err){
+      console.log(err);
+      throw new Error(err);
+    }
+  }
 
 
 }
