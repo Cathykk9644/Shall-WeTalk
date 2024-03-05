@@ -74,7 +74,7 @@ export function ChatMessageProvider({ id, children }) {
       });   
 
         
-      console.log("chats:",chatList);  
+      // console.log("chats:",chatList);  
       setChatMessages(chatList);
     }catch(err){
       console.log(err);
@@ -140,14 +140,14 @@ export function ChatMessageProvider({ id, children }) {
   }
 
   useEffect(() => {  
-    console.log('chatMessages after add',chatMessages)  
+    // console.log('chatMessages after add',chatMessages)  
   }, [chatMessages]);  
 
     useEffect(() => {  
       if (contacts) {  
         getChatMessages(id,contacts)  
       }  
-      console.log(socket)
+      // console.log(socket)
       if (socket == null) return;
 
       socket.on('receive-message', message=>{

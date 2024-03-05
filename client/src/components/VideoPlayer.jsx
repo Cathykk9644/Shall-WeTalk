@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const VideoPlayer = ({ name, stream, isUser }) => {
+const VideoPlayer = ({ name, stream, isUser, videoRef, isUsing = true }) => {
   const internalVideoRef = useRef(null); // Create a ref for the video element
 
   useEffect(() => {
@@ -13,13 +13,13 @@ const VideoPlayer = ({ name, stream, isUser }) => {
   }, [stream]);
 
   return (
-    <div className="flex flex-col items-center p-2">
+    <div className="flex flex-col items-center p-2" style={{ ...(!isUsing && { opacity: 0, width: '1px', height: '1px'})}}>
       <p className="mb-2 text-sm font-semibold text-gray-700">{name}</p>
       <video
         className="rounded-lg w-full max-w-md bg-black"
         playsInline
         muted={isUser} // Mute the video if it is the user's own video
-        ref={internalVideoRef} // Use the created ref here
+        ref={videoRef} // Use the created ref here
         autoPlay
       />
     </div>

@@ -26,7 +26,7 @@ export function ContactsProvider({id, children}) {
         return  {id:friend.friendId,name:friend.friendNickname, imageURL:friend.friend.imageURL}
       })
       setContacts(contactList)
-      console.log("contacts:",contactList)
+      // console.log("contacts:",contactList)
     }catch(err){
       console.log(err);
     }
@@ -40,7 +40,7 @@ export function ContactsProvider({id, children}) {
       });
       const suggestedFriends=response.data;
       setSuggestedFriendList(suggestedFriends)
-      console.log("suggestedFriends:",suggestedFriends)
+      // console.log("suggestedFriends:",suggestedFriends)
     }catch(err){
       console.log(err);
     }

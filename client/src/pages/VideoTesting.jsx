@@ -17,15 +17,16 @@ const VideoCallComponent = () => {
     callUser,
     leaveCall,
     answerCall,
+    idToCall,
+setIdToCall
   } = useContext(VideoChatSocketContext);
 
-  const [idToCall, setIdToCall] = useState("");
   const [callerStream, setCallerStream] = useState(null);
 
   // When the call is accepted, set the caller's stream
   useEffect(() => {
     if (callAccepted && !callEnded && userVideo.current) {
-      setCallerStream(userVideo.current.srcObject);
+      setCallerStream(userVideo.current.srcObject); // <-- userVideo is NULL here
     }
   }, [callAccepted, callEnded, userVideo]);
 
@@ -46,16 +47,18 @@ const VideoCallComponent = () => {
       <div className="flex flex-wrap justify-center items-center">
         {/* Display the video player for the local stream */}
         {stream && (
-          <VideoPlayer name={name || "Me"} stream={stream} isUser={true} />
+          <VideoPlayer name={name || "Me"} stream={stream} isUser={true} videoRef={myVideo} />
         )}
         {/* Display the video player for the caller's stream */}
-        {callAccepted && !callEnded && callerStream && (
+        {/* {callAccepted && !callEnded && ( */}
           <VideoPlayer
             name={call.name || "Caller"}
             stream={callerStream}
             isUser={false}
+          videoRef={userVideo}
+          isUsing={callAccepted}
           />
-        )}
+        {/* )} */}
       </div>
       <div className="flex flex-col items-center my-4">
         <input

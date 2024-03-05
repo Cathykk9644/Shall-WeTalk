@@ -15,6 +15,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
   const [name, setName] = useState("");
   const [call, setCall] = useState({});
   const [me, setMe] = useState("");
+  const [idToCall, setIdToCall] = useState("");
   // const videoChatSocket = useSocket();
 
   const myVideo = useRef(null);
@@ -25,7 +26,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
   // This effect will only run once when the component mounts
   useEffect(() => {
     videoChatSocket.current = io("http://localhost:8000", { query: { id } });
-    // console.log("videoChatSocket", videoChatSocket.current);
+    console.log("videoChatSocket", videoChatSocket.current);
 
     navigator.mediaDevices
       .enumerateDevices()
@@ -43,7 +44,7 @@ const VideoChatSocketProvider = ({ id, children }) => {
 
     // console.log(navigator.mediaDevices);
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false }) 
+      .getUserMedia({ video: true, audio: false })
       .then((currentStream) => {
         // console.log("current", currentStream);
         setStream(currentStream);
@@ -103,17 +104,18 @@ const VideoChatSocketProvider = ({ id, children }) => {
   const answerCall = () => {
     // setCallAccepted(true);
 
-    setCallAccepted(true, () => {
-      // instructions for immediately-after the state update
+    setCallAccepted(true);
+    
+    // instructions for immediately-after the state update
 
-      const peer = new Peer({ initiator: false, trickle: false, stream });
+    const peer = new Peer({ initiator: false, trickle: false, stream });
 
-      peer.on("signal", (data) => {
-        videoChatSocket.current.emit("answerCall", {
-          signal: data,
-          to: call.from,
-        });
+    peer.on("signal", (data) => {
+      videoChatSocket.current.emit("answerCall", {
+        signal: data,
+        to: call.from,
       });
+    });
 
     peer.on("stream", (currentStream) => {
       if (userVideo.current) {
@@ -121,14 +123,14 @@ const VideoChatSocketProvider = ({ id, children }) => {
       }
     });
 
-      peer.signal(call.signal);
+    peer.signal(call.signal);
 
-      connectionRef.current = peer;
-    });
+    connectionRef.current = peer;
   };
 
   // Calling a user
   const callUser = (idToCall) => {
+    
     if (idToCall === me) {
       setCallAccepted(true);
       userVideo.current.srcObject = myVideo.current.srcObject; // Show own video as the user video
@@ -136,7 +138,9 @@ const VideoChatSocketProvider = ({ id, children }) => {
       return;
     }
 
-    setCallAccepted(true, () => {
+    setCallAccepted(true);
+
+       console.log("Calling user:", idToCall)
       // Proceed with the regular call process if calling someone else
       const peer = new Peer({ initiator: true, trickle: false, stream });
 
@@ -161,8 +165,46 @@ const VideoChatSocketProvider = ({ id, children }) => {
       });
 
       connectionRef.current = peer;
-    });
+
+      
   };
+
+  useEffect(() => {
+    if (callAccepted) {
+
+
+      console.log("Calling user:", idToCall)
+      // Proceed with the regular call process if calling someone else
+      const peer = new Peer({ initiator: true, trickle: false, stream });
+
+      peer.on("signal", (data) => {
+        videoChatSocket.current.emit("callUser", {
+          userToCall: idToCall,
+          signalData: data,
+          from: me,
+          name,
+        });
+      });
+
+      console.log("USER VIDEO !", userVideo);
+      console.log("USER VIDEO current!", userVideo.current.srcObject);
+      peer.on("stream", (currentStream) => {
+        userVideo.current.srcObject = currentStream;
+      });
+
+      videoChatSocket.current.on("callAccepted", (signal) => {
+        setCallAccepted(true);
+        peer.signal(signal);
+      });
+
+      connectionRef.current = peer;
+
+
+    }
+}, [callAccepted])
+
+
+
 
   // Leaving the call
   const leaveCall = () => {
@@ -194,6 +236,8 @@ const VideoChatSocketProvider = ({ id, children }) => {
         callUser,
         leaveCall,
         answerCall,
+        idToCall,
+        setIdToCall
       }}
     >
       {children}

@@ -83,14 +83,15 @@ const VideoCall = () => {
           </div>
           <div className="w-1/2 bg-bgColor1 text-gray-400 flex items-center justify-center border-2 rounded-xl border-gray-300 ml-2 relative">
             {/* User Video */}
-            {callAccepted && !callEnded && (
-              <video
+            {/* {callAccepted && !callEnded && ( */}
+            <video
+              id="test-vid"
                 playsInline
                 ref={userVideo}
                 autoPlay
                 className="rounded-xl absolute inset-0 w-full h-full object-cover"
               />
-            )}
+            {/* )} */}
             <div className="absolute bottom-0 left-0 bg-black bg-opacity-40 text-white p-2 rounded-tr-xl text-xs font-semibold">
               {call.name || "Kathy Wong"}
             </div>
