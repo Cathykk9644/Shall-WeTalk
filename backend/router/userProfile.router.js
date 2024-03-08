@@ -14,6 +14,7 @@ class UserProfileRouter {
     // this.router.get(`${this.path}/getUserProfiles`, this.controller.getUserProfiles);
     this.router.post(`${this.path}/addOrUpdateMotherTongue`,this.controller.addOrUpdateMotherTongue);
     this.router.post(`${this.path}/addLearningLanguage`,this.controller.addLearningLanguage);
+    this.router.put(`${this.path}/updateUser`,this.controller.updateUser);
     // this.router.post(
     //   `${this.path}/addProfilePic`,
     //   this.controller.addProfilePicture

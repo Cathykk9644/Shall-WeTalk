@@ -41,6 +41,10 @@ class UserProfileController extends BaseController {
   addOrUpdateMotherTongue = async (req,res) =>{
     const {userId,languageId}=req.body;
     try{
+      //this.db.userMotherTongues.destroy({
+      //   where:{userId}
+      // })
+      // .bulkCreate 
       const newMotherTongue = {
         
         userId,
@@ -79,37 +83,47 @@ class UserProfileController extends BaseController {
     }
   }
 
- updateUsername = async (req,res) =>{
-    const {userId,languageId}=req.body;
-    try{
-      const newMotherTongue = {
-        userId,
-        languageId
-      }
+ updateUser = async (req,res) =>{
+    const {userId,username, address,bio}=req.body;
+    // Construct an object to hold the fields to update  
+    let updateFields = {};  
+    
+    // Check each parameter and add it to the updateFields object if it's provided  
+    if (username !== undefined) {  
+      updateFields.username = username;  
+    }  
+    if (address !== undefined) {  
+      updateFields.address = address;  
+    }  
+    if (bio !== undefined) {  
+      updateFields.bio = bio;  
+    }  
+    
+    try {  
+      // Perform the update only if there are fields to update  
+      if (Object.keys(updateFields).length > 0) {  
+        const result = await this.db.users.update(updateFields, {  
+          where: { id: userId }  
+        });  
+    
+        console.log(result[0] + ' rows were updated');  
+    
+        if (result[0] > 0) {  
+          console.log('Update successful');  
+        } else {  
+          console.log('Update failed: No user found with the specified ID or no new information provided');  
+        }  
 
-      const response = await this.db.userMotherTongues.create(newMotherTongue)
-      res.json(newMotherTongue)
+        res.json(result)
+      } else {  
+        console.log('No fields provided for update');  
+      }  
     }catch (err){
       console.log(err);
       throw new Error(err);
     }
   }
-  updateAddress = async (req,res) =>{
-    const {userId,languageId}=req.body;
-    try{
-      const newMotherTongue = {
-        userId,
-        languageId
-      }
-
-      const response = await this.db.userMotherTongues.create(newMotherTongue)
-      res.json(newMotherTongue)
-    }catch (err){
-      console.log(err);
-      throw new Error(err);
-    }
-  }
-
+  
 
 }
 

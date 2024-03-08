@@ -72,22 +72,22 @@ const UserProfile = ({ id }) => {
           params: { userId: loginId },
         }
       );
-      // userProfileDetails.data => map to arrays so that can do immediate update
+      
 
       setProfileDetails({
         username:userProfileDetails.data.username,
         userMotherTongues: userProfileDetails.data.userMotherTongues.map((userMotherTongue)=>{
           return {id: userMotherTongue.id, language:userMotherTongue.language.language}
-        }), //may need map function here
+        }), 
         userLearningLanguages:userProfileDetails.data.userLearningLanguages.map((userLearningLanguage)=>{
           return {id:userLearningLanguage.id,language:userLearningLanguage.language.language, proficiency:userLearningLanguage.proficiency}
-        }), //need map
+        }),
         userAddress:userProfileDetails.data.userAddress,
         hobbies:userProfileDetails.data.hobbies.map((hobby)=>{
           return {id:hobby.id,hobby:hobby.hobby}
-        }), //need map
+        }), 
         bio:userProfileDetails.data.bio,
-        imageURL:userProfileDetails.data.imageURL //optional
+        imageURL:userProfileDetails.data.imageURL 
       });
 
       setProfileURL(userProfileDetails.data.imageURL);
@@ -106,9 +106,8 @@ const UserProfile = ({ id }) => {
   const handleKeyDown = (e, field) => {    
     if (e.key === 'Escape') {    
       setIsEditing({...isEditing, [field]: false});    
-    } else if (e.key === 'Enter') {    
-      e.preventDefault();   
-      submitChange(field);  
+    } else if (e.key === 'Enter') {      
+      submitChange(e,field);  
     }    
   };   
 
@@ -157,23 +156,30 @@ const UserProfile = ({ id }) => {
       // });   
        if (field === 'userLearningLanguages') {  
           //process the userLearningLanguages field > may cause error
+          console.log("in if (userLearningLanguages",selectedOption) 
           setProfileDetails({ ...profileDetails, [field]: 
             [...profileDetails[field], {
             id:selectedOption.id,
             language:selectedOption.language,
             proficiency:selectedOption.proficiency
           }] });  
-        } else if(field === 'userMotherTongues'||"hobbies"){
+        } else if(field === "userMotherTongues"|| field === "hobbies"){
+          console.log("in else if (should be user Mother tongue or hobby:",selectedOption)      
           setProfileDetails({   
             ...profileDetails,   
             [field]: [...profileDetails[field], selectedOption]  
           });  
         }
-        else {  
-          setProfileDetails({ ...profileDetails, [field]: selectedOption });  
-          
+        else {
+          console.log("in else:",selectedOption)  
+          setProfileDetails( {...profileDetails, [field] : selectedOption} );  
+          await axios.put(`http://localhost:8000/userProfiles/updateUser`,{
+            userId:id,
+            [field]:selectedOption
+          })
         }  
-        setIsEditing({ ...isEditing, [field]: false });   
+        setIsEditing({ ...isEditing, [field]: false });
+        setTempValues({username: "", userMotherTongues: "", userLearningLanguages:{id:"",language:"",proficiency:""} , userAddress: "", hobbies: "", bio: ""})
     } catch (err) {    
       console.error(err);    
       // Handle error (e.g., show an error message)    
