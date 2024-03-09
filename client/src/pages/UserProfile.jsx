@@ -276,8 +276,8 @@ const UserProfile = ({ id }) => {
 
   // ==========================================================================================================
   useEffect(()=>{
-    console.log("tempVal",tempValues)
-    console.log("profileDetails",profileDetails)
+    // console.log("tempVal",tempValues)
+    // console.log("profileDetails",profileDetails)
   },[tempValues])
   return (
     <>

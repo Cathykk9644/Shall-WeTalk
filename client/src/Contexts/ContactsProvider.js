@@ -40,7 +40,7 @@ export function ContactsProvider({id, children}) {
       });
       const suggestedFriends=response.data;
       setSuggestedFriendList(suggestedFriends)
-      // console.log("suggestedFriends:",suggestedFriends)
+      console.log("suggestedFriends:",suggestedFriends)
     }catch(err){
       console.log(err);
     }

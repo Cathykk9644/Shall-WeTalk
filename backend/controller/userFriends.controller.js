@@ -114,11 +114,13 @@ class UserFriendsController extends BaseController {
         ],      
       });
       
+      console.log("profile:",profile)
+
       if (!profile) {  
         return res.status(404).json({ message: 'User not found' });  
       }  
   
-      const learningLanguages = profile.userLearningLanguages.map(userLearningLanguage=>userLearningLanguage.id)
+      const learningLanguages = profile.userLearningLanguages.map(userLearningLanguage=>userLearningLanguage.language.id)
       
       if (learningLanguages.length === 0) {  
         return res.status(404).json({ message: 'No learning languages found for user' });  
@@ -135,8 +137,9 @@ class UserFriendsController extends BaseController {
           }
         ]
       });  
+      console.log("Friends:",friends)
       const friendIds = friends.map(friend => friend.friendId); 
-
+      
       const suggestedFriends = await this.db.users.findAll({
         where: {  
           id: {  
@@ -169,14 +172,14 @@ class UserFriendsController extends BaseController {
         const userMotherTongues = suggestedFriend.userMotherTongues.map((userMotherTongue)=>{
           return (
             {
-              id:userMotherTongue.id ,
+              id:userMotherTongue.language.id ,
               language:userMotherTongue.language.language
             }
           )})
         const userLearningLanguages = suggestedFriend.userLearningLanguages.map((userLearningLanguage)=>{
           return(
             {
-              id:userLearningLanguage.id,
+              id:userLearningLanguage.language.id,
               language:userLearningLanguage.language.language,
               proficiency:userLearningLanguage.proficiency
             }
@@ -202,6 +205,7 @@ class UserFriendsController extends BaseController {
         )
       })
       res.json(formattedSuggestedFriend);
+      // res.json(profile);
     } catch (error) {
       console.log(error);
     }
