@@ -5,7 +5,9 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { useContacts } from "../Contexts/ContactsProvider";
 import { FaPencilAlt } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import Select from 'react-select';
+import { PiCodesandboxLogoDuotone } from "react-icons/pi";
 
 const STORAGE_KEY = "profilePictures/";
 
@@ -35,6 +37,10 @@ const UserProfile = ({ id }) => {
     { value: 'Advanced', label: 'Advanced' },  
  
   ];  
+  const selectedMotherLanguageOption = languageOptions.find(option => option.value === tempValues.userMotherTongues?.language);
+  const selectedLearningLanguageOption = languageOptions.find(option => option.value === tempValues.userLearningLanguages.language);  
+  const selectedLearningProficiencyOption = proficiencyOptions.find(option => option.value === tempValues.userLearningLanguages.proficiency); 
+  const selectedHobbyOption = hobbiesOptions.find(option => option.value === tempValues.hobbies); 
 
   const getProfilePictureURL = async (userId) => {
     const storageRef = ref(storage, `${(STORAGE_KEY, userId)}`);
@@ -162,16 +168,37 @@ const UserProfile = ({ id }) => {
             id:selectedOption.id,
             language:selectedOption.language,
             proficiency:selectedOption.proficiency
-          }] });  
-        } else if(field === "userMotherTongues"|| field === "hobbies"){
-          console.log("in else if (should be user Mother tongue or hobby:",selectedOption)      
+          }] });
+          await axios.post(`http://localhost:8000/userProfiles/userLearningLanguagesUpdate`,{
+            userId: id,
+            userLearningLanguages:{ ...profileDetails, [field]: 
+            [...profileDetails[field], {
+            id:selectedOption.id,
+            language:selectedOption.language,
+            proficiency:selectedOption.proficiency
+          }] }[field]
+          })
+
+          console.log(field,{ ...profileDetails, [field]: 
+            [...profileDetails[field], {
+            id:selectedOption.id,
+            language:selectedOption.language,
+            proficiency:selectedOption.proficiency
+          }] }[field])  
+        } else if(field === "userMotherTongues"|| field === "hobbies"){   
           setProfileDetails({   
             ...profileDetails,   
             [field]: [...profileDetails[field], selectedOption]  
-          });  
+          }); 
+          await axios.post(`http://localhost:8000/userProfiles/${field}Update`,{
+            userId:id,
+            [field]: {   
+            ...profileDetails,   
+            [field]: [...profileDetails[field], selectedOption]  
+          }[field]
+          })
         }
         else {
-          console.log("in else:",selectedOption)  
           setProfileDetails( {...profileDetails, [field] : selectedOption} );  
           await axios.put(`http://localhost:8000/userProfiles/updateUser`,{
             userId:id,
@@ -186,6 +213,68 @@ const UserProfile = ({ id }) => {
     }    
   };  
 
+  // =====================================Implement List editable components ==================================
+  // for mother languages
+  // Function to initialize an edit operation  
+  const startEdit = (index) => {  
+    const languageToEdit = profileDetails.userMotherTongues[index];  
+    // Assuming tempValues can hold the item to edit  
+    setTempValues({ ...tempValues, userMotherTongues: languageToEdit });  
+    setIsEditing({ ...isEditing, userMotherTongues: true });  
+    // Note: You might need a way to remember the index or id of the item being edited  
+  };  
+    
+  // Function to delete a language from the list  
+  const deleteLanguage = async (index) => {  
+    const updatedLanguages = profileDetails.userMotherTongues.filter((_, i) => i !== index);  
+    // Directly update the local state  
+    setProfileDetails({ ...profileDetails, userMotherTongues: updatedLanguages });  
+    // Call submitChange or directly update the backend here  
+    // For simplicity, we'll assume submitChange can handle this operation  
+    // Note: You might need to adjust submitChange to support deleting operation  
+    // This example directly calls an imagined API update function for deletion  
+    try {  
+      await axios.put(`http://localhost:8000/userProfiles/updateUser`, {  
+        userId: profileDetails.id, // Assuming profileDetails has an id field  
+        userMotherTongues: updatedLanguages.map(lang => ({ id: lang.id, language: lang.language })),  
+      });  
+      // Handle post-update logic here if necessary  
+    } catch (err) {  
+      console.error(err);  
+      // Handle error  
+    }  
+  };  
+
+  // for learning languages
+  const startEditLearningLanguage = (index) => {  
+    const languageToEdit = profileDetails.userLearningLanguages[index];  
+    setTempValues({ ...tempValues, userLearningLanguages: languageToEdit });  
+    setIsEditing({ ...isEditing, userLearningLanguages: true });  
+    // Optionally, you might want to keep track of the index being edited  
+    // setEditingIndex(index); // Assuming you have a state [editingIndex, setEditingIndex]  
+  };  
+  const deleteLearningLanguage = (index) => {  
+    const updatedLanguages = profileDetails.userLearningLanguages.filter((_, i) => i !== index);  
+    setProfileDetails({ ...profileDetails, userLearningLanguages: updatedLanguages });  
+    // Here, you should also update the backend to reflect this deletion  
+  };  
+
+  //for hobbies
+  const startEditHobby = (index) => {  
+    // Assuming hobbies are simple strings, update accordingly if they are objects  
+    const hobbyToEdit = profileDetails.hobbies[index];  
+    setTempValues({ ...tempValues, hobbies: hobbyToEdit });  
+    setIsEditing({ ...isEditing, hobbies: true });  
+    // Set editing index if necessary  
+  };  
+    
+  const deleteHobby = (index) => {  
+    const updatedHobbies = profileDetails.hobbies.filter((_, i) => i !== index);  
+    setProfileDetails({ ...profileDetails, hobbies: updatedHobbies });  
+    // Update backend as needed  
+  };  
+
+  // ==========================================================================================================
   useEffect(()=>{
     console.log("tempVal",tempValues)
     console.log("profileDetails",profileDetails)
@@ -226,40 +315,55 @@ const UserProfile = ({ id }) => {
                 <label className="mr-2">Native Language:</label>    
                 <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('userMotherTongues')} /></div>    
               </div>  
-              {/* Display userMotherTongues array */}  
-              {isEditing.userMotherTongues ? (  
-                <div className="flex">    
-                  <Select
-                    styles={{    
-                      control: (provided) => ({    
-                        ...provided,    
-                        width: 160,
-                        height: 30,
-                        minHeight:30,   
-                        margin: 8,   
-                      }),    
+              {/* Always display the userMotherTongues array with edit and delete buttons */}  
+              <div className="mx-4">  
+                {profileDetails.userMotherTongues.map((userMotherTongue, index) => (  
+                  <div key={index} className="flex items-center">  
+                    <li>{userMotherTongue.language}</li>  
+                    {/* Conditionally display Edit and Delete Buttons */}  
+                    {/* {isEditing.userMotherTongues && (  
+                      <>  
+                        <button onClick={() => startEdit(index)} className="ml-2">  
+                          <FaPencilAlt />  
+                        </button>  
+                        <button onClick={() => deleteLanguage(index)} className="ml-2">  
+                          <FaTrash />  
+                        </button>  
+                      </>  
+                    )}   */}
+                  </div>  
+                ))}  
+              </div>  
+              {/* Conditionally display the dropdown for editing/adding languages below the list */}  
+              {isEditing.userMotherTongues && (  
+                <div className="flex">  
+                  <Select  
+                    styles={{  
+                      control: (provided) => ({  
+                        ...provided,  
+                        width: 200,  
+                        height: 40,  
+                        minHeight: 30,  
+                        margin: 8,  
+                      }),  
                       menu: (provided) => ({  
                         ...provided,  
-                        width: 150, // Set a different width for the menu  
-                        minHeight:30,
+                        width: 160, // Adjust width as needed  
+                        minHeight: 40,  
                       }),  
-                    }}      
-                    value={tempValues.userMotherTongues}   
+                    }}  
+                    value={selectedMotherLanguageOption}  
                     onChange={({ value, id }) =>  
                       handleChange({ id, language: value }, 'userMotherTongues')}  
-                    options={languageOptions} // languageOptions should be an array of options for the user to select from, testing with a random list  
+                    options={languageOptions} // Assuming languageOptions is an array of options  
                     className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
                   />  
-                  <button className=" bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={(event) => submitChange(event,'userMotherTongues')}>Add
+                  <button className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
+                    onClick={(event) => submitChange(event, 'userMotherTongues')}>Add  
                   </button>  
                 </div>  
-              ) : (  
-                <div className="mx-4">{profileDetails.userMotherTongues.map((userMotherTongue) => (  
-                  <li>{userMotherTongue.language}</li>  
-                ))}</div>  
               )}  
-              <br />
+              <br />  
 
               
               {/*Learning Languages Field */}  
@@ -267,66 +371,79 @@ const UserProfile = ({ id }) => {
                 <label className="mr-2">Learning Languages:</label>    
                 <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('userLearningLanguages')} /></div>    
               </div>  
-              {/* Display userLearningLanguages array */}  
-              {isEditing.userLearningLanguages ? (  
-                <div className="flex">    
-                  <Select  
-                    styles={{  
-                      control: (provided) => ({  
-                        ...provided,  
-                        width: 160,  
-                        height: 30,  
-                        minHeight: 30,  
-                        margin: 8,  
-                      }),  
-                      menu: (provided) => ({  
-                        ...provided,  
-                        width: 150,  
-                        minHeight: 30,  
-                      }),  
-                    }}  
-                    value={tempValues.userLearningLanguages.language}  
-                     onChange={({ value, id }) =>  
-                      handleChange({ id, language: value }, 'userLearningLanguages')  
-                    }  
-                    options={languageOptions}  
-                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
-                  />  
-                  <Select  
-                    styles={{  
-                      control: (provided) => ({  
-                        ...provided,  
-                        width: 160,  
-                        height: 30,  
-                        minHeight: 30,  
-                        margin: 8,  
-                      }),  
-                      menu: (provided) => ({  
-                        ...provided,  
-                        width: 150,  
-                        minHeight: 30,  
-                      }),  
-                    }}  
-                    value={tempValues.userLearningLanguages.proficiency}  
-                    onChange={(selectedOption) =>  
-                      handleChange({ proficiency: selectedOption.value }, 'userLearningLanguages')  
-                    }  
-                    options={proficiencyOptions}  
-                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"  
-                  />  
-                  <button  
-                    className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"  
-                    onClick={(event) => submitChange(event,'userLearningLanguages')}  
-                  >  
-                    Add  
-                  </button>    
-                </div>    
-              ) : (  
-                <div className="mx-4">{profileDetails.userLearningLanguages.map((userLearningLanguage) => (  
-                  <li>{`${userLearningLanguage.language} - ${userLearningLanguage.proficiency}`}</li>  
-                ))}</div>  
+              {/* Display userLearningLanguages array */}
+              <div className="mx-4">  
+                {profileDetails.userLearningLanguages.map((userLearningLanguage, index) => (  
+                  <div key={index} className="flex items-center justify-between">  
+                    <li>{`${userLearningLanguage.language} - ${userLearningLanguage.proficiency}`}</li>  
+                    {/* <div>  
+                      <FaPencilAlt   
+                        className="mx-2 hover:text-blue-500 cursor-pointer"   
+                        onClick={() => startEditLearningLanguage(index)}   
+                      />  
+                      <FaTrash   
+                        className="hover:text-red-500 cursor-pointer"   
+                        onClick={() => deleteLearningLanguage(index)}   
+                      />  
+                    </div>   */}
+                  </div>  
+                ))}  
+              </div>    
+              {/* Conditional dropdown for editing/adding learning languages */}  
+              {isEditing.userLearningLanguages && (  
+                <div className="flex">      
+                  <Select    
+                    styles={{    
+                      control: (provided) => ({    
+                        ...provided,    
+                        width: 160,    
+                        height: 30,    
+                        minHeight: 30,    
+                        margin: 8,    
+                      }),    
+                      menu: (provided) => ({    
+                        ...provided,    
+                        width: 150,    
+                        minHeight: 30,    
+                      }),    
+                    }}    
+                    value={selectedLearningLanguageOption}    
+                    onChange={({ id, value }) => handleChange({ id, language: value }, 'userLearningLanguages')}    
+                    options={languageOptions}    
+                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"    
+                  />    
+                
+                  <Select    
+                    styles={{    
+                      control: (provided) => ({    
+                        ...provided,    
+                        width: 160,    
+                        height: 30,    
+                        minHeight: 30,    
+                        margin: 8,    
+                      }),    
+                      menu: (provided) => ({    
+                        ...provided,    
+                        width: 150,    
+                        minHeight: 30,    
+                      }),    
+                    }}    
+                    value={selectedLearningProficiencyOption}    
+                    onChange={(selectedOption) => handleChange({ proficiency: selectedOption.value }, 'userLearningLanguages')}    
+                    options={proficiencyOptions}    
+                    className="w-fit mx-4 border-2 border-blue-500 focus:outline-none focus:border-blue-700"    
+                  />    
+                
+                  <button    
+                    className="bg-blue-200 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded"    
+                    onClick={(event) => submitChange(event, 'userLearningLanguages')}    
+                  >    
+                    Add    
+                  </button>      
+                </div>      
               )}  
-              <br /> 
+                
+              <br />  
 
               {/* Address Field */}  
               <div className="flex">    
@@ -355,16 +472,35 @@ const UserProfile = ({ id }) => {
                 <label className="mr-2">Hobbies:</label>    
                 <div className="px-2  hover:bg-gray-300 cursor-pointer duration-100"><FaPencilAlt onClick={() => toggleEdit('hobbies')} /></div>    
               </div>  
-              {/* Display hobbies array */}  
-              {isEditing.hobbies ? (  
+              {/* Display hobbies array */}
+              <div className="mx-4">  
+                {profileDetails.hobbies.map((userHobby, index) => (  
+                  <div key={index} className="flex justify-between items-center">  
+                    <li>{userHobby.hobby}</li>  
+                    {/* add when implementing individual entry edits */}
+                    {/* <div>  
+                      <FaPencilAlt   
+                        className="mx-2 hover:text-blue-500 cursor-pointer"   
+                        onClick={() => startEditHobby(index)}   
+                      />  
+                      <FaTrash   
+                        className="hover:text-red-500 cursor-pointer"   
+                        onClick={() => deleteHobby(index)}   
+                      />  
+                    </div>   */}
+                  </div>  
+                ))}  
+              </div>  
+              {/* display the dropdown */}  
+              {isEditing.hobbies && (  
                 <div className="flex">    
                   <Select
                     styles={{    
                       control: (provided) => ({    
                         ...provided,    
                         width: 160,
-                        height: 20,
-                        minHeight:20,   
+                        height: 30,
+                        minHeight:30,   
                         margin: 8,   
                       }),    
                       menu: (provided) => ({  
@@ -373,7 +509,7 @@ const UserProfile = ({ id }) => {
                         minHeight:30,
                       }),  
                     }}      
-                    value={tempValues.hobbies}   
+                    value={selectedHobbyOption}  
                     onChange={({ value, id }) =>  
                       handleChange({ id, hobby: value },  'hobbies')}  
                     options={hobbiesOptions} // languageOptions should be an array of options for the user to select from, testing with a random list  
@@ -383,11 +519,7 @@ const UserProfile = ({ id }) => {
                     onClick={(event) => submitChange(event,'hobbies')}>Add
                   </button>  
                 </div>    
-              ) : (  
-                <div className="mx-4">{profileDetails.hobbies.map((userhobby) => (  
-                  <li>{userhobby.hobby}</li>  
-                ))}</div>  
-              )}  
+              ) }  
               <br />
 
               {/* Bio Field */}  
