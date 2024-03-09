@@ -26,7 +26,7 @@ export function ContactsProvider({id, children}) {
         return  {id:friend.friendId,name:friend.friendNickname, imageURL:friend.friend.imageURL}
       })
       setContacts(contactList)
-      // console.log("contacts:",contactList)
+      console.log("contacts:",contactList)
     }catch(err){
       console.log(err);
     }
@@ -50,6 +50,10 @@ export function ContactsProvider({id, children}) {
      getSuggestedFriends(id);
   },[])
 
+  useEffect(() => {  
+  console.log("Contacts after added", contacts);  
+}, [contacts]); // This effect runs whenever the `contacts` state changes.  
+
   // appending contact
   async function createContact (friendId, name) {
     try{
@@ -62,8 +66,10 @@ export function ContactsProvider({id, children}) {
     }catch(err){
       console.log(err);
     }
+
+    
     setContacts(prevContacts => {
-      return [...prevContacts, {id, name, imageURL:"https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae"} ]
+      return [...prevContacts, {id:friendId, name, imageURL:"https://firebasestorage.googleapis.com/v0/b/shallwetalk-1b7bf.appspot.com/o/addpfpIcon.png?alt=media&token=7428d2c4-6209-48f2-b282-67c7895a51ae"} ]
     })
   }
 
@@ -75,7 +81,8 @@ export function ContactsProvider({id, children}) {
       setProfileURL,
       username,
       setUsername,
-      suggestedFriendList
+      suggestedFriendList,
+      setSuggestedFriendList
     }}>
       {children}
     </ContactsContext.Provider>

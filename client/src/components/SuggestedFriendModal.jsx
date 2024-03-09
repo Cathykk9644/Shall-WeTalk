@@ -2,12 +2,16 @@
 import React, { useRef } from 'react';  
 import { useContacts } from '../Contexts/ContactsProvider';  
   
-const SuggestedFriendModal = ({ closeModal,suggestedFriend }) => {  
-  const { createContact } = useContacts();  
+const SuggestedFriendModal = ({ closeModal,suggestedFriend, suggestFriendIndex }) => {  
+  const { createContact , setSuggestedFriendList} = useContacts();  
   
   function handleSubmit(e) {  
     e.preventDefault();  
     createContact(suggestedFriend.id,suggestedFriend.name);  
+    // setSuggestedFriendList((currentList) => [  
+    //   ...currentList.slice(0, suggestFriendIndex),  
+    //   ...currentList.slice(suggestFriendIndex + 1)  
+    // ]);
     closeModal();  
   }  
   
